@@ -62,7 +62,7 @@ public class TTRRechnerUtilUnitTest
         Match wildenauer = new Match(1593, true);
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(wildenauer);
-        long ttrAenderung = ttrRechnerUtil.berechne(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
 
         assertEquals(7, ttrAenderung);
     }
@@ -90,7 +90,7 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(kirchberger);
         matchArrayList.add(betz);
 
-        long ttrAenderung = ttrRechnerUtil.berechne(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
         assertEquals(68, ttrAenderung);
     }
 
@@ -107,7 +107,7 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(heim);
         matchArrayList.add(waechter);
 
-        long ttrAenderung = ttrRechnerUtil.berechne(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
         assertEquals(-23, ttrAenderung);
     }
 
@@ -130,7 +130,7 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(haasS);
         matchArrayList.add(pilgrim);
 
-        long ttrAenderung = ttrRechnerUtil.berechne(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
         assertEquals(9, ttrAenderung);
     }
 

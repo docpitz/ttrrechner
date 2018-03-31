@@ -29,27 +29,28 @@ public class TTRechnerActivity extends AppCompatActivity
     @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
     @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
+    private Toast anzahlGegnerToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ttrrechner_activity_scrolling);
+        anzahlGegnerToast = new Toast(this);
+        // erstmal nicht so wichtig
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        activateToolbar();
     }
 
     @OnClick(R.id.btnAdd)
     public void pressBtnAddMatch()
     {
-        final LinearLayout pnlMatchList = (LinearLayout)findViewById(R.id.pnlMatchList);
-        final View matchView = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
-        new ButtonRemoveViewHolder(matchView);
-        pnlMatchList.addView(matchView);
-        Toast.makeText(this, "Anzahl Gegner:" + pnlMatchList.getChildCount(),Toast.LENGTH_SHORT);
+        final View pnlSingleMatch = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
+        new ButtonRemoveViewHolder(pnlSingleMatch);
+        pnlMatchList.addView(pnlSingleMatch);
+        showToastAnzahlGegner();
     }
+
 
     class ButtonRemoveViewHolder
     {
@@ -58,15 +59,31 @@ public class TTRechnerActivity extends AppCompatActivity
             ButterKnife.bind(this, view);
         }
 
-        /*
+
         @OnClick(R.id.btnRemoveMatch)
         public void pressBtnRemoveMatch(AppCompatImageButton button)
         {
-            LinearLayout pnlMatch = (LinearLayout)button.getParent();
-            LinearLayout pnlMatches = (LinearLayout)pnlMatch.getParent();
-            pnlMatches.removeView(pnlMatch);
+            LinearLayout pnlSingleMatch = (LinearLayout)button.getParent();
+            TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
+            showToastAnzahlGegner();
         }
-        */
+
+    }
+
+    private void showToastAnzahlGegner()
+    {
+        if(anzahlGegnerToast != null)
+        {
+            anzahlGegnerToast.cancel();
+        }
+        anzahlGegnerToast = Toast.makeText(this, "Anzahl Gegner: " + pnlMatchList.getChildCount(), Toast.LENGTH_SHORT);
+        anzahlGegnerToast.show();
+    }
+
+    private void activateToolbar()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -91,6 +108,4 @@ public class TTRechnerActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

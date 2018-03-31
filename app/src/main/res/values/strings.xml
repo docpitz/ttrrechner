@@ -2,5 +2,5 @@
     <string name="app_name">TTR-Rechner</string>
     <string name="action_settings">Einstellungen</string>
     <string name="ttbild">TT-Bild</string>
-    <string name="ttrpunkte">TTR-Punkte</string>
+    <string name="gegner">Gegner</string>
 </resources>
