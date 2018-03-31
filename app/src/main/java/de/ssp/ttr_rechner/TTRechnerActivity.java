@@ -59,7 +59,7 @@ public class TTRechnerActivity extends AppCompatActivity
             ButterKnife.bind(this, view);
         }
 
-
+        /*
         @OnClick(R.id.btnRemoveMatch)
         public void pressBtnRemoveMatch(AppCompatImageButton button)
         {
@@ -67,7 +67,7 @@ public class TTRechnerActivity extends AppCompatActivity
             TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
             showToastAnzahlGegner();
         }
-
+        */
     }
 
     private void showToastAnzahlGegner()
