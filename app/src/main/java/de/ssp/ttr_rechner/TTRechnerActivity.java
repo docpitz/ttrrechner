@@ -26,9 +26,9 @@ import butterknife.Optional;
 
 public class TTRechnerActivity extends AppCompatActivity
 {
-    @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
-    @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
-    @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
+    protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
+    protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
+    protected @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
     private Toast anzahlGegnerToast;
 
     @Override
@@ -42,7 +42,7 @@ public class TTRechnerActivity extends AppCompatActivity
         activateToolbar();
     }
 
-    @OnClick(R.id.btnAdd)
+    @OnClick(R.id.btnAddMatch)
     public void pressBtnAddMatch()
     {
         final View pnlSingleMatch = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
@@ -50,7 +50,6 @@ public class TTRechnerActivity extends AppCompatActivity
         pnlMatchList.addView(pnlSingleMatch);
         showToastAnzahlGegner();
     }
-
 
     class ButtonRemoveViewHolder
     {
@@ -89,7 +88,7 @@ public class TTRechnerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflatet das Menü; Dies fügt Menüpunkte hinzu, wenn das Menü dargestellt wird
         getMenuInflater().inflate(R.menu.menu_scrolling, menu);
         return true;
     }
@@ -97,12 +96,8 @@ public class TTRechnerActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

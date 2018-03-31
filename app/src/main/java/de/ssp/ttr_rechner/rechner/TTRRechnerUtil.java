@@ -34,7 +34,7 @@ public class TTRRechnerUtil
      * @param matches - Alle Spiele an einem Spieltag
      * @return die Änderung des TTR-Wertes
      */
-    public long berechneAenderung(List<Match> matches)
+    public long berechneTTRAenderung(List<Match> matches)
     {
         double gesamtWahrscheinlichkeit = 0;
         int anzahlSiege = 0;
