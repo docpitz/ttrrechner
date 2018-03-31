@@ -1,6 +1,7 @@
 package de.ssp.ttr_rechner;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -10,42 +11,62 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 
 public class TTRechnerActivity extends AppCompatActivity
 {
+    @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
+    @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
+    @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ttrrechner_activity_scrolling);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.btnAdd);
-        fab.setOnClickListener(new View.OnClickListener()
+    }
+
+    @OnClick(R.id.btnAdd)
+    public void pressBtnAddMatch()
+    {
+        final LinearLayout pnlMatchList = (LinearLayout)findViewById(R.id.pnlMatchList);
+        final View matchView = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
+        new ButtonRemoveViewHolder(matchView);
+        pnlMatchList.addView(matchView);
+        Toast.makeText(this, "Anzahl Gegner:" + pnlMatchList.getChildCount(),Toast.LENGTH_SHORT);
+    }
+
+    class ButtonRemoveViewHolder
+    {
+        ButtonRemoveViewHolder(View view)
         {
-            @Override
-            public void onClick(View view)
-            {
-                final LinearLayout matchLayout = (LinearLayout)findViewById(R.id.pnlMatchList);
-                final View matchView = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
-                matchLayout.addView(matchView);
+            ButterKnife.bind(this, view);
+        }
 
-                /*
-                final AppCompatImageButton btnRemoveMatch = (AppCompatImageButton) matchView.findViewById(R.id.btnRemoveMatch);
-                btnRemoveMatch.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        matchLayout.removeView(matchView);
-                    }
-                });
-                */
-            }
-        });
-
+        /*
+        @OnClick(R.id.btnRemoveMatch)
+        public void pressBtnRemoveMatch(AppCompatImageButton button)
+        {
+            LinearLayout pnlMatch = (LinearLayout)button.getParent();
+            LinearLayout pnlMatches = (LinearLayout)pnlMatch.getParent();
+            pnlMatches.removeView(pnlMatch);
+        }
+        */
     }
 
     @Override
@@ -70,4 +91,6 @@ public class TTRechnerActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
