@@ -1,0 +1,94 @@
+package de.ssp.ttr_rechner.model;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+/**
+ * Speichert die Werte für die TTRKonstante
+ * Automatisches Speichern und Auslesen der Werte aus den SharedPreferences
+ */
+public class TTRKonstante {
+
+    private static String TTR_KONSTANTE = "TTR_KONSTANTE";
+
+    private static String UEBER_EIN_JAHR_OHNE_SPIEL = "UEBER_EIN_JAHR_OHNE_SPIEL";
+    private static String WENIGER_ALS_15_SPIELE = "WENIGER_ALS_15_SPIELE";
+    private static String UNTER_21_JAHRE = "UNTER_21_JAHRE";
+    private static String UNTER_16_JAHRE = "UNTER_16_JAHRE";
+
+    private Boolean ueberEinJahrOhneSpiel;
+    private Boolean wenigerAls15Spiele;
+    private Boolean unter21Jahre;
+    private Boolean unter16Jahre;
+
+    private SharedPreferences ttrKonstanteSettings;
+
+    /**
+     * Konstruktor für TTRKonstante, lädt automatisch aus den Einstellungen die Werte aus.
+     *
+     * @param context
+     */
+    public TTRKonstante(Context context)
+    {
+        ttrKonstanteSettings = context.getSharedPreferences(TTR_KONSTANTE, Context.MODE_PRIVATE);
+        ueberEinJahrOhneSpiel = ttrKonstanteSettings.getBoolean(UEBER_EIN_JAHR_OHNE_SPIEL, false);
+        wenigerAls15Spiele = ttrKonstanteSettings.getBoolean(WENIGER_ALS_15_SPIELE, false);
+        unter16Jahre = ttrKonstanteSettings.getBoolean(UNTER_16_JAHRE, false);
+        unter21Jahre = ttrKonstanteSettings.getBoolean(UNTER_21_JAHRE,false);
+    }
+
+    public Boolean getUeberEinJahrOhneSpiel()
+    {
+        return ueberEinJahrOhneSpiel;
+    }
+
+    public Boolean getWenigerAls15Spiele()
+    {
+        return wenigerAls15Spiele;
+    }
+
+    public Boolean getUnter21Jahre()
+    {
+        return unter21Jahre;
+    }
+
+    public Boolean getUnter16Jahre()
+    {
+        return unter16Jahre;
+    }
+
+    public void setUeberEinJahrOhneSpiel(Boolean ueberEinJahrOhneSpiel)
+    {
+        this.ueberEinJahrOhneSpiel = ueberEinJahrOhneSpiel;
+        save();
+    }
+
+    public void setWenigerAls15Spiele(Boolean wenigerAls15Spiele)
+    {
+        this.wenigerAls15Spiele = wenigerAls15Spiele;
+        save();
+    }
+
+    public void setUnter21Jahre(Boolean unter21Jahre)
+    {
+        this.unter21Jahre = unter21Jahre;
+        save();
+    }
+
+    public void setUnter16Jahre(Boolean unter16Jahre)
+    {
+        this.unter16Jahre = unter16Jahre;
+        save();
+    }
+
+    private void save()
+    {
+        SharedPreferences.Editor ttrKonstanteSettingsEditor = ttrKonstanteSettings.edit();
+        ttrKonstanteSettingsEditor.putBoolean(UEBER_EIN_JAHR_OHNE_SPIEL ,ueberEinJahrOhneSpiel);
+        ttrKonstanteSettingsEditor.putBoolean(WENIGER_ALS_15_SPIELE, wenigerAls15Spiele);
+        ttrKonstanteSettingsEditor.putBoolean(UNTER_16_JAHRE, unter16Jahre);
+        ttrKonstanteSettingsEditor.putBoolean(UNTER_21_JAHRE, unter21Jahre);
+        ttrKonstanteSettingsEditor.apply();
+    }
+
+}
