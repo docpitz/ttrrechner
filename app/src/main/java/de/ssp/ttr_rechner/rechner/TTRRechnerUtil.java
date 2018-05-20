@@ -30,7 +30,7 @@ public class TTRRechnerUtil
 
     /**
      * Berechnet die Änderung der TTR-Punkte die durch
-     * alle Spiele während eines "Spieltages" passiert
+     * alle Spiele während eines "Spieltages" passiert sind
      * @param matches - Alle Spiele an einem Spieltag
      * @return die Änderung des TTR-Wertes
      */

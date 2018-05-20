@@ -38,9 +38,10 @@
                     android:id="@+id/backdrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/tt"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/tt"
+                    android:src="@drawable/tt2"
                     app:layout_collapseMode="parallax" />
 
                 <android.support.v7.widget.Toolbar
@@ -83,7 +84,7 @@
                 android:id="@+id/txtNeueTTRPunkte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1000"
+                android:text="-"
                 android:textColor="@android:color/white"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -91,12 +92,23 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btnAddMatch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="right"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:clickable="true"
             app:fabSize="normal"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@drawable/ic_plus" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnCalculatePoints"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_equal" />
     </LinearLayout>
 </RelativeLayout>
