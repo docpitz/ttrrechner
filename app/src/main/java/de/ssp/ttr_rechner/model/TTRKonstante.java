@@ -9,12 +9,15 @@ import android.content.SharedPreferences;
  */
 public class TTRKonstante {
 
-    private static String TTR_KONSTANTE = "TTR_KONSTANTE";
+    private static final int TTR_KONSTANTE = 16;
+    private static final int TTRKONSTANTE_ERHOEHUNG = 4;
 
-    private static String UEBER_EIN_JAHR_OHNE_SPIEL = "UEBER_EIN_JAHR_OHNE_SPIEL";
-    private static String WENIGER_ALS_15_SPIELE = "WENIGER_ALS_15_SPIELE";
-    private static String UNTER_21_JAHRE = "UNTER_21_JAHRE";
-    private static String UNTER_16_JAHRE = "UNTER_16_JAHRE";
+    private static final String TTR_KONSTANTE_SAVE_NAME = "TTR_KONSTANTE";
+
+    private static final String UEBER_EIN_JAHR_OHNE_SPIEL = "UEBER_EIN_JAHR_OHNE_SPIEL";
+    private static final String WENIGER_ALS_15_SPIELE = "WENIGER_ALS_15_SPIELE";
+    private static final String UNTER_21_JAHRE = "UNTER_21_JAHRE";
+    private static final String UNTER_16_JAHRE = "UNTER_16_JAHRE";
 
     private Boolean ueberEinJahrOhneSpiel;
     private Boolean wenigerAls15Spiele;
@@ -30,7 +33,7 @@ public class TTRKonstante {
      */
     public TTRKonstante(Context context)
     {
-        ttrKonstanteSettings = context.getSharedPreferences(TTR_KONSTANTE, Context.MODE_PRIVATE);
+        ttrKonstanteSettings = context.getSharedPreferences(TTR_KONSTANTE_SAVE_NAME, Context.MODE_PRIVATE);
         ueberEinJahrOhneSpiel = ttrKonstanteSettings.getBoolean(UEBER_EIN_JAHR_OHNE_SPIEL, false);
         wenigerAls15Spiele = ttrKonstanteSettings.getBoolean(WENIGER_ALS_15_SPIELE, false);
         unter16Jahre = ttrKonstanteSettings.getBoolean(UNTER_16_JAHRE, false);
@@ -89,6 +92,33 @@ public class TTRKonstante {
         ttrKonstanteSettingsEditor.putBoolean(UNTER_16_JAHRE, unter16Jahre);
         ttrKonstanteSettingsEditor.putBoolean(UNTER_21_JAHRE, unter21Jahre);
         ttrKonstanteSettingsEditor.apply();
+    }
+
+    /**
+     * berechnet die Höhe der Änderungskonstante
+     * @return die Änderungskonstante 
+     */
+    public int getTTRKonstante ()
+    {
+        int ttrKonstante = TTR_KONSTANTE;
+
+        if (ueberEinJahrOhneSpiel)
+        {
+            ttrKonstante = ttrKonstante + TTRKONSTANTE_ERHOEHUNG;
+        }
+        if (wenigerAls15Spiele)
+        {
+            ttrKonstante = ttrKonstante + TTRKONSTANTE_ERHOEHUNG;
+        }
+        if (unter16Jahre)
+        {
+            ttrKonstante = ttrKonstante + TTRKONSTANTE_ERHOEHUNG;
+        }
+        if (unter21Jahre)
+        {
+            ttrKonstante = ttrKonstante + TTRKONSTANTE_ERHOEHUNG;
+        }
+        return ttrKonstante;
     }
 
 }
