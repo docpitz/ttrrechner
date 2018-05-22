@@ -19,10 +19,10 @@ public class TTRKonstante {
     private static final String UNTER_21_JAHRE = "UNTER_21_JAHRE";
     private static final String UNTER_16_JAHRE = "UNTER_16_JAHRE";
 
-    private Boolean ueberEinJahrOhneSpiel;
-    private Boolean wenigerAls15Spiele;
-    private Boolean unter21Jahre;
-    private Boolean unter16Jahre;
+    private boolean ueberEinJahrOhneSpiel;
+    private boolean wenigerAls15Spiele;
+    private boolean unter21Jahre;
+    private boolean unter16Jahre;
 
     private SharedPreferences ttrKonstanteSettings;
 
@@ -40,45 +40,45 @@ public class TTRKonstante {
         unter21Jahre = ttrKonstanteSettings.getBoolean(UNTER_21_JAHRE,false);
     }
 
-    public Boolean getUeberEinJahrOhneSpiel()
+    public boolean getUeberEinJahrOhneSpiel()
     {
         return ueberEinJahrOhneSpiel;
     }
 
-    public Boolean getWenigerAls15Spiele()
+    public boolean getWenigerAls15Spiele()
     {
         return wenigerAls15Spiele;
     }
 
-    public Boolean getUnter21Jahre()
+    public boolean getUnter21Jahre()
     {
         return unter21Jahre;
     }
 
-    public Boolean getUnter16Jahre()
+    public boolean getUnter16Jahre()
     {
         return unter16Jahre;
     }
 
-    public void setUeberEinJahrOhneSpiel(Boolean ueberEinJahrOhneSpiel)
+    public void setUeberEinJahrOhneSpiel(boolean ueberEinJahrOhneSpiel)
     {
         this.ueberEinJahrOhneSpiel = ueberEinJahrOhneSpiel;
         save();
     }
 
-    public void setWenigerAls15Spiele(Boolean wenigerAls15Spiele)
+    public void setWenigerAls15Spiele(boolean wenigerAls15Spiele)
     {
         this.wenigerAls15Spiele = wenigerAls15Spiele;
         save();
     }
 
-    public void setUnter21Jahre(Boolean unter21Jahre)
+    public void setUnter21Jahre(boolean unter21Jahre)
     {
         this.unter21Jahre = unter21Jahre;
         save();
     }
 
-    public void setUnter16Jahre(Boolean unter16Jahre)
+    public void setUnter16Jahre(boolean unter16Jahre)
     {
         this.unter16Jahre = unter16Jahre;
         save();
@@ -96,7 +96,7 @@ public class TTRKonstante {
 
     /**
      * berechnet die Höhe der Änderungskonstante
-     * @return die Änderungskonstante 
+     * @return die Änderungskonstante
      */
     public int getTTRKonstante ()
     {

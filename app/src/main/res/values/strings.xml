@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">TTR-Rechner</string>
-    <string name="action_settings">Einstellungen</string>
+    <string name="action_ttr_konstante">TTR-Konstante anpassen</string>
     <string name="ttbild">TT-Bild</string>
     <string name="gegner">Gegner</string>
+    <string name="title_activity_ttrkonstante">TTR-Konstante</string>
 </resources>

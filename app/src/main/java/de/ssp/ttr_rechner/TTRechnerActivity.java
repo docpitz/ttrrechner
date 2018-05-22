@@ -1,5 +1,6 @@
 package de.ssp.ttr_rechner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 import de.ssp.ttr_rechner.model.Match;
+import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
 
 public class TTRechnerActivity extends AppCompatActivity
@@ -56,17 +58,20 @@ public class TTRechnerActivity extends AppCompatActivity
         if (! "".equals(strMeinTTRWert))
         {
             int intMeinTTRWert = Integer.parseInt(strMeinTTRWert);
-            TTRRechnerUtil calculator = new TTRRechnerUtil(intMeinTTRWert, 24);
+            TTRKonstante ttrKonstanteModel = new TTRKonstante(this);
+            TTRRechnerUtil calculator = new TTRRechnerUtil(intMeinTTRWert, ttrKonstanteModel.getTTRKonstante());
 
             int count = pnlMatchList.getChildCount();
             List<Match> matches = new ArrayList<>();
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 LinearLayout singleMatch = (LinearLayout) pnlMatchList.getChildAt(i);
 
                 EditText txtTTRGegner = singleMatch.findViewById(R.id.txtTTRGegner);
                 String strTTRGegner = txtTTRGegner.getText().toString();
 
-                if (!"".equals(strTTRGegner)) {
+                if (!"".equals(strTTRGegner))
+                {
                     int intTTRGegner = Integer.parseInt(strTTRGegner);
 
                     Switch switchMatch = singleMatch.findViewById(R.id.chkSieg);
@@ -77,13 +82,9 @@ public class TTRechnerActivity extends AppCompatActivity
                 }
 
             }
-
             int intAenderungTTR = (int) calculator.berechneTTRAenderung(matches);
-
             int intEndergebnis = intMeinTTRWert + intAenderungTTR;
-
             strAnzeigeErgebnis = String.valueOf(intEndergebnis);
-
         }
         txtNeueTTRPunkte.setText(strAnzeigeErgebnis);
     }
@@ -104,7 +105,6 @@ public class TTRechnerActivity extends AppCompatActivity
             ButterKnife.bind(this, view);
         }
 
-
         @OnClick(R.id.btnRemoveMatch)
         public void pressBtnRemoveMatch(AppCompatImageButton button)
         {
@@ -112,7 +112,6 @@ public class TTRechnerActivity extends AppCompatActivity
             TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
             showToastAnzahlGegner();
         }
-
     }
 
     private void showToastAnzahlGegner()
@@ -144,7 +143,10 @@ public class TTRechnerActivity extends AppCompatActivity
     {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_call_ttr_konstante)
+        {
+            Intent intentForTTRKonstanteActivity = new Intent(this, TTRKonstanteActivity.class);
+            startActivity(intentForTTRKonstanteActivity);
             return true;
         }
         return super.onOptionsItemSelected(item);
