@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,22 +46,57 @@ public class TTRKonstanteActivity extends AppCompatActivity
         chkKonstanteUnter16.setChecked(ttrKonstanteModel.getUnter16Jahre());
         chkKonstanteUnter21.setChecked(ttrKonstanteModel.getUnter21Jahre());
         chkKonstanteWeniger15Spiele.setChecked(ttrKonstanteModel.getWenigerAls15Spiele());
-        txtTTRKonstante.setText(String.valueOf(ttrKonstanteModel.getTTRKonstante()));
+        updateTTRKonstante();
         startIsFinished = true;
     }
 
-    @OnCheckedChanged({R.id.chkKonstanteWeniger15Spiele, R.id.chkKonstanteUnter21, R.id.chkKonstanteUnter16, R.id.chkKonstante1JahrOhneSpiel})
-    public void changeAnySwitch(CompoundButton switchButton, boolean checked)
+    @OnCheckedChanged({R.id.chkKonstanteWeniger15Spiele, R.id.chkKonstante1JahrOhneSpiel})
+    public void change15SpieleUnd1JahrOhneSpielSwitch(CompoundButton switchButton, boolean checked)
     {
         if(startIsFinished)
         {
             ttrKonstanteModel.setUeberEinJahrOhneSpiel(chkKonstante1JahrOhneSpiel.isChecked());
-            ttrKonstanteModel.setUnter16Jahre(chkKonstanteUnter16.isChecked());
-            ttrKonstanteModel.setUnter21Jahre(chkKonstanteUnter21.isChecked());
             ttrKonstanteModel.setWenigerAls15Spiele(chkKonstanteWeniger15Spiele.isChecked());
-
-            txtTTRKonstante.setText(String.valueOf(ttrKonstanteModel.getTTRKonstante()));
+            updateTTRKonstante();
         }
+    }
+
+    @OnCheckedChanged(R.id.chkKonstanteUnter16)
+    public void changeUnter16JahreSwitch(CompoundButton switchButton, boolean checked)
+    {
+        if (startIsFinished)
+        {
+            ttrKonstanteModel.setUnter16Jahre(chkKonstanteUnter16.isChecked());
+            if(chkKonstanteUnter16.isChecked())
+            {
+                ttrKonstanteModel.setUnter21Jahre(true);
+                chkKonstanteUnter21.setChecked(true);
+            }
+            updateTTRKonstante();
+        }
+    }
+
+    @OnCheckedChanged(R.id.chkKonstanteUnter21)
+    public void changeUnter21JahreSwitch(CompoundButton switchButton, boolean checked)
+    {
+        if(startIsFinished)
+        {
+            if(chkKonstanteUnter16.isChecked() && !chkKonstanteUnter21.isChecked())
+            {
+                chkKonstanteUnter21.setChecked(true);
+                Toast.makeText(this, "Wenn du unter 16 Jahre alt bist, bist du gleichzeitig unter 21 Jahre alt!", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                ttrKonstanteModel.setUnter21Jahre(chkKonstanteUnter21.isChecked());
+            }
+            updateTTRKonstante();
+        }
+    }
+
+    private void updateTTRKonstante()
+    {
+        txtTTRKonstante.setText(String.valueOf(ttrKonstanteModel.getTTRKonstante()));
     }
 
     @Override

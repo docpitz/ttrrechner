@@ -46,6 +46,7 @@ public class TTRechnerActivity extends AppCompatActivity
         anzahlGegnerToast = new Toast(this);
         // erstmal nicht so wichtig
         ButterKnife.bind(this);
+        addMatchView();
         activateToolbar();
     }
 
@@ -92,10 +93,16 @@ public class TTRechnerActivity extends AppCompatActivity
     @OnClick(R.id.btnAddMatch)
     public void pressBtnAddMatch()
     {
+        addMatchView();
+        showToastAnzahlGegner();
+    }
+
+    private void addMatchView()
+    {
         final View pnlSingleMatch = getLayoutInflater().inflate(R.layout.ttrechner_single_match, null);
         new ButtonRemoveViewHolder(pnlSingleMatch);
         pnlMatchList.addView(pnlSingleMatch);
-        showToastAnzahlGegner();
+        updateRemoveButton();
     }
 
     class ButtonRemoveViewHolder
@@ -110,7 +117,23 @@ public class TTRechnerActivity extends AppCompatActivity
         {
             LinearLayout pnlSingleMatch = (LinearLayout)button.getParent();
             TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
+            updateRemoveButton();
             showToastAnzahlGegner();
+        }
+    }
+
+    private void updateRemoveButton()
+    {
+        if(pnlMatchList.getChildCount() > 1)
+        {
+            for (int i = 0; i < pnlMatchList.getChildCount(); i++)
+            {
+                pnlMatchList.getChildAt(i).findViewById(R.id.btnRemoveMatch).setVisibility(View.VISIBLE);
+            }
+        }
+        if(pnlMatchList.getChildCount() == 1)
+        {
+            pnlMatchList.getChildAt(0).findViewById(R.id.btnRemoveMatch).setVisibility(View.INVISIBLE);
         }
     }
 

@@ -41,7 +41,7 @@
                     android:background="@drawable/tt"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/tt2"
+                    android:src="@drawable/tt"
                     app:layout_collapseMode="parallax" />
 
                 <android.support.v7.widget.Toolbar
