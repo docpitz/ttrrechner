@@ -6,8 +6,8 @@ android {
         applicationId "de.ssp.ttr_rechner"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1000001
-        versionName "1.00-0001"
+        versionCode 1000002
+        versionName "1.00-0002"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
