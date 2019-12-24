@@ -175,7 +175,7 @@
                         android:text="-"
                         android:layout_gravity="bottom"
                         android:textColor="@android:color/white"
-                        android:textSize="28sp"
+                        android:textSize="40sp"
                         android:textStyle="bold"
                         android:paddingBottom="6dp"
                         android:paddingRight="20dp"/>
@@ -188,7 +188,6 @@
                         android:layout_marginBottom="8dp"
                         android:layout_marginRight="10dp"
                         android:scaleType="center"
-                        app:fabSize="mini"
                         app:srcCompat="@drawable/ic_equal_18" />
                 </LinearLayout>
             </LinearLayout>
