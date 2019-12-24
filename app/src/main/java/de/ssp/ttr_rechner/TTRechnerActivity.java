@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,7 +28,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Optional;
 import de.ssp.ttr_rechner.model.Match;
 import de.ssp.ttr_rechner.model.TTRKonstante;
@@ -38,8 +42,10 @@ public class TTRechnerActivity extends AppCompatActivity
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
     protected @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
+    protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
     private Toast anzahlGegnerToast;
     private Wettkampf wettkampf;
+    private boolean recalculateNeuerTTRWert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,10 +53,17 @@ public class TTRechnerActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ttrrechner_activity_scrolling);
         anzahlGegnerToast = new Toast(this);
+        recalculateNeuerTTRWert = false;
         // erstmal nicht so wichtig
         ButterKnife.bind(this);
         activateToolbar();
         wettkampf = new Wettkampf(this);
+        scrButtonView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrButtonView.fullScroll(View.FOCUS_RIGHT);
+            }
+        });
     }
 
     @Override
@@ -65,7 +78,7 @@ public class TTRechnerActivity extends AppCompatActivity
         {
             Log.e(this.getLocalClassName(), e.getMessage());
         }
-        if(calculateNeueTTRPunkte() != angezeigteNeueTTRPunkte)
+        if(calculateNeueTTRPunkte() != angezeigteNeueTTRPunkte && angezeigteNeueTTRPunkte != -1)
         {
             pressBtnCalculatePoints();
             Toast.makeText(this, "Neue TTR-Punkte wurden neu berechnet.", Toast.LENGTH_SHORT).show();
@@ -90,8 +103,14 @@ public class TTRechnerActivity extends AppCompatActivity
     {
        pnlMatchList.removeAllViews();
        txtMeinTTRWert.setText("");
-       txtNeueTTRPunkte.setText("-");
+       this.resetNeueTTRPunkte();
        addMatchView(null);
+    }
+
+    @OnTextChanged(R.id.txtMeinTTRWert)
+    public void changeTxtMeinTTRWert(CharSequence text)
+    {
+        resetNeueTTRPunkte();
     }
 
     private int calculateNeueTTRPunkte()
@@ -150,7 +169,20 @@ public class TTRechnerActivity extends AppCompatActivity
             TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
             updateRemoveButton();
             showToastAnzahlGegner();
+            resetNeueTTRPunkte();
 
+        }
+
+        @OnCheckedChanged(R.id.chkSieg)
+        public void changeChkSieg(CompoundButton switchButton, boolean checked)
+        {
+            resetNeueTTRPunkte();
+        }
+
+        @OnTextChanged(R.id.txtTTRGegner)
+        public void changeTxtTTRGegner(CharSequence text)
+        {
+            resetNeueTTRPunkte();
         }
     }
 
@@ -259,10 +291,28 @@ public class TTRechnerActivity extends AppCompatActivity
 
         if (id == R.id.action_call_ttr_konstante)
         {
-            Intent intentForTTRKonstanteActivity = new Intent(this, TTRKonstanteActivity.class);
-            startActivity(intentForTTRKonstanteActivity);
+            pressBtnTTRSettings();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.btnTTRSettings)
+    public void pressBtnTTRSettings()
+    {
+        recalculateNeuerTTRWert = true;
+        Intent intentForTTRKonstanteActivity = new Intent(this, TTRKonstanteActivity.class);
+        startActivity(intentForTTRKonstanteActivity);
+    }
+
+    private void resetNeueTTRPunkte()
+    {
+        txtNeueTTRPunkte.setText("-");
+        if(recalculateNeuerTTRWert)
+        {
+            pressBtnCalculatePoints();
+            recalculateNeuerTTRWert = false;
+        }
+
     }
 }

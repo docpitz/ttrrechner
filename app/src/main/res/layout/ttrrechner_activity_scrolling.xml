@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="?attr/colorPrimaryDark"
                 app:expandedTitleMarginBottom="30dp"
                 app:expandedTitleMarginEnd="64dp"
                 app:expandedTitleMarginStart="48dp"
@@ -63,64 +63,135 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:background="@android:color/transparent"
+        >
 
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            android:background="@android:color/transparent">
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalButtonScrollView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Neue TTR-Punkte"
-                android:textColor="@android:color/white" />
+                android:layout_weight="1"
+                android:scrollbars="none"
+                android:background="@color/colorPrimary">
 
-            <TextView
-                android:id="@+id/txtNeueTTRPunkte"
-                android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:orientation="horizontal"
+                    android:paddingLeft="5dp"
+                    android:background="@android:color/transparent">
+
+                    <Button
+                        android:id="@+id/btnTTRSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_shape"
+                        android:drawableStart="@drawable/ic_settings_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="TTR-Konstante"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnRestore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_shape"
+                        android:drawableStart="@drawable/ic_delete_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Zurücksetzen"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnAddMatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_shape"
+                        android:drawableStart="@drawable/ic_plus_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Hinzufügen"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </HorizontalScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-"
-                android:textColor="@android:color/white"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:background="@color/colorPrimaryDark"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Neue TTR-Punkte:"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_gravity="bottom"
+                    android:paddingBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+
+                    >
+                    <TextView
+                        android:id="@+id/txtNeueTTRPunkte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_gravity="bottom"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:paddingBottom="6dp"
+                        android:paddingRight="20dp"/>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/btnCalculatePoints"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="10dp"
+                        android:scaleType="center"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/ic_equal_18" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnRestore"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_restore" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnAddMatch"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="right"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_plus" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnCalculatePoints"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:srcCompat="@drawable/ic_equal" />
-
     </LinearLayout>
 </RelativeLayout>
