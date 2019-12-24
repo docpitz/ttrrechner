@@ -62,7 +62,7 @@ public class TTRRechnerUtilUnitTest
         Match wildenauer = new Match(1593, true);
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(wildenauer);
-        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
 
         assertEquals(7, ttrAenderung);
     }
@@ -90,7 +90,7 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(kirchberger);
         matchArrayList.add(betz);
 
-        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
         assertEquals(68, ttrAenderung);
     }
 
@@ -107,7 +107,28 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(heim);
         matchArrayList.add(waechter);
 
-        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
+        assertEquals(-23, ttrAenderung);
+    }
+
+    @Test
+    public void testBerechneAenderungBeispielKleineNiederlageMitLeerwert()
+    {
+        TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1662, 16);
+        Match muthorst = new Match(1512, true);
+        Match heim = new Match(1630, false);
+        Match waechter = new Match(1512, false);
+        Match leerWert1 = new Match(-1, true);
+        Match leerWert2 = new Match(-1, false);
+
+        ArrayList<Match> matchArrayList = new ArrayList<>();
+        matchArrayList.add(muthorst);
+        matchArrayList.add(heim);
+        matchArrayList.add(waechter);
+        matchArrayList.add(leerWert1);
+        matchArrayList.add(leerWert2);
+
+        long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
         assertEquals(-23, ttrAenderung);
     }
 
@@ -130,7 +151,7 @@ public class TTRRechnerUtilUnitTest
         matchArrayList.add(haasS);
         matchArrayList.add(pilgrim);
 
-        long ttrAenderung = ttrRechnerUtil.berechneAenderung(matchArrayList);
+        long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
         assertEquals(9, ttrAenderung);
     }
 

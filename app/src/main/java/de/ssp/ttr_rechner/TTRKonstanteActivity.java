@@ -1,15 +1,11 @@
 package de.ssp.ttr_rechner;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,15 +13,17 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
+import de.ssp.ttr_rechner.model.Alter;
 import de.ssp.ttr_rechner.model.TTRKonstante;
 
 public class TTRKonstanteActivity extends AppCompatActivity
 {
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.chkKonstante1JahrOhneSpiel) Switch chkKonstante1JahrOhneSpiel;
-    protected @BindView(R.id.chkKonstanteUnter16) Switch chkKonstanteUnter16;
-    protected @BindView(R.id.chkKonstanteUnter21) Switch chkKonstanteUnter21;
     protected @BindView(R.id.chkKonstanteWeniger15Spiele) Switch chkKonstanteWeniger15Spiele;
+    protected @BindView(R.id.rbUnter16) RadioButton rbUnter16;
+    protected @BindView(R.id.rbUnter21) RadioButton rbUnter21;
+    protected @BindView(R.id.rbUeber21) RadioButton rbUeber21;
     protected @BindView(R.id.txtTTRKonstante) TextView txtTTRKonstante;
     protected TTRKonstante ttrKonstanteModel;
     protected boolean startIsFinished = false;
@@ -43,9 +41,23 @@ public class TTRKonstanteActivity extends AppCompatActivity
 
         ttrKonstanteModel = new TTRKonstante(this);
         chkKonstante1JahrOhneSpiel.setChecked(ttrKonstanteModel.getUeberEinJahrOhneSpiel());
-        chkKonstanteUnter16.setChecked(ttrKonstanteModel.getUnter16Jahre());
-        chkKonstanteUnter21.setChecked(ttrKonstanteModel.getUnter21Jahre());
         chkKonstanteWeniger15Spiele.setChecked(ttrKonstanteModel.getWenigerAls15Spiele());
+        switch (ttrKonstanteModel.getAlter())
+        {
+            case UNTER_16:
+                rbUnter16.toggle();
+                break;
+            case UNTER_21:
+                rbUnter21.toggle();
+                break;
+            case UEBER_21:
+                rbUeber21.toggle();
+                break;
+            default:
+                rbUnter16.toggle();
+                break;
+        }
+
         updateTTRKonstante();
         startIsFinished = true;
     }
@@ -61,35 +73,29 @@ public class TTRKonstanteActivity extends AppCompatActivity
         }
     }
 
-    @OnCheckedChanged(R.id.chkKonstanteUnter16)
-    public void changeUnter16JahreSwitch(CompoundButton switchButton, boolean checked)
+    @OnCheckedChanged(R.id.rbUnter16)
+    public void toogleUnter16(CompoundButton button, boolean checked)
     {
-        if (startIsFinished)
-        {
-            ttrKonstanteModel.setUnter16Jahre(chkKonstanteUnter16.isChecked());
-            if(chkKonstanteUnter16.isChecked())
-            {
-                ttrKonstanteModel.setUnter21Jahre(true);
-                chkKonstanteUnter21.setChecked(true);
-            }
-            updateTTRKonstante();
-        }
+        changeAlter(Alter.UNTER_16, checked);
     }
 
-    @OnCheckedChanged(R.id.chkKonstanteUnter21)
-    public void changeUnter21JahreSwitch(CompoundButton switchButton, boolean checked)
+    @OnCheckedChanged(R.id.rbUnter21)
+    public void toogleUnter18(CompoundButton button, boolean checked)
     {
-        if(startIsFinished)
+        changeAlter(Alter.UNTER_21, checked);
+    }
+
+    @OnCheckedChanged(R.id.rbUeber21)
+    public void toogleUeber18(CompoundButton button, boolean checked)
+    {
+        changeAlter(Alter.UEBER_21, checked);
+    }
+
+    private void changeAlter(Alter alter, boolean checked)
+    {
+        if(startIsFinished && checked)
         {
-            if(chkKonstanteUnter16.isChecked() && !chkKonstanteUnter21.isChecked())
-            {
-                chkKonstanteUnter21.setChecked(true);
-                Toast.makeText(this, "Wenn du unter 16 Jahre alt bist, bist du gleichzeitig unter 21 Jahre alt!", Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                ttrKonstanteModel.setUnter21Jahre(chkKonstanteUnter21.isChecked());
-            }
+            ttrKonstanteModel.setAlter(alter);
             updateTTRKonstante();
         }
     }

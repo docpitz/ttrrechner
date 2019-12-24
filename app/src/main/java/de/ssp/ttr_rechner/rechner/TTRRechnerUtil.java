@@ -40,9 +40,12 @@ public class TTRRechnerUtil
         int anzahlSiege = 0;
         for (Match match: matches)
         {
-            double einzelwahrscheinlichkeit = berechneGewinnwahrscheinlichkeit(match.getGegnerischerTTRWert());
-            gesamtWahrscheinlichkeit = gesamtWahrscheinlichkeit + einzelwahrscheinlichkeit;
-            anzahlSiege = anzahlSiege + (match.isGewonnen() ? + 1 : 0);
+            if(match.getGegnerischerTTRWert() > 0)
+            {
+                double einzelwahrscheinlichkeit = berechneGewinnwahrscheinlichkeit(match.getGegnerischerTTRWert());
+                gesamtWahrscheinlichkeit = gesamtWahrscheinlichkeit + einzelwahrscheinlichkeit;
+                anzahlSiege = anzahlSiege + (match.isGewonnen() ? +1 : 0);
+            }
         }
         double aenderung = (anzahlSiege - gesamtWahrscheinlichkeit) * this.aenderungsKonstante;
         return Math.round(aenderung);
