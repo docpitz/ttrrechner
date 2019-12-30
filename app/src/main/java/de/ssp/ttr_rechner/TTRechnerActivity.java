@@ -2,12 +2,6 @@ package de.ssp.ttr_rechner;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +19,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -32,7 +29,9 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Optional;
+import de.ssp.ttr_rechner.model.LoginTask;
 import de.ssp.ttr_rechner.model.Match;
+import de.ssp.ttr_rechner.model.MyTischtennis;
 import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.model.Wettkampf;
 import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
@@ -46,6 +45,7 @@ public class TTRechnerActivity extends AppCompatActivity
     private Toast anzahlGegnerToast;
     private Wettkampf wettkampf;
     private boolean recalculateNeuerTTRWert;
+    private LoginTask loginTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,6 +84,18 @@ public class TTRechnerActivity extends AppCompatActivity
             Toast.makeText(this, "Neue TTR-Punkte wurden neu berechnet.", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @OnClick(R.id.btnCallTTRPoints)
+    public void pressBtnCallTTRPoints()
+    {
+        loginTask = new LoginTask(this, "", "");
+        loginTask.execute();
+    }
+
+    public void ready()
+    {
+        txtMeinTTRWert.setText(String.valueOf(loginTask.ttr));
     }
 
     @OnClick(R.id.btnCalculatePoints)
@@ -170,7 +182,6 @@ public class TTRechnerActivity extends AppCompatActivity
             updateRemoveButton();
             showToastAnzahlGegner();
             resetNeueTTRPunkte();
-
         }
 
         @OnCheckedChanged(R.id.chkSieg)
@@ -313,6 +324,5 @@ public class TTRechnerActivity extends AppCompatActivity
             pressBtnCalculatePoints();
             recalculateNeuerTTRWert = false;
         }
-
     }
 }
