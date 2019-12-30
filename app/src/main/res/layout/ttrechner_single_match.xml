@@ -4,41 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pnlMatchView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingRight="20dp"
-        android:text="@string/gegner"
-        android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/txtTTRGegner"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtHintTTRGegner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.6"
-        android:ems="1"
-        android:hint="TTR-Pkt."
-        android:layout_marginRight="15dp"
-        android:inputType="numberSigned"
-        android:maxLength="4" />
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/txtTTRGegner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.7"
+            android:hint="@string/hint_ttr_gegner"
+            android:inputType="numberSigned"
+            android:maxLength="4" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Switch
         android:id="@+id/chkSieg"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
+        android:layout_weight="0.1"
         android:paddingLeft="10dp"
-        android:paddingRight="25dp"
+        android:paddingRight="15dp"
+        android:layout_gravity="center"
         android:text="Sieg"
         android:textOff="Verloren"
         android:textOn="Sieg" />
 
     <ImageButton
+        android:layout_gravity="center"
+        android:id="@+id/btnSearchMatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingRight="5dp"
+        android:alpha="0.35"
+        android:background="@android:color/transparent"
+        android:paddingTop="6dp"
+        app:srcCompat="@drawable/ic_search_36" />
+
+    <ImageButton
+        android:layout_gravity="center"
         android:id="@+id/btnRemoveMatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

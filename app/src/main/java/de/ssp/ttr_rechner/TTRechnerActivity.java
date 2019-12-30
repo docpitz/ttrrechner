@@ -1,13 +1,12 @@
 package de.ssp.ttr_rechner;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -16,36 +15,40 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.textfield.TextInputLayout;
+import com.jmelzer.myttr.User;
 
+import java.util.ArrayList;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import butterknife.Optional;
-import de.ssp.ttr_rechner.model.LoginTask;
+import de.ssp.ttr_rechner.service.LoginService;
 import de.ssp.ttr_rechner.model.Match;
-import de.ssp.ttr_rechner.model.MyTischtennis;
+import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.model.Wettkampf;
 import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
 
-public class TTRechnerActivity extends AppCompatActivity
+public class TTRechnerActivity extends AppCompatActivity implements LoginService.LoginServiceReady
 {
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
     protected @BindView(R.id.pnlMatchList) LinearLayout pnlMatchList;
     protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
+    protected @BindView(R.id.txtMeinTTRWertHint) TextInputLayout txtMeinTTRWertHint;
     private Toast anzahlGegnerToast;
     private Wettkampf wettkampf;
+    private MyTischtennisCredentials credentials;
     private boolean recalculateNeuerTTRWert;
-    private LoginTask loginTask;
+    private LoginService loginService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,6 +61,7 @@ public class TTRechnerActivity extends AppCompatActivity
         ButterKnife.bind(this);
         activateToolbar();
         wettkampf = new Wettkampf(this);
+        credentials = new MyTischtennisCredentials(this);
         scrButtonView.post(new Runnable() {
             @Override
             public void run() {
@@ -89,13 +93,48 @@ public class TTRechnerActivity extends AppCompatActivity
     @OnClick(R.id.btnCallTTRPoints)
     public void pressBtnCallTTRPoints()
     {
-        loginTask = new LoginTask(this, "", "");
-        loginTask.execute();
+        if(! showCredentialsNotSetIfNecessary())
+        {
+            txtMeinTTRWert.setText("");
+            loginService = new LoginService(this, this, credentials.getUsername(), credentials.getPassword());
+            loginService.execute();
+        }
     }
 
-    public void ready()
+    private boolean showCredentialsNotSetIfNecessary()
     {
-        txtMeinTTRWert.setText(String.valueOf(loginTask.ttr));
+        if(! credentials.isSet())
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Anmeldedaten erforderlich")
+                    .setMessage("Derzeit wurden noch keine Anmeldedaten hinterlegt. In den Einstellungen kannst du deine Anmeldedaten für myTischtennis hinterlegen!")
+                    .setPositiveButton(R.string.menu_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            callSettingsActivity(true);
+                        }
+                    }).setNegativeButton("Ok", null);
+            dialogBuilder.create().show();
+        }
+        return !credentials.isSet();
+    }
+
+    @Override
+    public void loginServiceReady(boolean success, User user, String errorMessage)
+    {
+        if(success && user != null)
+        {
+            txtMeinTTRWert.setText(String.valueOf(user.getPoints()));
+            txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + " ("+ user.getRealName() +")");
+        }
+        else
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Anmeldung fehlgeschlagen")
+                    .setMessage("Die Anmeldung ist fehlgeschlagen, ihre Login-Daten wurden gelöscht! Fehler: " + errorMessage)
+                    .setPositiveButton("Abbrechen", null);
+            dialogBuilder.create().show();
+        }
     }
 
     @OnClick(R.id.btnCalculatePoints)
@@ -119,9 +158,20 @@ public class TTRechnerActivity extends AppCompatActivity
        addMatchView(null);
     }
 
+    @OnClick(R.id.btnSearchAndAddMatch)
+    public void pressBtnSearchAndAddMatch()
+    {
+        if(! showCredentialsNotSetIfNecessary())
+        {
+            addMatchView(null);
+            // Hier muss die neue Maske aufgehen!
+        }
+    }
+
     @OnTextChanged(R.id.txtMeinTTRWert)
     public void changeTxtMeinTTRWert(CharSequence text)
     {
+        txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte));
         resetNeueTTRPunkte();
     }
 
@@ -154,22 +204,26 @@ public class TTRechnerActivity extends AppCompatActivity
         if(match != null)
         {
             EditText txtTTRGegner = pnlSingleMatch.findViewById(R.id.txtTTRGegner);
+            TextInputLayout txtHintTTRGegner = pnlSingleMatch.findViewById(R.id.txtHintTTRGegner);
             Switch chkSieg = pnlSingleMatch.findViewById(R.id.chkSieg);
             if(match.getGegnerischerTTRWert() > 0)
             {
+                txtHintTTRGegner.setHint(match.getNameAndVerein());
                 txtTTRGegner.setText(String.valueOf(match.getGegnerischerTTRWert()));
             }
             chkSieg.setChecked(match.isGewonnen());
         }
 
-        new ButtonRemoveViewHolder(pnlSingleMatch);
+        new PnlSingleMatchViewHolder(pnlSingleMatch);
         pnlMatchList.addView(pnlSingleMatch);
         updateRemoveButton();
     }
 
-    class ButtonRemoveViewHolder
+    class PnlSingleMatchViewHolder
     {
-        ButtonRemoveViewHolder(View view)
+        protected @BindView(R.id.pnlMatchView) LinearLayout pnlSingleMatchView;
+        protected @BindView(R.id.txtHintTTRGegner) TextInputLayout txtHintTTRGegner;
+        PnlSingleMatchViewHolder(View view)
         {
             ButterKnife.bind(this, view);
         }
@@ -177,11 +231,19 @@ public class TTRechnerActivity extends AppCompatActivity
         @OnClick(R.id.btnRemoveMatch)
         public void pressBtnRemoveMatch(AppCompatImageButton button)
         {
-            LinearLayout pnlSingleMatch = (LinearLayout)button.getParent();
-            TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatch);
+            TTRechnerActivity.this.pnlMatchList.removeView(pnlSingleMatchView);
             updateRemoveButton();
             showToastAnzahlGegner();
             resetNeueTTRPunkte();
+        }
+
+        @OnClick(R.id.btnSearchMatch)
+        public void pressBtnSearchMatch(AppCompatImageButton button)
+        {
+            if(! showCredentialsNotSetIfNecessary())
+            {
+                // Hier muss die neue Maske aufgehen
+            }
         }
 
         @OnCheckedChanged(R.id.chkSieg)
@@ -193,6 +255,7 @@ public class TTRechnerActivity extends AppCompatActivity
         @OnTextChanged(R.id.txtTTRGegner)
         public void changeTxtTTRGegner(CharSequence text)
         {
+            txtHintTTRGegner.setHint(getString(R.string.hint_ttr_gegner));
             resetNeueTTRPunkte();
         }
     }
@@ -275,7 +338,7 @@ public class TTRechnerActivity extends AppCompatActivity
             Switch switchMatch = singleMatch.findViewById(R.id.chkSieg);
             Boolean gewonnen = switchMatch.isChecked();
 
-            Match modelMatch = new Match(intTTRGegner, gewonnen);
+            Match modelMatch = new Match(intTTRGegner, gewonnen, null, null);
             matches.add(modelMatch);
         }
         return matches;
@@ -302,7 +365,7 @@ public class TTRechnerActivity extends AppCompatActivity
 
         if (id == R.id.action_call_ttr_konstante)
         {
-            pressBtnTTRSettings();
+            callSettingsActivity(false);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -311,8 +374,14 @@ public class TTRechnerActivity extends AppCompatActivity
     @OnClick(R.id.btnTTRSettings)
     public void pressBtnTTRSettings()
     {
+        callSettingsActivity(false);
+    }
+
+    private void callSettingsActivity(boolean focusOnCredentials)
+    {
         recalculateNeuerTTRWert = true;
-        Intent intentForTTRKonstanteActivity = new Intent(this, TTRKonstanteActivity.class);
+        Intent intentForTTRKonstanteActivity = new Intent(this, SettingsActivity.class);
+        intentForTTRKonstanteActivity.putExtra(MyTischtennisCredentials.FOCUS_ON_CREDENTIALS, focusOnCredentials);
         startActivity(intentForTTRKonstanteActivity);
     }
 

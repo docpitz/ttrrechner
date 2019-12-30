@@ -97,16 +97,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
                         android:drawableStart="@drawable/ic_settings_18"
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="TTR-Konstante"
+                        android:text="Einstellungen"
                         android:textSize="12sp" />
 
                     <Button
@@ -127,13 +127,30 @@
                         android:textSize="12sp" />
 
                     <Button
-                        android:id="@+id/btnAddMatch"
+                        android:id="@+id/btnSearchAndAddMatch"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_shape"
+                        android:drawableStart="@drawable/ic_search_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Suchen"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnAddMatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
                         android:drawableStart="@drawable/ic_plus_18"
