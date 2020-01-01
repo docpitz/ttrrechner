@@ -18,11 +18,12 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import de.ssp.ttr_rechner.model.Alter;
-import de.ssp.ttr_rechner.service.LoginService;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
+import de.ssp.ttr_rechner.service.caller.ServiceCallerLogin;
+import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
-public class SettingsActivity extends AppCompatActivity implements LoginService.LoginServiceReady
+public class SettingsActivity extends AppCompatActivity implements ServiceReady<User>
 {
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.chkKonstante1JahrOhneSpiel) Switch chkKonstante1JahrOhneSpiel;
@@ -36,7 +37,6 @@ public class SettingsActivity extends AppCompatActivity implements LoginService.
     protected TTRKonstante ttrKonstanteModel;
     protected MyTischtennisCredentials myTischtennisCredentialsModel;
     protected boolean startIsFinished = false;
-    private LoginService loginService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -102,8 +102,8 @@ public class SettingsActivity extends AppCompatActivity implements LoginService.
     @OnClick (R.id.btnLogin)
     public void pressBtnTestLogin()
     {
-        loginService = new LoginService(this, this, txtUsername.getText().toString(), txtPassword.getText().toString());
-        loginService.execute();
+        ServiceCallerLogin loginServiceCaller = new ServiceCallerLogin(this, this, txtUsername.getText().toString(), txtPassword.getText().toString());
+        loginServiceCaller.callService();;
     }
 
     @OnClick(R.id.btnLoginDelete)
@@ -115,7 +115,7 @@ public class SettingsActivity extends AppCompatActivity implements LoginService.
     }
 
     @Override
-    public void loginServiceReady(boolean success, User user, String errorMessage) {
+    public void serviceReady(boolean success, User user, String errorMessage) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         if(user != null)
         {

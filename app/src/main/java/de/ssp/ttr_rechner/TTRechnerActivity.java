@@ -29,14 +29,15 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import de.ssp.ttr_rechner.service.LoginService;
 import de.ssp.ttr_rechner.model.Match;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.model.Wettkampf;
 import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
+import de.ssp.ttr_rechner.service.caller.ServiceCallerRealNameAndPoints;
+import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
-public class TTRechnerActivity extends AppCompatActivity implements LoginService.LoginServiceReady
+public class TTRechnerActivity extends AppCompatActivity implements ServiceReady<User>
 {
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
@@ -47,7 +48,6 @@ public class TTRechnerActivity extends AppCompatActivity implements LoginService
     private Wettkampf wettkampf;
     private MyTischtennisCredentials credentials;
     private boolean recalculateNeuerTTRWert;
-    private LoginService loginService;
 
 
     @Override
@@ -96,8 +96,8 @@ public class TTRechnerActivity extends AppCompatActivity implements LoginService
         if(! showCredentialsNotSetIfNecessary())
         {
             txtMeinTTRWert.setText("");
-            loginService = new LoginService(this, this, credentials.getUsername(), credentials.getPassword());
-            loginService.execute();
+            ServiceCallerRealNameAndPoints realNameAndPointsCaller = new ServiceCallerRealNameAndPoints(this, this);
+            realNameAndPointsCaller.callService();
         }
     }
 
@@ -120,18 +120,19 @@ public class TTRechnerActivity extends AppCompatActivity implements LoginService
     }
 
     @Override
-    public void loginServiceReady(boolean success, User user, String errorMessage)
+    public void serviceReady(boolean success, User user, String errorMessage)
     {
         if(success && user != null)
         {
             txtMeinTTRWert.setText(String.valueOf(user.getPoints()));
-            txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + " ("+ user.getRealName() +")");
+            String realName = user.getRealName() != null && ! user.getRealName().isEmpty() ? " (" + user.getRealName() +")" : "";
+            txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + realName);
         }
         else
         {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setTitle("Anmeldung fehlgeschlagen")
-                    .setMessage("Die Anmeldung ist fehlgeschlagen, ihre Login-Daten wurden gelöscht! Fehler: " + errorMessage)
+                    .setMessage("Die Anmeldung ist fehlgeschlagen. \nFehler:\n" + errorMessage)
                     .setPositiveButton("Abbrechen", null);
             dialogBuilder.create().show();
         }

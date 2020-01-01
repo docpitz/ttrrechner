@@ -1,7 +1,7 @@
-package de.ssp.ttr_rechner.service;
+package de.ssp.ttr_rechner.service.asynctask;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -12,25 +12,20 @@ import com.jmelzer.myttr.User;
 import com.jmelzer.myttr.activities.MySettingsActivity;
 import com.jmelzer.myttr.db.LoginDataBaseAdapter;
 import com.jmelzer.myttr.logic.LoginException;
-import com.jmelzer.myttr.logic.LoginExpiredException;
 import com.jmelzer.myttr.logic.LoginManager;
 import com.jmelzer.myttr.logic.MyTischtennisParser;
 import com.jmelzer.myttr.logic.NetworkException;
-import com.jmelzer.myttr.logic.NiceGuysException;
 import com.jmelzer.myttr.logic.PlayerNotWellRegistered;
 import com.jmelzer.myttr.logic.ValidationException;
 
 import java.io.IOException;
 
+import de.ssp.ttr_rechner.service.caller.ServiceReady;
+
 /**
  * Task that executes the request against mytischtennis.de
  */
-public class LoginService extends AsyncTask<String, Void, Integer> {
-
-    public interface LoginServiceReady
-    {
-        public void loginServiceReady(boolean success, User user, String errorMessage);
-    }
+public class MyTischtennisLoginService extends AsyncTask<String, Void, Integer> {
 
     ProgressDialog progressDialog;
     public LoginManager loginManager = new LoginManager();
@@ -41,13 +36,13 @@ public class LoginService extends AsyncTask<String, Void, Integer> {
     String username;
     String password;
     public int ttr = 0;
-    Activity parent;
-    LoginServiceReady loginServiceReady;
+    Context context;
+    ServiceReady<User> loginServiceReady;
     private User user;
     LoginDataBaseAdapter loginDataBaseAdapter;
 
-    public LoginService(Activity parent, LoginServiceReady loginServiceReady, String username, String password) {
-        this.parent = parent;
+    public MyTischtennisLoginService(Context context, ServiceReady<User> loginServiceReady, String username, String password) {
+        this.context = context;
         this.username = username;
         this.password = password;
         this.loginServiceReady = loginServiceReady;
@@ -75,20 +70,20 @@ public class LoginService extends AsyncTask<String, Void, Integer> {
         {
             errorMessage = "Login war nicht erfolgreich. Hast du einen Premiumaccount?";
         }
-        loginServiceReady.loginServiceReady(loginSuccess, user, errorMessage);
+        loginServiceReady.serviceReady(loginSuccess, user, errorMessage);
     }
 
     @Override
     protected void onPreExecute() {
         start = System.currentTimeMillis();
         if (progressDialog == null) {
-            progressDialog = new ProgressDialog(parent);
-            progressDialog.setMessage("MyTischtennis wird geladen, bitte warten...");
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Anmelden bei myTischtennis, bitte warten...");
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
-        loginDataBaseAdapter = new LoginDataBaseAdapter(parent);
+        loginDataBaseAdapter = new LoginDataBaseAdapter(context);
         loginDataBaseAdapter = loginDataBaseAdapter.open();
     }
 
@@ -105,7 +100,6 @@ public class LoginService extends AsyncTask<String, Void, Integer> {
             errorMessage = e.getMessage();
             Log.d(Constants.LOG_TAG, "", e);
         }
-
         return null;
     }
 
@@ -117,7 +111,6 @@ public class LoginService extends AsyncTask<String, Void, Integer> {
                 loginSuccess = true;
                 ttr = user.getPoints();
                 store(user, new MyTischtennisParser());
-                new MyTischtennisParser().validateBadPeople();
                 this.user = user;
             }
         } catch (PlayerNotWellRegistered playerNotWellRegistered1) {
@@ -129,15 +122,11 @@ public class LoginService extends AsyncTask<String, Void, Integer> {
         } catch (LoginException e) {
             errorMessage = e.getErrorMessage();
             loginSuccess = false;
-        } catch (LoginExpiredException e) {
-            loginSuccess = false;
-        } catch (NiceGuysException e) {
-            //definitiv nichts zu tun!
         }
     }
 
     private void store(User user, MyTischtennisParser myTischtennisParser) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parent);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         Boolean saveUser = sharedPref.getBoolean(MySettingsActivity.KEY_PREF_SAVE_USER, true);
 
         loginManager.loadUserIntoMemoryAndStore(user, saveUser, myTischtennisParser);
