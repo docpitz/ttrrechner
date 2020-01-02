@@ -10,7 +10,5 @@ import com.jmelzer.myttr.logic.ValidationException;
 
 public interface ParserEvaluator<T>
 {
-    public T evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NoClickTTException, NiceGuysException, TooManyPlayersFound;
-    public String getErrorMessageFromEvaluator();
-    public String getProgressDialogMessage();
+    public T evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NoClickTTException, NiceGuysException;
 }

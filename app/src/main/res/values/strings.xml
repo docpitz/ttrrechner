@@ -6,4 +6,11 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="hint_ttr_gegner">TTR-Pkt. Gegner</string>
     <string name="hint_meine_ttr_punkte">Meine TTR-Punkte</string>
+    <string name="tab_suche_spieler">Spieler</string>
+    <string name="tab_suche_kritierien">Kritieren</string>
+    <string name="tab_suche_next_matches">Nächste Spiele</string>
+    <string name="spieler_suche">Spielersuche</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_suche_verein_vorname_nachname">Suche mit Hilfe von Verein, Vorname, Nachname</string>
 </resources>

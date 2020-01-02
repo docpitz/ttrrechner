@@ -5,20 +5,18 @@ import android.content.Context;
 import com.jmelzer.myttr.User;
 
 import de.ssp.ttr_rechner.service.asynctask.MyTischtennisService;
+import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
 import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorRealNameAndPoints;
 
 public class ServiceCallerRealNameAndPoints extends MyTischtennisEnsureLoginCaller<User>
 {
     public ServiceCallerRealNameAndPoints(Context context, ServiceReady<User> serviceReady)
     {
-        super(context, serviceReady);
+        super(context, "Lade Spielerdaten", serviceReady);
     }
 
     @Override
-    public void callLoggedInService()
-    {
-        ParserEvaluatorRealNameAndPoints parserEvaluatorRealNameAndPoints = new ParserEvaluatorRealNameAndPoints();
-        MyTischtennisService<User> myTischtennisService = new MyTischtennisService<>(context, parserEvaluatorRealNameAndPoints, serviceReady);
-        myTischtennisService.execute();
+    protected ParserEvaluator<User> getParserEvaluator() {
+        return new ParserEvaluatorRealNameAndPoints();
     }
 }

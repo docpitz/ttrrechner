@@ -33,18 +33,8 @@ public class ParserEvaluatorSearchPlayer implements ParserEvaluator<List<Player>
         }
         catch(TooManyPlayersFound e)
         {
-            errorMessage = "Es wurden zu viele Spieler gefunden.";
+            throw new ValidationException("Es wurden zu viele Spieler gefunden.");
         }
         return listPlayer;
-    }
-
-    @Override
-    public String getErrorMessageFromEvaluator() {
-        return errorMessage;
-    }
-
-    @Override
-    public String getProgressDialogMessage() {
-        return "Suche Spieler";
     }
 }

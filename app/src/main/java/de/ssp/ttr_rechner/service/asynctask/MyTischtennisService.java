@@ -16,6 +16,8 @@ import com.jmelzer.myttr.logic.NoDataException;
 import com.jmelzer.myttr.logic.ValidationException;
 import com.jmelzer.myttr.logic.impl.MyTTClickTTParserImpl;
 
+import java.util.Date;
+
 import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
 import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
@@ -25,22 +27,32 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
     protected ServiceReady<T> serviceReady;
     protected ParserEvaluator<T> parserEvaluation;
     protected T serviceReturnObject;
-    protected boolean succcess;
+    protected boolean success;
     private ProgressDialog progressDialog;
+    protected static long lastServiceCallTimestamp;
+    protected String dialogMessage;
 
-    public MyTischtennisService(Context context, ParserEvaluator<T> parserEvaluation, ServiceReady<T> serviceReady) {
+    public static boolean isLoginNecessary()
+    {
+        // Normalerweise sollte man dies über die Cookies direkt lösen
+        long timeNow = new Date().getTime();
+        return lastServiceCallTimestamp + 1000 * 30 * 60 < timeNow;
+    }
+
+    public MyTischtennisService(Context context, ParserEvaluator<T> parserEvaluation, String dialogMessage, ServiceReady<T> serviceReady) {
         if (context == null) throw new IllegalArgumentException("context must not be null");
-        this.succcess = false;
+        this.success = false;
         this.context = context;
         this.parserEvaluation = parserEvaluation;
+        this.dialogMessage = dialogMessage;
         this.serviceReady = serviceReady;
     }
 
     @Override
     protected void onPreExecute() {
-        if (progressDialog == null) {
+        if (dialogMessage != null && progressDialog == null) {
             progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage(parserEvaluation.getProgressDialogMessage() + ", bitte warten...");
+            progressDialog.setMessage(dialogMessage + ", bitte warten...");
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -52,58 +64,65 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
         try {
             long start = System.currentTimeMillis();
             serviceReturnObject = parserEvaluation.evaluateParser();
-            errorMessage = parserEvaluation.getErrorMessageFromEvaluator();
-            succcess = true;
+            success();
             Log.i(Constants.LOG_TAG, "parser time " + (System.currentTimeMillis() - start) + " ms");
         } catch (ValidationException e) {
             errorMessage = e.getMessage();
-            succcess = true;
+            success = false;
             Log.i(Constants.LOG_TAG, e.getMessage());
         } catch (LoginExpiredException e) {
             try {
+                new LoginManager().logout();
                 new LoginManager().relogin();
                 serviceReturnObject = parserEvaluation.evaluateParser();
-                succcess = true;
+                success();
             } catch (Exception e2) {
+                new LoginManager().logout();
                 errorMessage = "Das erneute Anmelden war nicht erfolgreich";
                 Log.e(Constants.LOG_TAG, "", e2);
-                succcess = false;
+                success = false;
             }
         } catch (NoClickTTException e) {
             Log.d(Constants.LOG_TAG, "second try after no data msg");
-            succcess = false;
+            success = false;
             try {
                 serviceReturnObject = parserEvaluation.evaluateParser();
                 Log.d(Constants.LOG_TAG, "success");
-                succcess = true;
+                success();
             } catch (NoClickTTException e2) {
                 logError(e);
-                succcess = false;
+                success = false;
                 errorMessage = new MyTTClickTTParserImpl().parseError(Client.lastHtml);
             }
             catch (Exception e2) {
                 logError(e);
-                succcess = false;
+                success = false;
                 errorMessage = "Fehler beim Lesen der Webseite \n" + Client.shortenUrl();
             }
         } catch (NetworkException e) {
-            succcess = false;
+            success = false;
             errorMessage = "Das Netzwerk antwortet zu langsam oder ist ausgeschaltet";
         }
         catch (NoDataException ed) {
             logError(ed);
-            succcess = false;
+            success = false;
             errorMessage = "Mytischtennis.de meldet: " + ed.getMessage();
         }
         catch (NiceGuysException e) {
-            succcess = false;
+            success = false;
         }catch (Exception e) {
 //            catch all others
-            succcess = false;
+            success = false;
             logError(e);
             errorMessage = "Fehler beim Lesen der Webseite \n" + Client.shortenUrl();
         }
         return null;
+    }
+
+    protected void success()
+    {
+        success = true;
+        lastServiceCallTimestamp = new Date().getTime();
     }
 
     private void logError(Exception e) {
@@ -127,7 +146,7 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
     @Override
     protected void onPostExecute(Integer integer) {
         try {
-            if (progressDialog.isShowing()) {
+            if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
         } catch (Exception e) {
@@ -137,7 +156,6 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
             Log.d(Constants.LOG_TAG, "couldn't load data in class " + getClass());
             errorMessage = "Konnte die Daten nicht laden (Grund unbekannt)";
         }
-        serviceReady.serviceReady(succcess, serviceReturnObject, errorMessage);
-
+        serviceReady.serviceReady(success, serviceReturnObject, errorMessage);
     }
 }

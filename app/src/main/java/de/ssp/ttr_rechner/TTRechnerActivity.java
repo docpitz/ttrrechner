@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.jmelzer.myttr.User;
+import com.jmelzer.myttr.model.SearchPlayer;
 
 import java.util.ArrayList;
 
@@ -165,7 +166,8 @@ public class TTRechnerActivity extends AppCompatActivity implements ServiceReady
         if(! showCredentialsNotSetIfNecessary())
         {
             addMatchView(null);
-            // Hier muss die neue Maske aufgehen!
+            Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerActivity.class);
+            startActivity(intentForSearchPlayerActivity);
         }
     }
 
