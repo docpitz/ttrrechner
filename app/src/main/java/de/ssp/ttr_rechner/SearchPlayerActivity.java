@@ -19,11 +19,11 @@ import butterknife.OnClick;
 import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonAction;
 import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonHideShowListner;
 import de.ssp.ttr_rechner.ui.searchplayer.SearchWithCriteriaFragment;
+import de.ssp.ttr_rechner.ui.searchplayer.SearchWithNameFragment;
 import de.ssp.ttr_rechner.ui.searchplayer.SearchWithNextGamesFragment;
-import de.ssp.ttr_rechner.ui.searchplayer.SearchWithPlayerFragment;
 import de.ssp.ttr_rechner.ui.searchplayer.SectionsPagerAdapter;
 
-public class SearchPlayerActivity extends AppCompatActivity implements SearchWithPlayerFragment.OnFragmentInteractionListener, SearchWithCriteriaFragment.OnFragmentInteractionListener, SearchWithNextGamesFragment.OnFragmentInteractionListener
+public class SearchPlayerActivity extends AppCompatActivity implements SearchWithNameFragment.OnFragmentInteractionListener, SearchWithCriteriaFragment.OnFragmentInteractionListener, SearchWithNextGamesFragment.OnFragmentInteractionListener
 {
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.view_pager) ViewPager viewPager;

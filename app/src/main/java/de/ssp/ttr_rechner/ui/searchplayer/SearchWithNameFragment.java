@@ -19,6 +19,7 @@ import com.jmelzer.myttr.model.SearchPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +33,12 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchWithPlayerFragment.OnFragmentInteractionListener} interface
+ * {@link SearchWithNameFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SearchWithPlayerFragment#newInstance} factory method to
+ * Use the {@link SearchWithNameFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchWithPlayerFragment extends Fragment implements FloatingButtonAction, ServiceReady<List<Player>>
+public class SearchWithNameFragment extends Fragment implements FloatingButtonAction, ServiceReady<List<Player>>
 {
     private OnFragmentInteractionListener mListener;
     protected TTRClubParser clubParser;
@@ -46,7 +47,7 @@ public class SearchWithPlayerFragment extends Fragment implements FloatingButton
     protected @BindView(R.id.txtNachname) EditText txtNachname;
 
 
-    public SearchWithPlayerFragment() {
+    public SearchWithNameFragment() {
         // Required empty public constructor
     }
 
@@ -54,10 +55,10 @@ public class SearchWithPlayerFragment extends Fragment implements FloatingButton
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment SearchWithPlayerFragment.
+     * @return A new instance of fragment SearchWithNameFragment.
      */
-    public static SearchWithPlayerFragment newInstance() {
-        SearchWithPlayerFragment fragment = new SearchWithPlayerFragment();
+    public static SearchWithNameFragment newInstance() {
+        SearchWithNameFragment fragment = new SearchWithNameFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -74,7 +75,7 @@ public class SearchWithPlayerFragment extends Fragment implements FloatingButton
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.player_search_fragment_player, container, false);
+        View view = inflater.inflate(R.layout.player_search_fragment_name, container, false);
         ButterKnife.bind(this, view);
         initializeClubParsing();
         return view;
@@ -122,6 +123,12 @@ public class SearchWithPlayerFragment extends Fragment implements FloatingButton
         String nachname = txtNachname.getText().toString();
         String vereinsname = txtClubSearch.getText().toString();
 
+        if(! validateInput(vorname, nachname))
+        {
+            return;
+        }
+
+
         Club foundedClub = null;
         if(vereinsname != null && !vereinsname.isEmpty())
         {
@@ -147,6 +154,20 @@ public class SearchWithPlayerFragment extends Fragment implements FloatingButton
             intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList) playerList);
             getActivity().startActivityForResult(intent, TTRechnerActivity.REQUEST_CODE_SEARCH);
         }
+    }
+
+    private boolean validateInput(String vorname, String nachname)
+    {
+        if(vorname.isEmpty() && !nachname.isEmpty() || !vorname.isEmpty() && nachname.isEmpty())
+        {
+            androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this.getContext());
+            dialogBuilder.setTitle("Fehler bei der Eingabe")
+                    .setMessage("Bitte Vorname und Nachname gemeinsam eingeben oder beide frei lassen.")
+                    .setPositiveButton("Ok", null);
+            dialogBuilder.create().show();
+            return false;
+        }
+        return true;
     }
 
     /**

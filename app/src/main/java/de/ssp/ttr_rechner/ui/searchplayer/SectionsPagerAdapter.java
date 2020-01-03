@@ -19,7 +19,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_suche_spieler, R.string.tab_suche_kritierien, R.string.tab_suche_next_matches};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_suche_name, R.string.tab_suche_kritierien, R.string.tab_suche_next_matches};
     private final Context mContext;
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
@@ -38,7 +38,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         {
             case 0:
             {
-                return SearchWithPlayerFragment.newInstance();
+                return SearchWithNameFragment.newInstance();
             }
             case 1:
             {

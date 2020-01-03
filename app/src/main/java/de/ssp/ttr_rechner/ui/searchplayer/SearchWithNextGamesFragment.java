@@ -96,7 +96,7 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment SearchWithPlayerFragment.
+     * @return A new instance of fragment SearchWithNextGamesFragment.
      */
     public static SearchWithNextGamesFragment newInstance()
     {
