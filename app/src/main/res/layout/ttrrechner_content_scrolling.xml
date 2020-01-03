@@ -24,23 +24,24 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtMeinTTRWertHint"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="9">
+                android:layout_weight="1">
+
                 <EditText
                     android:id="@+id/txtMeinTTRWert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_meine_ttr_punkte"
                     android:inputType="numberSigned"
-                    android:maxLength="4" />
+                    android:maxLength="4"
+                    android:importantForAutofill="no" />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/btnCallTTRPoints"
                 android:layout_gravity="center"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:background="@android:drawable/ic_menu_myplaces" />
 
 

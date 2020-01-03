@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".FoundedPlayerActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_player_choose"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".TTRechnerActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -26,7 +30,8 @@
             android:name=".SearchPlayerActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/spieler_suche"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden"

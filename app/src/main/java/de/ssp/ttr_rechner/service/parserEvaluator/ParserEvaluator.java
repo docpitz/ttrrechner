@@ -5,7 +5,6 @@ import com.jmelzer.myttr.logic.NetworkException;
 import com.jmelzer.myttr.logic.NiceGuysException;
 import com.jmelzer.myttr.logic.NoClickTTException;
 import com.jmelzer.myttr.logic.NoDataException;
-import com.jmelzer.myttr.logic.TooManyPlayersFound;
 import com.jmelzer.myttr.logic.ValidationException;
 
 public interface ParserEvaluator<T>

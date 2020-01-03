@@ -1,27 +1,33 @@
-package de.ssp.ttr_rechner.ui.main;
+package de.ssp.ttr_rechner.ui.searchplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
 import com.jmelzer.myttr.Club;
-import com.jmelzer.myttr.logic.ClubParser;
+import com.jmelzer.myttr.Player;
 import com.jmelzer.myttr.logic.TTRClubParser;
+import com.jmelzer.myttr.model.SearchPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnTextChanged;
+import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
+import de.ssp.ttr_rechner.TTRechnerActivity;
+import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
+import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
+import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +37,13 @@ import de.ssp.ttr_rechner.R;
  * Use the {@link SearchWithPlayerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchWithPlayerFragment extends Fragment
+public class SearchWithPlayerFragment extends Fragment implements FloatingButtonAction, ServiceReady<List<Player>>
 {
     private OnFragmentInteractionListener mListener;
     protected TTRClubParser clubParser;
-    protected Club foundedClub;
     protected @BindView(R.id.txtClubSearch) AutoCompleteTextView txtClubSearch;
+    protected @BindView(R.id.txtVorname) EditText txtVorname;
+    protected @BindView(R.id.txtNachname) EditText txtNachname;
 
 
     public SearchWithPlayerFragment() {
@@ -67,7 +74,7 @@ public class SearchWithPlayerFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_with_player, container, false);
+        View view = inflater.inflate(R.layout.player_search_fragment_player, container, false);
         ButterKnife.bind(this, view);
         initializeClubParsing();
         return view;
@@ -105,6 +112,41 @@ public class SearchWithPlayerFragment extends Fragment
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPressedFloatingButton(View view)
+    {
+        TTRClubParser ttrClubParser = new TTRClubParser(getContext());
+        String vorname = txtVorname.getText().toString();
+        String nachname = txtNachname.getText().toString();
+        String vereinsname = txtClubSearch.getText().toString();
+
+        Club foundedClub = null;
+        if(vereinsname != null && !vereinsname.isEmpty())
+        {
+            foundedClub = ttrClubParser.getClubNameBestMatch(vereinsname);
+            txtClubSearch.setText(foundedClub != null ? foundedClub.getName() : "");
+        }
+
+        SearchPlayer searchPlayer = new SearchPlayer();
+        searchPlayer.setFirstname(vorname);
+        searchPlayer.setLastname(nachname);
+        searchPlayer.setClub(foundedClub);
+
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),this,searchPlayer);
+        serviceCallerSearchPlayer.callService();
+    }
+
+    @Override
+    public void serviceReady(boolean success, List<Player> playerList, String errorMessage)
+    {
+        if(! ServiceErrorAlertDialogHelper.showErrorDialog(this.getContext(), success, errorMessage))
+        {
+            Intent intent = new Intent(getActivity(), FoundedPlayerActivity.class);
+            intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList) playerList);
+            getActivity().startActivityForResult(intent, TTRechnerActivity.REQUEST_CODE_SEARCH);
+        }
     }
 
     /**

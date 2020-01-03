@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     protected @BindView(R.id.txtTTRKonstante) TextView txtTTRKonstante;
     protected @BindView(R.id.txtUsername) EditText txtUsername;
     protected @BindView(R.id.txtPassword) EditText txtPassword;
+    protected @BindView(R.id.chkMyttLoginPossible) Switch chkMyttLoginPossible;
+    protected @BindView(R.id.pnlLogin) LinearLayout pnlLogin;
     protected TTRKonstante ttrKonstanteModel;
     protected MyTischtennisCredentials myTischtennisCredentialsModel;
     protected boolean startIsFinished = false;
@@ -42,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.settings_activity);
 
         ButterKnife.bind(this);
 
@@ -55,9 +58,9 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         {
             txtUsername.requestFocus();
         }
-
         startIsFinished = true;
     }
+
 
     @OnCheckedChanged({R.id.chkKonstanteWeniger15Spiele, R.id.chkKonstante1JahrOhneSpiel})
     public void change15SpieleUnd1JahrOhneSpielSwitch(CompoundButton switchButton, boolean checked)
@@ -71,21 +74,35 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     }
 
     @OnCheckedChanged(R.id.rbUnter16)
-    public void toogleUnter16(CompoundButton button, boolean checked)
+    public void toggleUnter16(CompoundButton button, boolean checked)
     {
         changeAlter(Alter.UNTER_16, checked);
     }
 
     @OnCheckedChanged(R.id.rbUnter21)
-    public void toogleUnter18(CompoundButton button, boolean checked)
+    public void toggleUnter18(CompoundButton button, boolean checked)
     {
         changeAlter(Alter.UNTER_21, checked);
     }
 
     @OnCheckedChanged(R.id.rbUeber21)
-    public void toogleUeber18(CompoundButton button, boolean checked)
+    public void toggleUeber18(CompoundButton button, boolean checked)
     {
         changeAlter(Alter.UEBER_21, checked);
+    }
+
+    @OnCheckedChanged(R.id.chkMyttLoginPossible)
+    public void toggleMyTTLoginPossible(CompoundButton button, boolean checked)
+    {
+        if(startIsFinished)
+        {
+            pnlLogin.setVisibility(checked ? TextView.VISIBLE : TextView.INVISIBLE);
+            txtUsername.setText("");
+            txtPassword.setText("");
+            txtUsername.requestFocus();
+
+            myTischtennisCredentialsModel.setCredentials(null, null, checked);
+        }
     }
 
     @Override
@@ -111,7 +128,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     {
         txtUsername.setText("");
         txtPassword.setText("");
-        myTischtennisCredentialsModel.setCredentials(null, null);
+        myTischtennisCredentialsModel.setCredentials(null, null, chkMyttLoginPossible.isChecked());
     }
 
     @Override
@@ -119,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         if(user != null)
         {
-            myTischtennisCredentialsModel.setCredentials(user.getUsername(), user.getPassword());
+            myTischtennisCredentialsModel.setCredentials(user.getUsername(), user.getPassword(), chkMyttLoginPossible.isChecked());
             dialogBuilder.setTitle("Anmeldung erfolgreich")
                     .setMessage("Die Anmeldung war erfolgreich, ihre Login-Daten wurden gespeichert!")
                     .setPositiveButton("Ok", null);
@@ -127,7 +144,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         }
         else
         {
-            myTischtennisCredentialsModel.setCredentials(null, null);
+            myTischtennisCredentialsModel.setCredentials(null, null, chkMyttLoginPossible.isChecked());
             dialogBuilder.setTitle("Anmeldung fehlgeschlagen")
                     .setMessage("Die Anmeldung ist fehlgeschlagen, ihre Login-Daten wurden gelöscht!" +
                             "\n\nFehler: \n" + errorMessage)
@@ -139,6 +156,8 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     private void initializeMyTischtennisCredentials()
     {
         myTischtennisCredentialsModel = new MyTischtennisCredentials(this);
+        pnlLogin.setVisibility(myTischtennisCredentialsModel.isMyTischtennisLoginPossible() ? TextView.VISIBLE : TextView.INVISIBLE);
+        chkMyttLoginPossible.setChecked(myTischtennisCredentialsModel.isMyTischtennisLoginPossible());
         txtUsername.setText(myTischtennisCredentialsModel.getUsername());
         txtPassword.setText(myTischtennisCredentialsModel.getPassword());
     }

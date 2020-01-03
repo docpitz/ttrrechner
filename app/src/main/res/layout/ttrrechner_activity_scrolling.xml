@@ -39,6 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/tt"
+                    android:contentDescription="@string/bild"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/tt"
@@ -65,11 +66,11 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:background="@android:color/transparent"
-        >
+        android:baselineAligned="false">
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -78,7 +79,7 @@
             <HorizontalScrollView
                 android:id="@+id/horizontalButtonScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbars="none"
                 android:background="@color/colorPrimary">
@@ -87,9 +88,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
                     android:orientation="horizontal"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
                     android:background="@android:color/transparent">
 
                     <Button
@@ -98,7 +98,7 @@
                         android:layout_height="36dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
@@ -106,7 +106,7 @@
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Einstellungen"
+                        android:text="@string/einstellungen"
                         android:textSize="12sp" />
 
                     <Button
@@ -114,7 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
@@ -123,7 +123,7 @@
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Zurücksetzen"
+                        android:text="@string/zuruecksetzen"
                         android:textSize="12sp" />
 
                     <Button
@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
@@ -140,7 +140,7 @@
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Suchen"
+                        android:text="@string/suchen"
                         android:textSize="12sp" />
 
                     <Button
@@ -149,7 +149,7 @@
                         android:layout_height="36dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
@@ -157,7 +157,7 @@
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Hinzufügen"
+                        android:text="@string/hinzufuegen"
                         android:textSize="12sp" />
                 </LinearLayout>
             </HorizontalScrollView>
@@ -165,13 +165,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:paddingTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Neue TTR-Punkte:"
+                    android:text="@string/neue_ttr_punkte"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:layout_gravity="bottom"
@@ -187,13 +187,13 @@
                         android:id="@+id/txtNeueTTRPunkte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-"
+                        android:text="@string/leer"
                         android:layout_gravity="bottom"
                         android:textColor="@android:color/white"
                         android:textSize="40sp"
                         android:textStyle="bold"
                         android:paddingBottom="6dp"
-                        android:paddingRight="20dp"/>
+                        android:paddingEnd="20dp"/>
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnCalculatePoints"
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorPrimary"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:scaleType="center"
                         app:srcCompat="@drawable/ic_equal_18" />
                 </LinearLayout>

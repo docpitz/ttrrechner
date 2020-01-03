@@ -1,4 +1,4 @@
-package de.ssp.ttr_rechner.ui.main;
+package de.ssp.ttr_rechner.ui.searchplayer;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;

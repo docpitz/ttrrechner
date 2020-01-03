@@ -20,7 +20,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_settings" />
+    <include layout="@layout/settings_content" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

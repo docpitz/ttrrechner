@@ -10,6 +10,7 @@ public class MyTischtennisCredentials {
     private static final String MY_TISCHTENNIS_CREDENTIALS_SAVE_NAME = "MY_TISCHTENNIS_CREDENTIALS_SAVE_NAME";
     private static final String USERNAME = "USERNAME";
     private static final String PASSWORD = "PASSWORD";
+    private static final String MY_TISCHTENNIS_POSSIBLE = "MY_TISCHTENNIS_POSSIBLE";
 
     private SharedPreferences myTischtennisCredentials;
 
@@ -23,9 +24,9 @@ public class MyTischtennisCredentials {
         myTischtennisCredentials = context.getSharedPreferences(MY_TISCHTENNIS_CREDENTIALS_SAVE_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setCredentials(String username, String password)
+    public void setCredentials(String username, String password, boolean isMyTischtennisLoginPossible)
     {
-        save(username, password);
+        save(username, password, isMyTischtennisLoginPossible);
     }
 
     public String getUsername()
@@ -38,14 +39,20 @@ public class MyTischtennisCredentials {
         return myTischtennisCredentials.getString(PASSWORD, "");
     }
 
+    public boolean isMyTischtennisLoginPossible()
+    {
+        return myTischtennisCredentials.getBoolean(MY_TISCHTENNIS_POSSIBLE, true);
+    }
+
     public boolean isSet()
     {
         return !getUsername().isEmpty() && !getPassword().isEmpty();
     }
 
-    private void save(String username, String password)
+    private void save(String username, String password, boolean isMyTischtennisLoginPossible)
     {
         SharedPreferences.Editor myTischtennisCredentialsEdit = myTischtennisCredentials.edit();
+        myTischtennisCredentialsEdit.putBoolean(MY_TISCHTENNIS_POSSIBLE, isMyTischtennisLoginPossible);
         if(username != null && username != null)
         {
             myTischtennisCredentialsEdit.putString(USERNAME, username);
@@ -53,7 +60,8 @@ public class MyTischtennisCredentials {
         }
         else
         {
-            myTischtennisCredentialsEdit.clear();
+            myTischtennisCredentialsEdit.remove(USERNAME);
+            myTischtennisCredentialsEdit.remove(PASSWORD);
         }
 
         myTischtennisCredentialsEdit.apply();
