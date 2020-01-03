@@ -1,7 +1,6 @@
 package de.ssp.ttr_rechner.ui.searchplayer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,23 +13,17 @@ import android.widget.RadioGroup;
 import android.widget.ToggleButton;
 
 import com.jmelzer.myttr.Club;
-import com.jmelzer.myttr.Player;
 import com.jmelzer.myttr.logic.TTRClubParser;
 import com.jmelzer.myttr.model.SearchPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.TTRechnerActivity;
-import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +33,7 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
  * Use the {@link SearchWithCriteriaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchWithCriteriaFragment extends Fragment implements FloatingButtonAction, ServiceReady<List<Player>>
+public class SearchWithCriteriaFragment extends Fragment implements FloatingButtonAction
 {
     enum Gender
     {
@@ -186,7 +179,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         searchPlayer.setClub(foundedClub);
         searchPlayer.setGender(getGenderFromUI().gender);
 
-        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),this, searchPlayer);
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceReadySearchPlayer(getActivity()), searchPlayer);
         serviceCallerSearchPlayer.callService();
 
     }
@@ -213,17 +206,6 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
             return -1;
         }
         return Integer.valueOf(str).intValue();
-    }
-
-    @Override
-    public void serviceReady(boolean success, List<Player> playerList, String errorMessage)
-    {
-        if(! ServiceErrorAlertDialogHelper.showErrorDialog(this.getContext(), success, errorMessage))
-        {
-            Intent intent = new Intent(getActivity(), FoundedPlayerActivity.class);
-            intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST,(ArrayList)playerList);
-            getActivity().startActivityForResult(intent, TTRechnerActivity.REQUEST_CODE_SEARCH);
-        }
     }
 
     /**
