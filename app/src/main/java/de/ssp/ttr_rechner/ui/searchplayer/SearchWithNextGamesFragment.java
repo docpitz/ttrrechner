@@ -45,14 +45,14 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
     protected NextGame[] nextGames;
     protected @BindView(android.R.id.list) ListView listMannschaften;
 
-
     public SearchWithNextGamesFragment()
     {
         // Required empty public constructor
     }
 
     @Override
-    public void onPressedFloatingButton(View view) {
+    public void onPressedFloatingButton(View view)
+    {
     }
 
 
@@ -100,10 +100,7 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
      */
     public static SearchWithNextGamesFragment newInstance()
     {
-        SearchWithNextGamesFragment fragment = new SearchWithNextGamesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new SearchWithNextGamesFragment();
     }
 
     @Override
@@ -139,12 +136,20 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
     public void onResume()
     {
         super.onResume();
+        if(nextGames != null)
+        {
+            listMannschaften.setAdapter(new NextGamesListAdapter(this.getContext(), nextGames));
+        }
         if (!getUserVisibleHint())
         {
             return;
         }
-        ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), this);
-        serviceCallerNextGames.callService();
+
+        if(nextGames == null)
+        {
+            ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), this);
+            serviceCallerNextGames.callService();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
