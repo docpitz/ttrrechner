@@ -34,7 +34,8 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_meine_ttr_punkte"
                     android:importantForAutofill="no"
-                    android:inputType="numberSigned"
+                    android:inputType="phone"
+                    android:digits="0123456789"
                     android:maxLength="4" />
             </com.google.android.material.textfield.TextInputLayout>
 

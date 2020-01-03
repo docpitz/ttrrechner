@@ -38,8 +38,10 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:hint="@string/geburtsjahr_von"
-                android:inputType="number"
                 android:maxLines="1"
+                android:maxLength="4"
+                android:inputType="phone"
+                android:digits="0123456789"
                 android:importantForAutofill="no" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +57,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:hint="@string/bis"
-                android:inputType="number"
+                android:maxLength="4"
+                android:inputType="phone"
+                android:digits="0123456789"
                 android:maxLines="1"
                 android:importantForAutofill="no" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +84,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:hint="@string/ttr_punkte_von"
-                android:inputType="number"
+                android:maxLength="4"
+                android:inputType="phone"
+                android:digits="0123456789"
                 android:maxLines="1"
                 android:importantForAutofill="no" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -97,7 +103,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:hint="@string/bis"
-                android:inputType="number"
+                android:maxLength="4"
+                android:inputType="phone"
+                android:digits="0123456789"
                 android:maxLines="1"
                 android:importantForAutofill="no" />
         </com.google.android.material.textfield.TextInputLayout>
