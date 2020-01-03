@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jmelzer.myttr.Player;
 import com.jmelzer.myttr.User;
@@ -390,6 +391,12 @@ public class TTRechnerActivity extends AppCompatActivity implements ServiceReady
         if (id == R.id.action_call_ttr_konstante)
         {
             callSettingsActivity(false);
+            return true;
+        }
+        if (id == R.id.action_call_licence)
+        {
+            OssLicensesMenuActivity.setActivityTitle(getString(R.string.licence));
+            startActivity(new Intent(this, OssLicensesMenuActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
