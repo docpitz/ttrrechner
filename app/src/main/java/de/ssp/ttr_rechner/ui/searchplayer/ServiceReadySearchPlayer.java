@@ -17,9 +17,11 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
 public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
 {
     protected Activity activity;
-    public ServiceReadySearchPlayer(Activity activity)
+    protected boolean isSingleChooseActiv;
+    public ServiceReadySearchPlayer(Activity activity, boolean isSingleChooseActiv)
     {
         this.activity = activity;
+        this.isSingleChooseActiv = isSingleChooseActiv;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
             {
                 Intent intent = new Intent(activity, FoundedPlayerActivity.class);
                 intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList) playerList);
+                intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
                 activity.startActivityForResult(intent, TTRechnerActivity.REQUEST_CODE_SEARCH);
             }
             else

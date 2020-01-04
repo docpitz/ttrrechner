@@ -2,11 +2,11 @@ package de.ssp.ttr_rechner.ui.searchplayer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
 import com.jmelzer.myttr.Player;
@@ -31,31 +31,15 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchWithNextGamesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SearchWithNextGamesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchWithNextGamesFragment extends ListFragment implements ServiceReady<NextGame[]>, FloatingButtonAction
+public class SearchWithNextGamesFragment extends ListFragment implements FloatingButtonAction
 {
-
-
-    private OnFragmentInteractionListener mListener;
     protected NextGame[] nextGames;
     protected @BindView(android.R.id.list) ListView listMannschaften;
-
-    public SearchWithNextGamesFragment()
-    {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onPressedFloatingButton(View view)
-    {
-    }
-
-
+    protected boolean isSingleChooseActive;
 
     public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
     {
@@ -79,17 +63,28 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
             {
                 Intent intentForTTRKonstanteActivity = new Intent(getActivity(), FoundedPlayerActivity.class);
                 intentForTTRKonstanteActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList)playerList);
+                intentForTTRKonstanteActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
                 getActivity().startActivityForResult(intentForTTRKonstanteActivity, TTRechnerActivity.REQUEST_CODE_SEARCH);
             }
         }
     }
 
-    @Override
-    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        NextGame nextGame = nextGames[position];
-        ServiceCallerFindPlayersByTeam serviceCallerFindPlayersByTeam = new ServiceCallerFindPlayersByTeam(getContext(), new ServiceReadySearchPlayer(), nextGame.getGegnerId());
-        serviceCallerFindPlayersByTeam.callService();
+    public class ServiceReadyNextGames implements  ServiceReady<NextGame[]>
+    {
+        @Override
+        public void serviceReady(boolean success, NextGame[] nextGames, String errorMessage)
+        {
+            if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
+            {
+                SearchWithNextGamesFragment.this.nextGames = nextGames;
+                listMannschaften.setAdapter(new NextGamesListAdapter(SearchWithNextGamesFragment.this.getContext(), nextGames));
+            }
+        }
+    }
+
+    public SearchWithNextGamesFragment()
+    {
+        // Required empty public constructor
     }
 
     /**
@@ -98,16 +93,20 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
      *
      * @return A new instance of fragment SearchWithNextGamesFragment.
      */
-    public static SearchWithNextGamesFragment newInstance()
+    public static SearchWithNextGamesFragment newInstance(boolean isSingleChooseActive)
     {
-        return new SearchWithNextGamesFragment();
+        SearchWithNextGamesFragment fragment = new SearchWithNextGamesFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
+            isSingleChooseActive = getArguments().getBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
         }
     }
 
@@ -144,66 +143,39 @@ public class SearchWithNextGamesFragment extends ListFragment implements Service
         {
             return;
         }
-
+        hideSoftKeyBoard();
         if(nextGames == null)
         {
-            ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), this);
+            ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), new ServiceReadyNextGames());
             serviceCallerNextGames.callService();
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        NextGame nextGame = nextGames[position];
+        ServiceCallerFindPlayersByTeam serviceCallerFindPlayersByTeam = new ServiceCallerFindPlayersByTeam(getContext(), new ServiceReadySearchPlayer(), nextGame.getGegnerId());
+        serviceCallerFindPlayersByTeam.callService();
     }
 
+
     @Override
-    public void onAttach(Context context)
+    public void onPressedFloatingButton(View view)
     {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
-        {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach()
     {
         super.onDetach();
-        mListener = null;
     }
 
-    @Override
-    public void serviceReady(boolean success, NextGame[] nextGames, String errorMessage)
-    {
-        if(! ServiceErrorAlertDialogHelper.showErrorDialog(this.getContext(), success, errorMessage))
-        {
-            this.nextGames = nextGames;
-            listMannschaften.setAdapter(new NextGamesListAdapter(this.getContext(), nextGames));
+    private void hideSoftKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
         }
-    }
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener
-    {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

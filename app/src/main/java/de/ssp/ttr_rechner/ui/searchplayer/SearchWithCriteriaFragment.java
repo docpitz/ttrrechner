@@ -1,7 +1,5 @@
 package de.ssp.ttr_rechner.ui.searchplayer;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +20,12 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchWithCriteriaFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SearchWithCriteriaFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -48,8 +45,8 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         }
     }
 
-    private OnFragmentInteractionListener mListener;
     protected TTRClubParser clubParser;
+    protected boolean isSingleChooseActive;
 
     protected @BindView(R.id.txtClubSearch) AutoCompleteTextView txtClubSearch;
     protected @BindView(R.id.btnAlleGeschlechter) ToggleButton btnAlleGeschlechter;
@@ -82,9 +79,10 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
      *
      * @return A new instance of fragment SearchWithNameFragment.
      */
-    public static SearchWithCriteriaFragment newInstance() {
+    public static SearchWithCriteriaFragment newInstance(boolean isSingleChooseActive) {
         SearchWithCriteriaFragment fragment = new SearchWithCriteriaFragment();
         Bundle args = new Bundle();
+        args.putBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,6 +91,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            isSingleChooseActive = getArguments().getBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
         }
     }
 
@@ -117,24 +116,6 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         txtClubSearch.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
     @OnClick({R.id.btnAlleGeschlechter, R.id.btnWeiblich, R.id.btnMaennlich})
     protected void pressGeschlecht(ToggleButton view)
     {
@@ -151,7 +132,6 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -167,6 +147,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         Club foundedClub = null;
         if (vereinsname != null && !vereinsname.isEmpty())
         {
+            vereinsname.trim();
             foundedClub = ttrClubParser.getClubNameBestMatch(vereinsname);
             txtClubSearch.setText(foundedClub != null ? foundedClub.getName() : "");
         }
@@ -179,7 +160,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         searchPlayer.setClub(foundedClub);
         searchPlayer.setGender(getGenderFromUI().gender);
 
-        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceReadySearchPlayer(getActivity()), searchPlayer);
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceReadySearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
         serviceCallerSearchPlayer.callService();
 
     }
@@ -206,20 +187,5 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
             return -1;
         }
         return Integer.valueOf(str).intValue();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

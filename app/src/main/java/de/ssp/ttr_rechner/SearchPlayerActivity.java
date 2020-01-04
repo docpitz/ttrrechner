@@ -1,7 +1,6 @@
 package de.ssp.ttr_rechner;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +17,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonAction;
 import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonHideShowListner;
-import de.ssp.ttr_rechner.ui.searchplayer.SearchWithCriteriaFragment;
-import de.ssp.ttr_rechner.ui.searchplayer.SearchWithNameFragment;
-import de.ssp.ttr_rechner.ui.searchplayer.SearchWithNextGamesFragment;
 import de.ssp.ttr_rechner.ui.searchplayer.SectionsPagerAdapter;
 
-public class SearchPlayerActivity extends AppCompatActivity implements SearchWithNameFragment.OnFragmentInteractionListener, SearchWithCriteriaFragment.OnFragmentInteractionListener, SearchWithNextGamesFragment.OnFragmentInteractionListener
+public class SearchPlayerActivity extends AppCompatActivity
 {
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.view_pager) ViewPager viewPager;
@@ -42,7 +38,9 @@ public class SearchPlayerActivity extends AppCompatActivity implements SearchWit
         setSupportActionBar(tbToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        boolean isSingleChooseActive = getIntent().getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), isSingleChooseActive);
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs.setupWithViewPager(viewPager);
         tabs.setOnTabSelectedListener(new FloatingButtonHideShowListner(viewPager, fab));
@@ -56,11 +54,11 @@ public class SearchPlayerActivity extends AppCompatActivity implements SearchWit
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == TTRechnerActivity.REQUEST_CODE_SEARCH && resultCode == RESULT_OK)
         {
-            setResult(RESULT_OK, data);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -75,10 +73,5 @@ public class SearchPlayerActivity extends AppCompatActivity implements SearchWit
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri)
-    {
     }
 }

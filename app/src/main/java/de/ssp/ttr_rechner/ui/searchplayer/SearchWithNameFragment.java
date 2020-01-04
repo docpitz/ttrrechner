@@ -1,7 +1,5 @@
 package de.ssp.ttr_rechner.ui.searchplayer;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,21 +18,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchWithNameFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SearchWithNameFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class SearchWithNameFragment extends Fragment implements FloatingButtonAction
 {
-    private OnFragmentInteractionListener mListener;
     protected TTRClubParser clubParser;
+    protected boolean isSingleChooseActive;
     protected @BindView(R.id.txtClubSearch) AutoCompleteTextView txtClubSearch;
     protected @BindView(R.id.txtVorname) EditText txtVorname;
     protected @BindView(R.id.txtNachname) EditText txtNachname;
@@ -50,9 +47,10 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
      *
      * @return A new instance of fragment SearchWithNameFragment.
      */
-    public static SearchWithNameFragment newInstance() {
+    public static SearchWithNameFragment newInstance(boolean isSingleChooseActive) {
         SearchWithNameFragment fragment = new SearchWithNameFragment();
         Bundle args = new Bundle();
+        args.putBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +59,7 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            isSingleChooseActive = getArguments().getBoolean(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
         }
     }
 
@@ -84,28 +83,9 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
         txtClubSearch.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -125,6 +105,7 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
         Club foundedClub = null;
         if(vereinsname != null && !vereinsname.isEmpty())
         {
+            vereinsname.trim();
             foundedClub = ttrClubParser.getClubNameBestMatch(vereinsname);
             txtClubSearch.setText(foundedClub != null ? foundedClub.getName() : "");
         }
@@ -134,7 +115,7 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
         searchPlayer.setLastname(nachname);
         searchPlayer.setClub(foundedClub);
 
-        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(), new ServiceReadySearchPlayer(getActivity()), searchPlayer);
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(), new ServiceReadySearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
         serviceCallerSearchPlayer.callService();
     }
 
@@ -152,20 +133,5 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
             return false;
         }
         return true;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

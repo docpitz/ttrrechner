@@ -24,7 +24,7 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtMeinTTRWertHint"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
@@ -40,11 +40,22 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btnCallTTRPoints"
+                android:id="@+id/btnSearchForMyTTRPoints"
+                android:layout_gravity="center"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:alpha="0.5"
+                android:background="@drawable/ic_search_18" />
+
+            <Button
+                android:id="@+id/btnCallMyTTRPoints"
                 android:layout_gravity="center"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@android:drawable/ic_menu_myplaces" />
+                android:alpha="0.5"
+                android:background="@drawable/ic_personal_24" />
 
 
         </LinearLayout>

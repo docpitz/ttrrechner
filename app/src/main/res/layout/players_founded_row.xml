@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:focusable="false"
+        android:paddingRight="-7dp"
         android:focusableInTouchMode="false"
         android:layout_weight="1.2" />
 
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:paddingLeft="7dp"
         android:orientation="vertical">
 
         <TextView

@@ -22,11 +22,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     private static final int[] TAB_TITLES = new int[]{R.string.tab_suche_name, R.string.tab_suche_kritierien, R.string.tab_suche_next_matches};
     private final Context mContext;
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    protected boolean isSingleChooseActive;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm)
+    public SectionsPagerAdapter(Context context, FragmentManager fm, boolean isSingleChooseActive)
     {
         super(fm);
         mContext = context;
+        this.isSingleChooseActive = isSingleChooseActive;
     }
 
     @Override
@@ -38,15 +40,15 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         {
             case 0:
             {
-                return SearchWithNameFragment.newInstance();
+                return SearchWithNameFragment.newInstance(isSingleChooseActive);
             }
             case 1:
             {
-                return SearchWithCriteriaFragment.newInstance();
+                return SearchWithCriteriaFragment.newInstance(isSingleChooseActive);
             }
             case 2:
             {
-                return SearchWithNextGamesFragment.newInstance();
+                return SearchWithNextGamesFragment.newInstance(isSingleChooseActive);
             }
         }
         return null;

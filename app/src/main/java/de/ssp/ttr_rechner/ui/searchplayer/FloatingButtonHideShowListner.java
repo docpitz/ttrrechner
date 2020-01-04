@@ -3,8 +3,8 @@ package de.ssp.ttr_rechner.ui.searchplayer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
+import de.ssp.ttr_rechner.ui.util.FloatingActionButtonUtil;
 
 public class FloatingButtonHideShowListner extends TabLayout.ViewPagerOnTabSelectedListener
 {
@@ -21,29 +21,12 @@ public class FloatingButtonHideShowListner extends TabLayout.ViewPagerOnTabSelec
         super.onTabSelected(tab);
         if(tab.getPosition()==2)
         {
-            hideFloatingActionButton(fab);
+            FloatingActionButtonUtil.hideFloatingActionButton(fab);
         }
         else {
-            showFloatingActionButton(fab);
+            FloatingActionButtonUtil.showFloatingActionButton(fab);
         }
     }
 
-    private void hideFloatingActionButton(FloatingActionButton fab)
-    {
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)fab.getLayoutParams();
-        FloatingActionButton.Behavior behavior= (FloatingActionButton.Behavior)params.getBehavior();
-        if(behavior!=null){
-            behavior.setAutoHideEnabled(false);
-        }
-        fab.hide();
-    }
 
-    private void showFloatingActionButton(FloatingActionButton fab){
-        fab.show();
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)fab.getLayoutParams();
-        FloatingActionButton.Behavior behavior = (FloatingActionButton.Behavior)params.getBehavior();
-        if(behavior!=null){
-            behavior.setAutoHideEnabled(true);
-        }
-    }
 }
