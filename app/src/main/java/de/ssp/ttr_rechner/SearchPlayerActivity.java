@@ -21,6 +21,8 @@ import de.ssp.ttr_rechner.ui.searchplayer.SectionsPagerAdapter;
 
 public class SearchPlayerActivity extends AppCompatActivity
 {
+    public static String PUT_EXTRA_IS_PREMIUM_ACCOUNT = "IS_PREMIUM_ACCOUNT";
+
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.view_pager) ViewPager viewPager;
     protected @BindView(R.id.tabs) TabLayout tabs;
@@ -39,8 +41,9 @@ public class SearchPlayerActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         boolean isSingleChooseActive = getIntent().getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
+        boolean isPremiumAccount = getIntent().getBooleanExtra(SearchPlayerActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, false);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), isSingleChooseActive);
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), isSingleChooseActive, isPremiumAccount);
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs.setupWithViewPager(viewPager);
         tabs.setOnTabSelectedListener(new FloatingButtonHideShowListner(viewPager, fab));

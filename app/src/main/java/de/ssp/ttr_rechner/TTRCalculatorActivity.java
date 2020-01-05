@@ -35,15 +35,17 @@ import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.model.Wettkampf;
 import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
+import de.ssp.ttr_rechner.service.caller.ServiceCallerIsPremiumAccount;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerRealNameAndPoints;
 import de.ssp.ttr_rechner.service.caller.ServiceReady;
 import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
 
-public class TTRCalculatorActivity extends AppCompatActivity implements ServiceReady<User>, TTRCalculatorInteractor
+public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalculatorInteractor
 {
     public static int REQUEST_CODE_SEARCH = 1;
+    public static int REQUEST_CODE_SETTINGS = 2;
     public static String PUT_EXTRA_RESULT_PLAYERS = "RESULT_PLAYERS";
 
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
@@ -59,6 +61,48 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
     private Wettkampf wettkampf;
     private MyTischtennisCredentials credentials;
     private PanelMatchViewHolder panelMatchViewHolder;
+    private Boolean isPremiumAccount;
+
+    public class ServiceReadyUser implements ServiceReady<User>
+    {
+        @Override
+        public void serviceReady(boolean success, User user, String errorMessage)
+        {
+            if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
+            {
+                return;
+            }
+
+            if(user != null)
+            {
+                setMyTTRPunkteToView(user.getPoints(), user.getRealName());
+            }
+        }
+    }
+
+    public class ServiceReadyIsPremiumAccount implements ServiceReady<Boolean>
+    {
+        protected boolean isSingleChooseActive;
+        public ServiceReadyIsPremiumAccount(boolean isSingleChooseActive)
+        {
+            this.isSingleChooseActive = isSingleChooseActive;
+        }
+
+        @Override
+        public void serviceReady(boolean success, Boolean value, String errorMessage)
+        {
+            if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
+            {
+                return;
+            }
+
+            if(success && errorMessage == null)
+            {
+                isPremiumAccount = value;
+                callSearchPlayerActivity(isSingleChooseActive);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,7 +128,6 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
         txtNeueTTRPunkte.setText(R.string.leer);
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -97,21 +140,11 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == REQUEST_CODE_SEARCH && resultCode == RESULT_OK)
         {
-            ArrayList<Player> playerArrayList = (ArrayList<Player>) intent.getSerializableExtra(PUT_EXTRA_RESULT_PLAYERS);
-            boolean isMyTTRPunkteCalled = intent.getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
-            if(isMyTTRPunkteCalled)
-            {
-                if(playerArrayList.size() == 1)
-                {
-                    Player player = playerArrayList.get(0);
-                    setMyTTRPunkteToView(player.getTtrPoints(), player.getFirstname() + " " + player.getLastname());
-                }
-            }
-            else
-            {
-                wettkampf.addMatches(playerArrayList);
-                showToastAnzahlGegner();
-            }
+            onActivityResultSearch(intent);
+        }
+        else if(requestCode == REQUEST_CODE_SETTINGS && resultCode == RESULT_OK)
+        {
+            onActivityResultSettings(intent);
         }
     }
 
@@ -161,7 +194,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
         {
             txtMeinTTRWert.setText(null);
             txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte));
-            ServiceCallerRealNameAndPoints realNameAndPointsCaller = new ServiceCallerRealNameAndPoints(this, this);
+            ServiceCallerRealNameAndPoints realNameAndPointsCaller = new ServiceCallerRealNameAndPoints(this, new ServiceReadyUser());
             realNameAndPointsCaller.callService();
         }
     }
@@ -169,11 +202,9 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
     @OnClick(R.id.btnSearchForMyTTRPoints)
     public void pressBtnSearchForMyTTRPoints()
     {
-        if(! showCredentialsNotSetIfNecessary())
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessary(true))
         {
-            Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerActivity.class);
-            intentForSearchPlayerActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, true);
-            startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
+            callSearchPlayerActivity(true);
         }
     }
 
@@ -195,10 +226,9 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
     @OnClick(R.id.btnSearchPlayers)
     public void pressBtnSearchAndAddMatch()
     {
-        if(! showCredentialsNotSetIfNecessary())
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessary(false))
         {
-            Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerActivity.class);
-            startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
+            callSearchPlayerActivity(false);
         }
     }
 
@@ -224,19 +254,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
         }
     }
 
-    @Override
-    public void serviceReady(boolean success, User user, String errorMessage)
-    {
-        if(ServiceErrorAlertDialogHelper.showErrorDialog(this, success, errorMessage))
-        {
-            return;
-        }
 
-        if(user != null)
-        {
-            setMyTTRPunkteToView(user.getPoints(), user.getRealName());
-        }
-    }
 
     @Override
     public void showToastAnzahlGegner()
@@ -276,7 +294,15 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
     {
         Intent intentForTTRKonstanteActivity = new Intent(this, SettingsActivity.class);
         intentForTTRKonstanteActivity.putExtra(MyTischtennisCredentials.FOCUS_ON_CREDENTIALS, focusOnCredentials);
-        startActivity(intentForTTRKonstanteActivity);
+        startActivityForResult(intentForTTRKonstanteActivity, REQUEST_CODE_SETTINGS);
+    }
+
+    private void callSearchPlayerActivity(boolean isSingleChooseActive)
+    {
+        Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerActivity.class);
+        intentForSearchPlayerActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
+        intentForSearchPlayerActivity.putExtra(SearchPlayerActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, isPremiumAccount.booleanValue());
+        startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
     }
 
     private boolean showCredentialsNotSetIfNecessary()
@@ -345,6 +371,45 @@ public class TTRCalculatorActivity extends AppCompatActivity implements ServiceR
             String realName = wettkampf.meinName != null && ! wettkampf.meinName.isEmpty() ? " - " + wettkampf.meinName : "";
             txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + realName);
             txtMeinTTRWert.setText(String.valueOf(wettkampf.meinTTRWert));
+        }
+    }
+
+    private boolean callServiceIsPremiumAccountIfNeccessary(boolean isSingleChooseActive)
+    {
+        if(isPremiumAccount == null)
+        {
+            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceReadyIsPremiumAccount(isSingleChooseActive));
+            serviceCallerIsPremiumAccount.callService();
+            return true;
+        }
+        return false;
+    }
+
+    private void onActivityResultSearch(Intent intent)
+    {
+        ArrayList<Player> playerArrayList = (ArrayList<Player>) intent.getSerializableExtra(PUT_EXTRA_RESULT_PLAYERS);
+        boolean isMyTTRPunkteCalled = intent.getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
+        if(isMyTTRPunkteCalled)
+        {
+            if(playerArrayList.size() == 1)
+            {
+                Player player = playerArrayList.get(0);
+                setMyTTRPunkteToView(player.getTtrPoints(), player.getFirstname() + " " + player.getLastname());
+            }
+        }
+        else
+        {
+            wettkampf.addMatches(playerArrayList);
+            showToastAnzahlGegner();
+        }
+    }
+
+    private void onActivityResultSettings(Intent intent)
+    {
+        boolean isLoginDataChanged = intent.getBooleanExtra(SettingsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, true);
+        if(isLoginDataChanged)
+        {
+            isPremiumAccount = null;
         }
     }
 }

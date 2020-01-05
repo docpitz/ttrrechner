@@ -19,39 +19,29 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_suche_name, R.string.tab_suche_kritierien, R.string.tab_suche_next_matches};
+    private static final int[] TAB_TITLES_PREMIUM = new int[]{R.string.tab_suche_name, R.string.tab_suche_kritierien, R.string.tab_suche_next_matches};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_suche_kritierien};
     private final Context mContext;
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
     protected boolean isSingleChooseActive;
+    protected boolean isPremiumAccount;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm, boolean isSingleChooseActive)
+    public SectionsPagerAdapter(Context context, FragmentManager fm, boolean isSingleChooseActive, boolean isPremiumAccount)
     {
         super(fm);
         mContext = context;
         this.isSingleChooseActive = isSingleChooseActive;
+        this.isPremiumAccount = isPremiumAccount;
     }
 
     @Override
     public Fragment getItem(int position)
     {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        switch (position)
+        if(isPremiumAccount)
         {
-            case 0:
-            {
-                return SearchWithNameFragment.newInstance(isSingleChooseActive);
-            }
-            case 1:
-            {
-                return SearchWithCriteriaFragment.newInstance(isSingleChooseActive);
-            }
-            case 2:
-            {
-                return SearchWithNextGamesFragment.newInstance(isSingleChooseActive);
-            }
+            return getItemForPremiumAccount(position);
         }
-        return null;
+        return SearchWithCriteriaFragment.newInstance(isSingleChooseActive);
     }
 
     @Override
@@ -75,12 +65,33 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     @Override
     public CharSequence getPageTitle(int position)
     {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        int stringId = isPremiumAccount ? TAB_TITLES_PREMIUM[position] : TAB_TITLES[position];
+        return mContext.getResources().getString(stringId);
     }
 
     @Override
     public int getCount()
     {
-        return 3;
+        return isPremiumAccount ? 3 : 1;
+    }
+
+    protected Fragment getItemForPremiumAccount(int position)
+    {
+        switch (position)
+        {
+            case 0:
+            {
+                return SearchWithNameFragment.newInstance(isSingleChooseActive);
+            }
+            case 1:
+            {
+                return SearchWithCriteriaFragment.newInstance(isSingleChooseActive);
+            }
+            case 2:
+            {
+                return SearchWithNextGamesFragment.newInstance(isSingleChooseActive);
+            }
+        }
+        return null;
     }
 }

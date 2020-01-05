@@ -1,5 +1,6 @@
 package de.ssp.ttr_rechner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
@@ -26,6 +27,8 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
 public class SettingsActivity extends AppCompatActivity implements ServiceReady<User>
 {
+    public static String PUT_EXTRA_IS_LOGIN_DATA_CHANGED = "IS_LOGIN_DATA_CHANGED";
+
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.chkKonstante1JahrOhneSpiel) Switch chkKonstante1JahrOhneSpiel;
     protected @BindView(R.id.chkKonstanteWeniger15Spiele) Switch chkKonstanteWeniger15Spiele;
@@ -40,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     protected TTRKonstante ttrKonstanteModel;
     protected MyTischtennisCredentials myTischtennisCredentialsModel;
     protected boolean startIsFinished = false;
+    protected boolean isLoginDataChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +63,24 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
             txtUsername.requestFocus();
         }
         startIsFinished = true;
+        isLoginDataChanged = false;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finishActivity();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == android.R.id.home)
+        {
+            finishActivity();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -105,27 +127,18 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if(item.getItemId() == android.R.id.home)
-        {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @OnClick (R.id.btnLogin)
     public void pressBtnTestLogin()
     {
+        isLoginDataChanged = true;
         ServiceCallerLogin loginServiceCaller = new ServiceCallerLogin(this, this, txtUsername.getText().toString(), txtPassword.getText().toString());
-        loginServiceCaller.callService();;
+        loginServiceCaller.callService();
     }
 
     @OnClick(R.id.btnLoginDelete)
     public void pressBtnDeleteLogin()
     {
+        isLoginDataChanged = true;
         txtUsername.setText("");
         txtPassword.setText("");
         myTischtennisCredentialsModel.setCredentials(null, null, chkMyttLoginPossible.isChecked());
@@ -198,6 +211,14 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
             ttrKonstanteModel.setAlter(alter);
             updateTTRKonstante();
         }
+    }
+
+    private void finishActivity()
+    {
+        Intent intent = new Intent();
+        intent.putExtra(SettingsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, isLoginDataChanged);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }
