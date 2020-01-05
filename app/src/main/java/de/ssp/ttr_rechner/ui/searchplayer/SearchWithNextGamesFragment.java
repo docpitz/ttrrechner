@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.TTRechnerActivity;
+import de.ssp.ttr_rechner.TTRCalculatorActivity;
 import de.ssp.ttr_rechner.model.NextGame;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerFindCompletePlayer;
@@ -64,7 +64,7 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
                 Intent intentForTTRKonstanteActivity = new Intent(getActivity(), FoundedPlayerActivity.class);
                 intentForTTRKonstanteActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList)playerList);
                 intentForTTRKonstanteActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
-                getActivity().startActivityForResult(intentForTTRKonstanteActivity, TTRechnerActivity.REQUEST_CODE_SEARCH);
+                getActivity().startActivityForResult(intentForTTRKonstanteActivity, TTRCalculatorActivity.REQUEST_CODE_SEARCH);
             }
         }
     }

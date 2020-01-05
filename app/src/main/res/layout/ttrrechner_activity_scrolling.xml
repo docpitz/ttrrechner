@@ -110,7 +110,7 @@
                         android:textSize="12sp" />
 
                     <Button
-                        android:id="@+id/btnRestore"
+                        android:id="@+id/btnReset"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
@@ -127,7 +127,7 @@
                         android:textSize="12sp" />
 
                     <Button
-                        android:id="@+id/btnSearchAndAddMatch"
+                        android:id="@+id/btnSearchPlayers"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"

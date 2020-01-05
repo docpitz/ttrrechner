@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jmelzer.myttr.Player;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Wettkampf
 {
@@ -28,6 +30,20 @@ public class Wettkampf
     {
         this.context = context;
         load();
+    }
+
+    public void addMatches(List<Player> playerList)
+    {
+        if(matches.size() == 1 && matches.get(0).getGegnerischerTTRWert() == -1 && playerList.size() > 0)
+        {
+            matches.remove(0);
+        }
+
+        for (Player player: playerList)
+        {
+            Match match = new Match(player.getTtrPoints(), false, player.getFirstname() + " " + player.getLastname(), player.getClub());
+            matches.add(match);
+        }
     }
 
     public void save(ArrayList<Match> matches, int meinTTRWert)

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.ssp.ttr_rechner.TTRechnerActivity">
+    tools:context="de.ssp.ttr_rechner.TTRCalculatorActivity">
     <item
         android:id="@+id/action_call_ttr_konstante"
         android:orderInCategory="100"

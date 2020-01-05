@@ -10,7 +10,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
-import de.ssp.ttr_rechner.TTRechnerActivity;
+import de.ssp.ttr_rechner.TTRCalculatorActivity;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceReady;
 
@@ -34,7 +34,7 @@ public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
                 Intent intent = new Intent(activity, FoundedPlayerActivity.class);
                 intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_PLAYER_LIST, (ArrayList) playerList);
                 intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
-                activity.startActivityForResult(intent, TTRechnerActivity.REQUEST_CODE_SEARCH);
+                activity.startActivityForResult(intent, TTRCalculatorActivity.REQUEST_CODE_SEARCH);
             }
             else
             {

@@ -96,7 +96,7 @@ public class FoundedPlayerActivity extends AppCompatActivity
             }
         }
         Intent intent = new Intent();
-        intent.putExtra(TTRechnerActivity.PUT_EXTRA_RESULT_PLAYERS, playerArrayList);
+        intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, playerArrayList);
         intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
         setResult(RESULT_OK, intent);
         finish();

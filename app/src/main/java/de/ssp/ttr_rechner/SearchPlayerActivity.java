@@ -56,7 +56,7 @@ public class SearchPlayerActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if(requestCode == TTRechnerActivity.REQUEST_CODE_SEARCH && resultCode == RESULT_OK)
+        if(requestCode == TTRCalculatorActivity.REQUEST_CODE_SEARCH && resultCode == RESULT_OK)
         {
             setResult(RESULT_OK, intent);
             finish();
