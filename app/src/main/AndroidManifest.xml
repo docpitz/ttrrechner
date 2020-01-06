@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name=".MyTTRRechnerApplication"
         tools:replace="android:allowBackup">
         <activity android:name=".FoundedPlayerActivity"
             android:configChanges="orientation|keyboardHidden"
