@@ -105,6 +105,4 @@ public class PanelSingleMatchViewHolder
             chkSieg.setChecked(match.isGewonnen());
         }
     }
-
 }
-
