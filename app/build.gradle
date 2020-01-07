@@ -7,8 +7,8 @@ android {
         applicationId "de.ssp.ttr_rechner"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1000002
-        versionName "1.00-0002"
+        versionCode 2000001
+        versionName "2.00-0001"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.github.docpitz:myTTR:5.0.11"
+    implementation "com.github.docpitz:myTTR:5.0.12"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
