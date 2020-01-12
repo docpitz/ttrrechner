@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0"
-        android:alpha="0.35"
+        android:alpha="0.5"
         android:background="@android:color/transparent"
         android:contentDescription="@string/loeschen"
         android:paddingTop="6dp"

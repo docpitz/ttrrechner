@@ -42,4 +42,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'commons-httpclient:commons-httpclient:3.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
 }

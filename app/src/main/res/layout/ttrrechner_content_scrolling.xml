@@ -64,6 +64,7 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:animateLayoutChanges="true"
             android:paddingTop="10dp">
 
         </LinearLayout>

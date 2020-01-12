@@ -2,6 +2,7 @@ package de.ssp.ttr_rechner.model;
 
 public class Match
 {
+    public static int NO_MATCH = -1;
     private int gegnerischerTTRWert;
     private boolean gewonnen;
     private String nameVerein;

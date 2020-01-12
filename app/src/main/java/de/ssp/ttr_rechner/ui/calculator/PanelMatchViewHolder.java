@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +74,9 @@ public class PanelMatchViewHolder
         panelSingleMatchViewHolderList.add(panelSingleMatchViewHolder);
         pnlMatchList.addView(panelSingleMatchViewHolder.getView());
         updateRemoveButton();
+        YoYo.with(Techniques.FadeIn)
+                .duration(200)
+                .playOn(panelSingleMatchViewHolder.getView());
     }
 
     public void removeMatch(PanelSingleMatchViewHolder panelSingleMatchViewHolder)

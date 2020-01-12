@@ -59,7 +59,7 @@ public class TTRRechnerUtilUnitTest
     public void testBerechneAenderungBeispielEinfach()
     {
         TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1615, 16);
-        Match wildenauer = new Match(1593, true);
+        Match wildenauer = new Match(1593, true, "");
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(wildenauer);
         long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
@@ -71,14 +71,14 @@ public class TTRRechnerUtilUnitTest
     public void testBerechneAenderungBeispielGroßerErfolg()
     {
         TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1576, 16);
-        Match wolf = new Match(1625, true);
-        Match brunhuber = new Match(1581, true);
-        Match egger = new Match(1562, true);
-        Match kahler = new Match(1635, true);
-        Match schmidt = new Match(1594, true);
-        Match weissenbach = new Match(1651, true);
-        Match kirchberger = new Match(1688, true);
-        Match betz = new Match(1645, false);
+        Match wolf = new Match(1625, true, "");
+        Match brunhuber = new Match(1581, true, "");
+        Match egger = new Match(1562, true, "");
+        Match kahler = new Match(1635, true, "");
+        Match schmidt = new Match(1594, true, "");
+        Match weissenbach = new Match(1651, true, "");
+        Match kirchberger = new Match(1688, true, "");
+        Match betz = new Match(1645, false, "");
 
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(wolf);
@@ -98,9 +98,9 @@ public class TTRRechnerUtilUnitTest
     public void testBerechneAenderungBeispielKleineNiederlage()
     {
         TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1662, 16);
-        Match muthorst = new Match(1512, true);
-        Match heim = new Match(1630, false);
-        Match waechter = new Match(1512, false);
+        Match muthorst = new Match(1512, true, "");
+        Match heim = new Match(1630, false, "");
+        Match waechter = new Match(1512, false, "");
 
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(muthorst);
@@ -115,11 +115,11 @@ public class TTRRechnerUtilUnitTest
     public void testBerechneAenderungBeispielKleineNiederlageMitLeerwert()
     {
         TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1662, 16);
-        Match muthorst = new Match(1512, true);
-        Match heim = new Match(1630, false);
-        Match waechter = new Match(1512, false);
-        Match leerWert1 = new Match(-1, true);
-        Match leerWert2 = new Match(-1, false);
+        Match muthorst = new Match(1512, true, "");
+        Match heim = new Match(1630, false, "");
+        Match waechter = new Match(1512, false, "");
+        Match leerWert1 = new Match(Match.NO_MATCH, true, "");
+        Match leerWert2 = new Match(Match.NO_MATCH, false, "");
 
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(muthorst);
@@ -136,12 +136,12 @@ public class TTRRechnerUtilUnitTest
     public void testBerechneAenderungBeispielAndereKonstante()
     {
         TTRRechnerUtil ttrRechnerUtil = new TTRRechnerUtil(1170, 24);
-        Match coutureaV = new Match(921, true);
-        Match haasL = new Match(837, true);
-        Match coutureaM = new Match(789, true);
-        Match bodensteiner = new Match(1121, true);
-        Match haasS = new Match(857, true);
-        Match pilgrim = new Match(926, true);
+        Match coutureaV = new Match(921, true, "");
+        Match haasL = new Match(837, true, "");
+        Match coutureaM = new Match(789, true, "");
+        Match bodensteiner = new Match(1121, true, "");
+        Match haasS = new Match(857, true, "");
+        Match pilgrim = new Match(926, true, "");
 
         ArrayList<Match> matchArrayList = new ArrayList<>();
         matchArrayList.add(coutureaV);
@@ -154,5 +154,4 @@ public class TTRRechnerUtilUnitTest
         long ttrAenderung = ttrRechnerUtil.berechneTTRAenderung(matchArrayList);
         assertEquals(9, ttrAenderung);
     }
-
 }
