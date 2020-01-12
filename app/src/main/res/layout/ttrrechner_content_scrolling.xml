@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-tools:context=".TTRechnerActivity"
+tools:context=".TTRCalculatorActivity"
 tools:showIn="@layout/ttrrechner_activity_scrolling">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -21,24 +22,43 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtMeinTTRWertHint"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Meine TTR-Punkte"
-                android:textSize="20sp"/>
+                android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/txtMeinTTRWert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:hint="TTR-Punkte"
-                android:inputType="numberSigned"
-                android:maxLength="4" />
+                <EditText
+                    android:id="@+id/txtMeinTTRWert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_meine_ttr_punkte"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:digits="0123456789"
+                    android:maxLength="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnSearchForMyTTRPoints"
+                android:layout_gravity="center"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:alpha="0.5"
+                android:background="@drawable/ic_search_18" />
+
+            <Button
+                android:id="@+id/btnCallMyTTRPoints"
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:alpha="0.5"
+                android:background="@drawable/ic_personal_24" />
+
 
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/pnlMatchList"
             android:layout_width="match_parent"
@@ -49,4 +69,4 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
         </LinearLayout>
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

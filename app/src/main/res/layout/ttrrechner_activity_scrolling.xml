@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,14 +16,14 @@
         android:fitsSystemWindows="true"
         tools:context="com.chivazo.chivazoandroid.activities.SingleProductActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -39,23 +39,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/tt"
+                    android:contentDescription="@string/bild"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/tt"
                     app:layout_collapseMode="parallax" />
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <include layout="@layout/ttrrechner_content_scrolling" />
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
         android:id="@+id/pnlAboveKeyBoard"
@@ -65,22 +66,20 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:background="@android:color/transparent"
-        >
+        android:baselineAligned="false">
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-
-
             android:background="@android:color/transparent">
 
             <HorizontalScrollView
                 android:id="@+id/horizontalButtonScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbars="none"
                 android:background="@color/colorPrimary">
@@ -89,9 +88,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
                     android:orientation="horizontal"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
                     android:background="@android:color/transparent">
 
                     <Button
@@ -99,24 +97,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
                         android:drawableStart="@drawable/ic_settings_18"
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="TTR-Konstante"
+                        android:text="@string/einstellungen"
                         android:textSize="12sp" />
 
                     <Button
-                        android:id="@+id/btnRestore"
+                        android:id="@+id/btnReset"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
@@ -125,7 +123,24 @@
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Zurücksetzen"
+                        android:text="@string/zuruecksetzen"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnSearchPlayers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_shape"
+                        android:drawableStart="@drawable/ic_group_add_24"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="@string/suchen"
                         android:textSize="12sp" />
 
                     <Button
@@ -133,16 +148,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_shape"
-                        android:drawableStart="@drawable/ic_plus_18"
+                        android:drawableStart="@drawable/ic_person_add_18"
                         android:drawablePadding="5dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
-                        android:text="Hinzufügen"
+                        android:text="@string/hinzufuegen"
                         android:textSize="12sp" />
                 </LinearLayout>
             </HorizontalScrollView>
@@ -150,13 +165,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:paddingTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Neue TTR-Punkte:"
+                    android:text="@string/neue_ttr_punkte"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:layout_gravity="bottom"
@@ -172,21 +187,21 @@
                         android:id="@+id/txtNeueTTRPunkte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-"
+                        android:text="@string/leer"
                         android:layout_gravity="bottom"
                         android:textColor="@android:color/white"
                         android:textSize="40sp"
                         android:textStyle="bold"
                         android:paddingBottom="6dp"
-                        android:paddingRight="20dp"/>
+                        android:paddingEnd="20dp"/>
 
-                    <android.support.design.widget.FloatingActionButton
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/btnCalculatePoints"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorPrimary"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:scaleType="center"
                         app:srcCompat="@drawable/ic_equal_18" />
                 </LinearLayout>

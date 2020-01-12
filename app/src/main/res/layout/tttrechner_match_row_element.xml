@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pnlMatchView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtHintTTRGegner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/txtTTRGegner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/hint_ttr_gegner"
+            android:maxLength="4"
+            android:inputType="phone"
+            android:digits="0123456789"
+            android:importantForAutofill="no" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Switch
+        android:id="@+id/chkSieg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:paddingStart="10dp"
+        android:paddingEnd="15dp"
+        android:layout_gravity="center"
+        android:text="@string/sieg"
+        android:textOff="@string/verloren"
+        android:textOn="@string/sieg" />
+
+    <ImageButton
+        android:id="@+id/btnRemoveMatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:alpha="0.35"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/loeschen"
+        android:paddingTop="6dp"
+        app:srcCompat="@drawable/ic_delete_36" />
+
+</LinearLayout>

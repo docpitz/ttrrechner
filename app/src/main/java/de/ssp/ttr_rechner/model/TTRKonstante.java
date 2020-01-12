@@ -21,6 +21,7 @@ public class TTRKonstante {
     private boolean ueberEinJahrOhneSpiel;
     private boolean wenigerAls15Spiele;
     private Alter alter;
+    private Context context;
 
     private SharedPreferences ttrKonstanteSettings;
 
@@ -31,51 +32,24 @@ public class TTRKonstante {
      */
     public TTRKonstante(Context context)
     {
-        ttrKonstanteSettings = context.getSharedPreferences(TTR_KONSTANTE_SAVE_NAME, Context.MODE_PRIVATE);
-        ueberEinJahrOhneSpiel = ttrKonstanteSettings.getBoolean(UEBER_EIN_JAHR_OHNE_SPIEL, false);
-        wenigerAls15Spiele = ttrKonstanteSettings.getBoolean(WENIGER_ALS_15_SPIELE, false);
-        alter = Alter.values()[ttrKonstanteSettings.getInt(ALTER, Alter.UNTER_16.ordinal())];
+        this.context = context;
     }
 
     public boolean getUeberEinJahrOhneSpiel()
     {
+        updateFromPreferences();
         return ueberEinJahrOhneSpiel;
     }
 
     public boolean getWenigerAls15Spiele()
     {
+        updateFromPreferences();
         return wenigerAls15Spiele;
     }
 
     public Alter getAlter() {
+        updateFromPreferences();
         return alter;
-    }
-
-    public void setUeberEinJahrOhneSpiel(boolean ueberEinJahrOhneSpiel)
-    {
-        this.ueberEinJahrOhneSpiel = ueberEinJahrOhneSpiel;
-        save();
-    }
-
-    public void setWenigerAls15Spiele(boolean wenigerAls15Spiele)
-    {
-        this.wenigerAls15Spiele = wenigerAls15Spiele;
-        save();
-    }
-
-    public void setAlter(Alter alter)
-    {
-        this.alter = alter;
-        save();
-    }
-
-    private void save()
-    {
-        SharedPreferences.Editor ttrKonstanteSettingsEditor = ttrKonstanteSettings.edit();
-        ttrKonstanteSettingsEditor.putBoolean(UEBER_EIN_JAHR_OHNE_SPIEL ,ueberEinJahrOhneSpiel);
-        ttrKonstanteSettingsEditor.putBoolean(WENIGER_ALS_15_SPIELE, wenigerAls15Spiele);
-        ttrKonstanteSettingsEditor.putInt(ALTER, alter.ordinal());
-        ttrKonstanteSettingsEditor.apply();
     }
 
     /**
@@ -84,6 +58,7 @@ public class TTRKonstante {
      */
     public int getTTRKonstante ()
     {
+        updateFromPreferences();
         int ttrKonstante = TTR_KONSTANTE;
 
         if (ueberEinJahrOhneSpiel)
@@ -105,4 +80,38 @@ public class TTRKonstante {
         return ttrKonstante;
     }
 
+    public void setUeberEinJahrOhneSpiel(boolean ueberEinJahrOhneSpiel)
+    {
+        this.ueberEinJahrOhneSpiel = ueberEinJahrOhneSpiel;
+        save();
+    }
+
+    public void setWenigerAls15Spiele(boolean wenigerAls15Spiele)
+    {
+        this.wenigerAls15Spiele = wenigerAls15Spiele;
+        save();
+    }
+
+    public void setAlter(Alter alter)
+    {
+        this.alter = alter;
+        save();
+    }
+
+    private void updateFromPreferences()
+    {
+        ttrKonstanteSettings = context.getSharedPreferences(TTR_KONSTANTE_SAVE_NAME, Context.MODE_PRIVATE);
+        ueberEinJahrOhneSpiel = ttrKonstanteSettings.getBoolean(UEBER_EIN_JAHR_OHNE_SPIEL, false);
+        wenigerAls15Spiele = ttrKonstanteSettings.getBoolean(WENIGER_ALS_15_SPIELE, false);
+        alter = Alter.values()[ttrKonstanteSettings.getInt(ALTER, Alter.UNTER_16.ordinal())];
+    }
+
+    private void save()
+    {
+        SharedPreferences.Editor ttrKonstanteSettingsEditor = ttrKonstanteSettings.edit();
+        ttrKonstanteSettingsEditor.putBoolean(UEBER_EIN_JAHR_OHNE_SPIEL ,ueberEinJahrOhneSpiel);
+        ttrKonstanteSettingsEditor.putBoolean(WENIGER_ALS_15_SPIELE, wenigerAls15Spiele);
+        ttrKonstanteSettingsEditor.putInt(ALTER, alter.ordinal());
+        ttrKonstanteSettingsEditor.apply();
+    }
 }

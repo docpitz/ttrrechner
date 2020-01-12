@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".SettingsActivity"
+    tools:showIn="@layout/settings_activity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TTR Konstante"
+                    android:layout_weight="1"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:id="@+id/txtTTRKonstante"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="right"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:paddingRight="10dp"
+                    android:textSize="22sp" />
+            </LinearLayout>
+            <TextView
+                android:paddingTop="14dp"
+                android:id="@+id/alter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alter"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbUnter16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="bis 16 Jahre"
+                    android:textSize="18sp"/>
+
+                <RadioButton
+                    android:id="@+id/rbUnter21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="bis 21 Jahre"
+                    android:textSize="18sp"/>
+
+                <RadioButton
+                    android:id="@+id/rbUeber21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="über 21 Jahre"
+                    android:textSize="18sp"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/einsaetze"
+                android:paddingTop="14dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Einsätze"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+            <Switch
+                android:id="@+id/chkKonstanteWeniger15Spiele"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:text="weniger als 15 Spiele"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/chkKonstante1JahrOhneSpiel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="8dp"
+                android:text="über 1 Jahr ohne Spiele"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="22dp"
+                android:paddingBottom="14dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="MyTischtennis Login"
+                    android:textSize="22sp" />
+
+                <Switch
+                    android:id="@+id/chkMyttLoginPossible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pnlLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/txtUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:hint="Benutzername"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="14dp"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/txtPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+
+                        android:hint="Kennwort"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnLoginDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/button_shape_primary_color"
+                        android:drawableStart="@drawable/ic_delete_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Login löschen"
+                        android:textSize="12sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/btnLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/button_shape_primary_color"
+                        android:drawableStart="@drawable/ic_account_18"
+                        android:drawablePadding="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Login testen"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
