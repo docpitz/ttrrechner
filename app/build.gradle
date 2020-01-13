@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "de.ssp.ttr_rechner"
         minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 2020000
-        versionName "2.02-0000"
+        targetSdkVersion 28
+        versionCode 2020001
+        versionName "2.02-0001"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,5 +49,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
-    implementation 'com.github.ceryle:RadioRealButton:v2.1.1'
+    implementation 'com.github.patgdut:RadioRealButton:v2.1.2'
 }
