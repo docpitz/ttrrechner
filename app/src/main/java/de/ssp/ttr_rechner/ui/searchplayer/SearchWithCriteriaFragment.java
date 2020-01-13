@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.ToggleButton;
 
 import com.jmelzer.myttr.Club;
 import com.jmelzer.myttr.logic.TTRClubParser;
@@ -19,7 +17,7 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import co.ceryle.radiorealbutton.RadioRealButtonGroup;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
@@ -38,10 +36,10 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         FEMALE("female"),
         MALE("male");
 
-        String gender;
+        String stringValue;
         Gender(String gender)
         {
-            this.gender = gender;
+            this.stringValue = gender;
         }
     }
 
@@ -49,36 +47,16 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
     protected boolean isSingleChooseActive;
 
     protected @BindView(R.id.txtClubSearch) AutoCompleteTextView txtClubSearch;
-    protected @BindView(R.id.btnAlleGeschlechter) ToggleButton btnAlleGeschlechter;
-    protected @BindView(R.id.btnMaennlich) ToggleButton btnMaennlich;
-    protected @BindView(R.id.btnWeiblich) ToggleButton btnWeiblich;
-    protected @BindView(R.id.btnGruoupGeschlecht) RadioGroup radioGroup;
+    protected @BindView(R.id.btnGroupGender) RadioRealButtonGroup btnGroupGender;
     protected @BindView(R.id.txtGeburtsjahrVon) EditText txtGeburtsjahrVon;
     protected @BindView(R.id.txtGeburtsjahrBis) EditText txtGeburtsjahrBis;
     protected @BindView(R.id.txtTTRVon) EditText txtTTRVon;
     protected @BindView(R.id.txtTTRBis) EditText txtTTRBis;
 
-    final RadioGroup.OnCheckedChangeListener toggleListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(final RadioGroup radioGroup, final int i) {
-            for (int position = 0; position < radioGroup.getChildCount(); position++) {
-                final ToggleButton view = (ToggleButton) radioGroup.getChildAt(position);
-                view.setChecked(view.getId() == i);
-            }
-        }
-    };
-
-
     public SearchWithCriteriaFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SearchWithNameFragment.
-     */
     public static SearchWithCriteriaFragment newInstance(boolean isSingleChooseActive) {
         SearchWithCriteriaFragment fragment = new SearchWithCriteriaFragment();
         Bundle args = new Bundle();
@@ -96,12 +74,10 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.player_search_fragment_criteria, container, false);
         ButterKnife.bind(this, view);
-        radioGroup.setOnCheckedChangeListener(toggleListener);
         initializeClubParsing();
         return view;
     }
@@ -114,24 +90,6 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.select_dialog_item, clubs);
         txtClubSearch.setThreshold(3);//will start working from first character
         txtClubSearch.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
-    }
-
-    @OnClick({R.id.btnAlleGeschlechter, R.id.btnWeiblich, R.id.btnMaennlich})
-    protected void pressGeschlecht(ToggleButton view)
-    {
-        if(view.isChecked())
-        {
-            ((RadioGroup)view.getParent()).check(view.getId());
-        }
-        else
-        {
-            view.setChecked(true);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -158,7 +116,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         searchPlayer.setYearFrom(yearFrom);
         searchPlayer.setYearTo(yearTo);
         searchPlayer.setClub(foundedClub);
-        searchPlayer.setGender(getGenderFromUI().gender);
+        searchPlayer.setGender(getGenderFromUI().stringValue);
 
         ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceReadySearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
         serviceCallerSearchPlayer.callService();
@@ -168,13 +126,17 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
     private Gender getGenderFromUI()
     {
         Gender gender = Gender.ALL;
-        if(btnMaennlich.isChecked())
+        switch (btnGroupGender.getPosition())
         {
-            gender = Gender.MALE;
-        }
-        else if(btnWeiblich.isChecked())
-        {
-            gender = Gender.FEMALE;
+            case 0:
+                gender = Gender.ALL;
+                break;
+            case 1:
+                gender = Gender.MALE;
+                break;
+            case 2:
+                gender = Gender.FEMALE;
+                break;
         }
         return gender;
     }
