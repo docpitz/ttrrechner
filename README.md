@@ -1,8 +1,8 @@
 **myTTR-Rechner for Android**
 
-TTR-Calculator for Android to calc new the ttr-points for lose or win a game.
-For players with a mytischtennis-login you can connect to mytischtennis.de
+The myTTR calculator is for calculating your future TTR points in table tennis.
+For players with a myTTR-account you can get current or quarterly points from mytischtennis.de via the app.
 
 https://play.google.com/store/apps/details?id=de.ssp.ttr_rechner
 
-Enjoy!!
+Enjoy the app!!
