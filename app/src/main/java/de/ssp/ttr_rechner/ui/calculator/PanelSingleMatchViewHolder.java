@@ -9,9 +9,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.textfield.TextInputLayout;
 
-import androidx.appcompat.widget.AppCompatImageButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
@@ -53,18 +54,26 @@ public class PanelSingleMatchViewHolder
     }
 
     @OnClick(R.id.btnRemoveMatch)
-    public void pressBtnRemoveMatch(AppCompatImageButton button)
+    public void pressBtnRemoveMatch(ImageButton button)
     {
-        ttrCalculatorInteractor.removeMatch(this);
-        ttrCalculatorInteractor.showToastAnzahlGegner();
-        ttrCalculatorInteractor.resetNeueTTRPunkte();
+
+        YoYo.with(Techniques.Pulse)
+                .duration(200)
+                .onStart(animator -> button.setAlpha(0.5f))
+                .onEnd(animator ->
+                {
+                    ttrCalculatorInteractor.removeMatch(PanelSingleMatchViewHolder.this);
+                    ttrCalculatorInteractor.showToastAnzahlGegner();
+                    ttrCalculatorInteractor.resetNeueTTRPunkte();
+                })
+                .playOn(btnRemoveMatch);
     }
 
     public Match getMatch()
     {
         String strTTRGegner = txtTTRGegner.getText().toString();
 
-        int intTTRGegner = -1;
+        int intTTRGegner = Match.NO_MATCH;
         if (!"".equals(strTTRGegner))
         {
             intTTRGegner = Integer.parseInt(strTTRGegner);

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".ui.searchplayer.SearchWithNameFragment">
@@ -23,8 +24,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -37,12 +38,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:hint="@string/geburtsjahr_von"
-                android:maxLines="1"
-                android:maxLength="4"
-                android:inputType="phone"
                 android:digits="0123456789"
-                android:importantForAutofill="no" />
+                android:hint="@string/geburtsjahr_von"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -56,12 +57,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:hint="@string/bis"
-                android:maxLength="4"
-                android:inputType="phone"
                 android:digits="0123456789"
-                android:maxLines="1"
-                android:importantForAutofill="no" />
+                android:hint="@string/bis"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
@@ -69,8 +70,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -83,12 +84,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:hint="@string/ttr_punkte_von"
-                android:maxLength="4"
-                android:inputType="phone"
                 android:digits="0123456789"
-                android:maxLines="1"
-                android:importantForAutofill="no" />
+                android:hint="@string/ttr_punkte_von"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -102,51 +103,73 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:hint="@string/bis"
-                android:maxLength="4"
-                android:inputType="phone"
                 android:digits="0123456789"
-                android:maxLines="1"
-                android:importantForAutofill="no" />
+                android:hint="@string/bis"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
-    <RadioGroup
-        android:id="@+id/btnGruoupGeschlecht"
-        android:layout_width="fill_parent"
+    <co.ceryle.radiorealbutton.RadioRealButtonGroup
+        android:layout_marginTop="16dp"
+        android:id="@+id/btnGroupGender"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal">
+        app:rrbg_animateDrawables_enter="accelerate"
+        app:rrbg_animateTexts_enter="accelerate"
+        app:rrbg_dividerColor="@color/gray"
+        app:rrbg_dividerSize="1dp"
+        app:rrbg_selectorColor="@color/colorPrimaryDark"
+        app:rrbg_radius="2dp"
+        app:rrbg_selectorSize="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        app:rrbg_animateTexts_textColorFrom="@color/gray"
+        app:rrbg_animateTexts_textColorTo="@color/colorPrimaryDark"
+        app:rrbg_animateDrawables_tintColorFrom="@color/gray"
+        app:rrbg_animateDrawables_tintColorTo="@color/colorPrimaryDark"
+        app:rrbg_animateDrawables_scale="1.0"
+        app:rrbg_animateTexts_scale="1.0"
+        android:elevation="2dp">
 
-        <ToggleButton
-            android:id="@+id/btnAlleGeschlechter"
-            android:layout_width="fill_parent"
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:textOff="@string/alle"
-            android:textOn="@string/alle"
-            android:textSize="14sp" />
+            app:rrb_drawableHeight="18dp"
+            app:rrb_drawablePadding="4dp"
+            app:rrb_drawableWidth="18dp"
+            app:rrb_textSize="16dp"
+            app:rrb_checked="true"
+            app:rrb_rippleColor="@color/colorPrimary"
+            app:rrb_drawable="@mipmap/ic_gender_male_female"
+            app:rrb_text="@string/alle"
+            app:rrb_textColor="@color/gray"/>
 
-        <ToggleButton
-            android:id="@+id/btnMaennlich"
-            android:layout_width="fill_parent"
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/maennlich"
-            android:textOn="@string/maennlich"
-            android:textSize="14sp" />
+            app:rrb_drawableHeight="18dp"
+            app:rrb_drawablePadding="4dp"
+            app:rrb_drawableWidth="18dp"
+            app:rrb_textSize="16dp"
+            app:rrb_rippleColor="@color/colorPrimary"
+            app:rrb_drawable="@mipmap/ic_gender_male"
+            app:rrb_text="@string/maennlich"
+            app:rrb_textColor="@color/gray"/>
 
-        <ToggleButton
-            android:id="@+id/btnWeiblich"
-            android:layout_width="fill_parent"
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="@string/weiblich"
-            android:textOn="@string/weiblich"
-            android:textSize="14sp" />
-
-    </RadioGroup>
-
+            app:rrb_drawableHeight="18dp"
+            app:rrb_drawablePadding="4dp"
+            app:rrb_drawableWidth="18dp"
+            app:rrb_textSize="16dp"
+            app:rrb_rippleColor="@color/colorPrimary"
+            app:rrb_drawable="@mipmap/ic_gender_female"
+            app:rrb_text="@string/weiblich"
+            app:rrb_textColor="@color/gray"/>
+    </co.ceryle.radiorealbutton.RadioRealButtonGroup>
 </LinearLayout>

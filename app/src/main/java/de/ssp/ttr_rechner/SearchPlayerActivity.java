@@ -46,7 +46,7 @@ public class SearchPlayerActivity extends AppCompatActivity
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), isSingleChooseActive, isPremiumAccount);
         viewPager.setAdapter(sectionsPagerAdapter);
         tabs.setupWithViewPager(viewPager);
-        tabs.setOnTabSelectedListener(new FloatingButtonHideShowListner(viewPager, fab));
+        tabs.setOnTabSelectedListener(new FloatingButtonHideShowListner(fab));
     }
 
     @OnClick(R.id.fab)

@@ -13,7 +13,10 @@ import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jmelzer.myttr.Player;
 import com.jmelzer.myttr.User;
@@ -41,6 +44,7 @@ import de.ssp.ttr_rechner.service.caller.ServiceReady;
 import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
+import de.ssp.ttr_rechner.ui.util.TTRAnimationsUtils;
 
 public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalculatorInteractor
 {
@@ -52,8 +56,9 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
     protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
     protected @BindView(R.id.txtMeinTTRWertHint) TextInputLayout txtMeinTTRWertHint;
-    protected @BindView(R.id.btnCallMyTTRPoints) Button btnCallTTRPoints;
+    protected @BindView(R.id.btnCallMyTTRPoints) Button btnCallMyTTRPoints;
     protected @BindView(R.id.btnSearchPlayers) Button btnSearchPlayers;
+    protected @BindView(R.id.btnCalculatePoints) FloatingActionButton btnCalculatePoints;
     protected @BindView(R.id.btnSearchForMyTTRPoints) Button btnSearchForMyTTRPoints;
     protected @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -188,8 +193,10 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     }
 
     @OnClick(R.id.btnCallMyTTRPoints)
-    public void pressBtnCallTTRPoints()
+    public void pressBtnCallTTRPoints(Button button)
     {
+        TTRAnimationsUtils.standardAnimationButtonPress(button);
+
         if(! showCredentialsNotSetIfNecessary())
         {
             txtMeinTTRWert.setText(null);
@@ -200,8 +207,10 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     }
 
     @OnClick(R.id.btnSearchForMyTTRPoints)
-    public void pressBtnSearchForMyTTRPoints()
+    public void pressBtnSearchForMyTTRPoints(Button button)
     {
+        TTRAnimationsUtils.standardAnimationButtonPress(button);
+
         if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessary(true))
         {
             callSearchPlayerActivity(true);
@@ -235,7 +244,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     @OnClick(R.id.btnAddMatch)
     public void pressBtnAddMatch()
     {
-        wettkampf.matches.add(new Match(-1, false, null));
+        wettkampf.matches.add(new Match(Match.NO_MATCH, false, null));
         panelMatchViewHolder.addMatch(null, this, this);
         showToastAnzahlGegner();
     }
@@ -243,6 +252,10 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     @OnClick(R.id.btnCalculatePoints)
     public void pressBtnCalculatePoints()
     {
+        YoYo.with(Techniques.Pulse)
+                .duration(800)
+                .playOn(txtNeueTTRPunkte);
+
         int intEndergebnis = calculateNeueTTRPunkte();
         if (intEndergebnis > 0)
         {
@@ -253,8 +266,6 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
             resetNeueTTRPunkte();
         }
     }
-
-
 
     @Override
     public void showToastAnzahlGegner()
@@ -329,7 +340,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     private void proccessMyTischtennisLoginPossible(boolean isPossible)
     {
         int myTischtennisFunctionVisiblity = isPossible ? TextView.VISIBLE : TextView.GONE;
-        btnCallTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
+        btnCallMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
         btnSearchPlayers.setVisibility(myTischtennisFunctionVisiblity);
         btnSearchForMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
     }
@@ -340,14 +351,14 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
 
         if (strMeinTTRWert.isEmpty())
         {
-            return -1;
+            return Match.NO_MATCH;
         }
         return Integer.parseInt(strMeinTTRWert);
     }
 
     private int calculateNeueTTRPunkte()
     {
-        int intEndergebnis = -1;
+        int intEndergebnis = Match.NO_MATCH;
         int intMeinTTR = getMeinTTR();
 
         if(intMeinTTR > 0)
