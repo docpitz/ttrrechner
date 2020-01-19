@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,8 +55,10 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
 
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
-    protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
+    protected @BindView(R.id.txtDiffTTRPunkte) TextView txtDiffTTRPunkte;
     protected @BindView(R.id.txtMeinTTRWertHint) TextInputLayout txtMeinTTRWertHint;
+    protected @BindView(R.id.pnlPunkte) LinearLayout pnlPunkte;
+    protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
     protected @BindView(R.id.btnCallMyTTRPoints) Button btnCallMyTTRPoints;
     protected @BindView(R.id.btnSearchPlayers) Button btnSearchPlayers;
     protected @BindView(R.id.btnCalculatePoints) FloatingActionButton btnCalculatePoints;
@@ -254,12 +257,13 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     {
         YoYo.with(Techniques.Pulse)
                 .duration(800)
-                .playOn(txtNeueTTRPunkte);
+                .playOn(pnlPunkte);
 
-        int intEndergebnis = calculateNeueTTRPunkte();
-        if (intEndergebnis > 0)
+        TTRRechnerUtil ttrRechnerUtil = initalizeTTRRechnerUtil();
+        if (ttrRechnerUtil != null)
         {
-            txtNeueTTRPunkte.setText(String.valueOf(intEndergebnis));
+            txtNeueTTRPunkte.setText(String.valueOf(ttrRechnerUtil.berechneNeueTTRPunkte()));
+            txtDiffTTRPunkte.setText(getTextDiffTTRPunkteChange(ttrRechnerUtil.berechneTTRAenderung()));
         }
         else
         {
@@ -289,6 +293,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     @Override
     public void resetNeueTTRPunkte()
     {
+        txtDiffTTRPunkte.setText("");
         txtNeueTTRPunkte.setText("-");
     }
 
@@ -356,20 +361,27 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         return Integer.parseInt(strMeinTTRWert);
     }
 
-    private int calculateNeueTTRPunkte()
+    private String getTextDiffTTRPunkteChange(long ttrAenderung)
     {
-        int intEndergebnis = Match.NO_MATCH;
+        String plus = "";
+        if(ttrAenderung >= 0)
+        {
+            plus = "+";
+        }
+        return "(" + plus + ttrAenderung + ")";
+    }
+
+    private TTRRechnerUtil initalizeTTRRechnerUtil()
+    {
         int intMeinTTR = getMeinTTR();
 
         if(intMeinTTR > 0)
         {
             TTRKonstante ttrKonstanteModel = new TTRKonstante(this);
-            TTRRechnerUtil calculator = new TTRRechnerUtil(intMeinTTR, ttrKonstanteModel.getTTRKonstante());
-            int intAenderungTTR = (int) calculator.berechneTTRAenderung(panelMatchViewHolder.getMatches());
-            intEndergebnis = intMeinTTR + intAenderungTTR;
+            TTRRechnerUtil calculator = new TTRRechnerUtil(intMeinTTR, ttrKonstanteModel.getTTRKonstante(),panelMatchViewHolder.getMatches());
+            return calculator;
         }
-
-        return intEndergebnis;
+        return null;
     }
 
     private void restoreView(Wettkampf wettkampf)
