@@ -9,9 +9,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorFindPlayerAvata
 public class ServiceCallerFindPlayerAvatarAdress extends MyTischtennisEnsureLoginCaller<String>
 {
     protected String playersId;
-    public ServiceCallerFindPlayerAvatarAdress(Context context, ServiceReady<String> serviceReady, String playersId)
+    public ServiceCallerFindPlayerAvatarAdress(Context context, ServiceFinish<String> serviceFinish, String playersId)
     {
-        super(context, null, serviceReady, AsyncTask.THREAD_POOL_EXECUTOR);
+        super(context, null, serviceFinish, AsyncTask.THREAD_POOL_EXECUTOR);
         this.playersId = playersId;
     }
 

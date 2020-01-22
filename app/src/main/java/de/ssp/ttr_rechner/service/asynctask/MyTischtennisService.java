@@ -19,12 +19,12 @@ import com.jmelzer.myttr.logic.impl.MyTTClickTTParserImpl;
 import java.util.Date;
 
 import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
     protected String errorMessage;
     protected Context context;
-    protected ServiceReady<T> serviceReady;
+    protected ServiceFinish<T> serviceFinish;
     protected ParserEvaluator<T> parserEvaluation;
     protected T serviceReturnObject;
     protected boolean success;
@@ -39,13 +39,13 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
         return lastServiceCallTimestamp + 1000 * 30 * 60 < timeNow;
     }
 
-    public MyTischtennisService(Context context, ParserEvaluator<T> parserEvaluation, String dialogMessage, ServiceReady<T> serviceReady) {
+    public MyTischtennisService(Context context, ParserEvaluator<T> parserEvaluation, String dialogMessage, ServiceFinish<T> serviceFinish) {
         if (context == null) throw new IllegalArgumentException("context must not be null");
         this.success = false;
         this.context = context;
         this.parserEvaluation = parserEvaluation;
         this.dialogMessage = dialogMessage;
-        this.serviceReady = serviceReady;
+        this.serviceFinish = serviceFinish;
     }
 
     @Override
@@ -156,6 +156,6 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
             Log.d(Constants.LOG_TAG, "couldn't load data in class " + getClass());
             errorMessage = "Konnte die Daten nicht laden (Grund unbekannt)";
         }
-        serviceReady.serviceReady(success, serviceReturnObject, errorMessage);
+        serviceFinish.serviceFinished(success, serviceReturnObject, errorMessage);
     }
 }

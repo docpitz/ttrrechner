@@ -118,7 +118,7 @@ public class SearchWithCriteriaFragment extends Fragment implements FloatingButt
         searchPlayer.setClub(foundedClub);
         searchPlayer.setGender(getGenderFromUI().stringValue);
 
-        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceReadySearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(),new ServiceFinishSearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
         serviceCallerSearchPlayer.callService();
 
     }

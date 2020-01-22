@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jmelzer.myttr.Player;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -26,23 +25,23 @@ import de.ssp.ttr_rechner.R;
 import de.ssp.ttr_rechner.model.ChooseablePlayer;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerFindPlayerAvatarAdress;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
 {
-    class ServiceReadyPlayerAvatar implements ServiceReady<String>
+    class ServiceFinishPlayerAvatar implements ServiceFinish<String>
     {
         ImageView imageView;
         Player player;
-        ServiceReadyPlayerAvatar(ImageView imageView, Player player)
+        ServiceFinishPlayerAvatar(ImageView imageView, Player player)
         {
             this.imageView = imageView;
             this.player = player;
         }
 
         @Override
-        public void serviceReady(boolean success, String url, String errorMessage)
+        public void serviceFinished(boolean success, String url, String errorMessage)
         {
             imgAdresses.put(player, url);
             FoundedPlayersListAdapter.this.loadImagetoView(url, imageView);
@@ -118,8 +117,8 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         }
         else
         {
-            ServiceReadyPlayerAvatar serviceReadyPlayerAvatar = new ServiceReadyPlayerAvatar(imgPlayer, player);
-            ServiceCallerFindPlayerAvatarAdress serviceCaller = new ServiceCallerFindPlayerAvatarAdress(getContext(), serviceReadyPlayerAvatar, String.valueOf(player.getPersonId()));
+            ServiceFinishPlayerAvatar serviceFinishPlayerAvatar = new ServiceFinishPlayerAvatar(imgPlayer, player);
+            ServiceCallerFindPlayerAvatarAdress serviceCaller = new ServiceCallerFindPlayerAvatarAdress(getContext(), serviceFinishPlayerAvatar, String.valueOf(player.getPersonId()));
             serviceCaller.callService();
             pnlRowFoundedPlayer.setTag(serviceCaller);
         }

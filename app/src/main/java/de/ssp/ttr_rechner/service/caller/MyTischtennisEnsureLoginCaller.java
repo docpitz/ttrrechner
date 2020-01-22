@@ -13,31 +13,31 @@ import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.service.asynctask.MyTischtennisService;
 import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
 
-public abstract class MyTischtennisEnsureLoginCaller<T> implements ServiceCaller, ServiceReady<User>
+public abstract class MyTischtennisEnsureLoginCaller<T> implements ServiceCaller, ServiceFinish<User>
 {
-    protected ServiceReady<T> serviceReady;
+    protected ServiceFinish<T> serviceFinish;
     protected Context context;
     protected String dialogMessage;
     protected Executor executor;
     protected MyTischtennisService<T> myTischtennisService;
     protected ServiceCallerLogin loginCaller;
 
-    public MyTischtennisEnsureLoginCaller(Context context, String dialogMessage, ServiceReady<T> serviceReady, Executor executor)
+    public MyTischtennisEnsureLoginCaller(Context context, String dialogMessage, ServiceFinish<T> serviceFinish, Executor executor)
     {
         this.context = context;
         this.dialogMessage = dialogMessage;
-        this.serviceReady = serviceReady;
+        this.serviceFinish = serviceFinish;
         this.executor = executor;
     }
 
-    public MyTischtennisEnsureLoginCaller(Context context, String dialogMessage, ServiceReady<T> serviceReady)
+    public MyTischtennisEnsureLoginCaller(Context context, String dialogMessage, ServiceFinish<T> serviceFinish)
     {
-        this(context, dialogMessage, serviceReady, null);
+        this(context, dialogMessage, serviceFinish, null);
     }
 
     protected void callLoggedInService()
     {
-        myTischtennisService = new MyTischtennisService<>(context, getParserEvaluator(), dialogMessage, serviceReady);
+        myTischtennisService = new MyTischtennisService<>(context, getParserEvaluator(), dialogMessage, serviceFinish);
         Log.d(this.toString(), "Service started");
         if(executor != null)
         {
@@ -83,7 +83,7 @@ public abstract class MyTischtennisEnsureLoginCaller<T> implements ServiceCaller
     }
 
     @Override
-    public void serviceReady(boolean success, User user, String errorMessage)
+    public void serviceFinished(boolean success, User user, String errorMessage)
     {
         // Anmeldeservice ist erfolgt
         if(success && user != null)
@@ -92,7 +92,7 @@ public abstract class MyTischtennisEnsureLoginCaller<T> implements ServiceCaller
         }
         else
         {
-            serviceReady.serviceReady(success, null, errorMessage);
+            serviceFinish.serviceFinished(success, null, errorMessage);
         }
     }
 

@@ -23,9 +23,9 @@ import de.ssp.ttr_rechner.model.Alter;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerLogin;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
-public class SettingsActivity extends AppCompatActivity implements ServiceReady<User>
+public class SettingsActivity extends AppCompatActivity implements ServiceFinish<User>
 {
     public static String PUT_EXTRA_IS_LOGIN_DATA_CHANGED = "IS_LOGIN_DATA_CHANGED";
 
@@ -164,7 +164,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     }
 
     @Override
-    public void serviceReady(boolean success, User user, String errorMessage) {
+    public void serviceFinished(boolean success, User user, String errorMessage) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         if(user != null)
         {

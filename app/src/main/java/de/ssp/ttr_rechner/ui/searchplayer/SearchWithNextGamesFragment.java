@@ -27,7 +27,7 @@ import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerFindCompletePlayer;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerFindPlayersByTeam;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerNextGames;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,23 +41,23 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
     protected @BindView(android.R.id.list) ListView listMannschaften;
     protected boolean isSingleChooseActive;
 
-    public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
+    public class ServiceFinishSearchPlayer implements ServiceFinish<List<Player>>
     {
         @Override
-        public void serviceReady(boolean success, List<Player> playerList, String errorMessage)
+        public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {
-                ServiceCallerFindCompletePlayer serviceCallerFindCompletePlayer = new ServiceCallerFindCompletePlayer(getContext(), new ServiceReadyFindPlayer(), playerList);
+                ServiceCallerFindCompletePlayer serviceCallerFindCompletePlayer = new ServiceCallerFindCompletePlayer(getContext(), new ServiceFinishFindPlayer(), playerList);
                 serviceCallerFindCompletePlayer.callService();
             }
         }
     }
 
-    public class ServiceReadyFindPlayer implements  ServiceReady<List<Player>>
+    public class ServiceFinishFindPlayer implements ServiceFinish<List<Player>>
     {
         @Override
-        public void serviceReady(boolean success, List<Player> playerList, String errorMessage)
+        public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {
@@ -69,10 +69,10 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
         }
     }
 
-    public class ServiceReadyNextGames implements  ServiceReady<NextGame[]>
+    public class ServiceFinishNextGames implements ServiceFinish<NextGame[]>
     {
         @Override
-        public void serviceReady(boolean success, NextGame[] nextGames, String errorMessage)
+        public void serviceFinished(boolean success, NextGame[] nextGames, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {
@@ -146,7 +146,7 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
         hideSoftKeyBoard();
         if(nextGames == null)
         {
-            ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), new ServiceReadyNextGames());
+            ServiceCallerNextGames serviceCallerNextGames = new ServiceCallerNextGames(this.getContext(), new ServiceFinishNextGames());
             serviceCallerNextGames.callService();
         }
     }
@@ -155,7 +155,7 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
     public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         NextGame nextGame = nextGames[position];
-        ServiceCallerFindPlayersByTeam serviceCallerFindPlayersByTeam = new ServiceCallerFindPlayersByTeam(getContext(), new ServiceReadySearchPlayer(), nextGame.getGegnerId());
+        ServiceCallerFindPlayersByTeam serviceCallerFindPlayersByTeam = new ServiceCallerFindPlayersByTeam(getContext(), new ServiceFinishSearchPlayer(), nextGame.getGegnerId());
         serviceCallerFindPlayersByTeam.callService();
     }
 

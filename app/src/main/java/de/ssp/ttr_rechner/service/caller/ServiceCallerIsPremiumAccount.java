@@ -7,9 +7,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorIsPremiumAccoun
 
 public class ServiceCallerIsPremiumAccount extends MyTischtennisEnsureLoginCaller<Boolean>
 {
-    public ServiceCallerIsPremiumAccount(Context context, ServiceReady<Boolean> serviceReady)
+    public ServiceCallerIsPremiumAccount(Context context, ServiceFinish<Boolean> serviceFinish)
     {
-        super(context, "Suche nach Premium-Account", serviceReady);
+        super(context, "Suche nach Premium-Account", serviceFinish);
     }
 
     @Override

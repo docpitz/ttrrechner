@@ -12,20 +12,20 @@ import androidx.appcompat.app.AlertDialog;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.TTRCalculatorActivity;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
-public class ServiceReadySearchPlayer implements ServiceReady<List<Player>>
+public class ServiceFinishSearchPlayer implements ServiceFinish<List<Player>>
 {
     protected Activity activity;
     protected boolean isSingleChooseActiv;
-    public ServiceReadySearchPlayer(Activity activity, boolean isSingleChooseActiv)
+    public ServiceFinishSearchPlayer(Activity activity, boolean isSingleChooseActiv)
     {
         this.activity = activity;
         this.isSingleChooseActiv = isSingleChooseActiv;
     }
 
     @Override
-    public void serviceReady(boolean success, List<Player> playerList, String errorMessage)
+    public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
     {
         if(! ServiceErrorAlertDialogHelper.showErrorDialog(activity, success, errorMessage))
         {

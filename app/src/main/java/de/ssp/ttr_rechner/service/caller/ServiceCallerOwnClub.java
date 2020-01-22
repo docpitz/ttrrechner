@@ -10,9 +10,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorOwnClub;
 public class ServiceCallerOwnClub extends MyTischtennisEnsureLoginCaller<Club>
 {
 
-    public ServiceCallerOwnClub(Context context, ServiceReady<Club> serviceReady)
+    public ServiceCallerOwnClub(Context context, ServiceFinish<Club> serviceFinish)
     {
-        super(context, "Lade eigenen Verein", serviceReady);
+        super(context, "Lade eigenen Verein", serviceFinish);
     }
 
     @Override

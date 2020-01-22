@@ -9,9 +9,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorRealNameAndPoin
 
 public class ServiceCallerRealNameAndPoints extends MyTischtennisEnsureLoginCaller<User>
 {
-    public ServiceCallerRealNameAndPoints(Context context, ServiceReady<User> serviceReady)
+    public ServiceCallerRealNameAndPoints(Context context, ServiceFinish<User> serviceFinish)
     {
-        super(context, "Lade eigene Spielerdaten", serviceReady);
+        super(context, "Lade eigene Spielerdaten", serviceFinish);
     }
 
     @Override
