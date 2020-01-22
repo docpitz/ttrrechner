@@ -1,0 +1,22 @@
+package de.ssp.ttr_rechner.service.caller;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
+import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorFindPlayerAvatarAdresse;
+
+public class ServiceCallerFindPlayerAvatarAdress extends MyTischtennisEnsureLoginCaller<String>
+{
+    protected String playersId;
+    public ServiceCallerFindPlayerAvatarAdress(Context context, ServiceReady<String> serviceReady, String playersId)
+    {
+        super(context, null, serviceReady, AsyncTask.THREAD_POOL_EXECUTOR);
+        this.playersId = playersId;
+    }
+
+    @Override
+    protected ParserEvaluator<String> getParserEvaluator() {
+        return new ParserEvaluatorFindPlayerAvatarAdresse(playersId);
+    }
+}

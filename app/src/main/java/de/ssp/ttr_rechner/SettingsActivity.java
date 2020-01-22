@@ -40,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     protected @BindView(R.id.txtPassword) EditText txtPassword;
     protected @BindView(R.id.chkMyttLoginPossible) Switch chkMyttLoginPossible;
     protected @BindView(R.id.pnlLogin) LinearLayout pnlLogin;
+    protected @BindView(R.id.chkShowPlayersImage) Switch chkShowPlayersImage;
     protected TTRKonstante ttrKonstanteModel;
     protected MyTischtennisCredentials myTischtennisCredentialsModel;
     protected boolean startIsFinished = false;
@@ -87,12 +88,11 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
     @OnCheckedChanged({R.id.chkKonstanteWeniger15Spiele, R.id.chkKonstante1JahrOhneSpiel})
     public void change15SpieleUnd1JahrOhneSpielSwitch(CompoundButton switchButton, boolean checked)
     {
-        if(startIsFinished)
-        {
-            ttrKonstanteModel.setUeberEinJahrOhneSpiel(chkKonstante1JahrOhneSpiel.isChecked());
-            ttrKonstanteModel.setWenigerAls15Spiele(chkKonstanteWeniger15Spiele.isChecked());
-            updateTTRKonstante();
-        }
+        if(! startIsFinished) return;
+
+        ttrKonstanteModel.setUeberEinJahrOhneSpiel(chkKonstante1JahrOhneSpiel.isChecked());
+        ttrKonstanteModel.setWenigerAls15Spiele(chkKonstanteWeniger15Spiele.isChecked());
+        updateTTRKonstante();
     }
 
     @OnCheckedChanged(R.id.rbUnter16)
@@ -113,18 +113,37 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         changeAlter(Alter.UEBER_21, checked);
     }
 
+    @OnCheckedChanged(R.id.chkShowPlayersImage)
+    public void changeShowPlayersImage(CompoundButton switchButton, boolean checked)
+    {
+        if(! startIsFinished) return;
+
+        if(checked)
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Hoher Datenverbrauch")
+                    .setMessage("Die Anzeige von Spielerbildern führt zu einem hohen Datenverbrauch. Bisher haben nur wenige Spieler bisher ein Bild eingestellt.")
+                    .setPositiveButton("Aktivieren", (dialog, which) -> myTischtennisCredentialsModel.setPlayersImageShow(true))
+                    .setNegativeButton("Abbrechen", (dialog, which) -> chkShowPlayersImage.setChecked(false));
+            dialogBuilder.show();
+        }
+        else
+        {
+            myTischtennisCredentialsModel.setPlayersImageShow(false);
+        }
+    }
+
     @OnCheckedChanged(R.id.chkMyttLoginPossible)
     public void toggleMyTTLoginPossible(CompoundButton button, boolean checked)
     {
-        if(startIsFinished)
-        {
-            pnlLogin.setVisibility(checked ? TextView.VISIBLE : TextView.INVISIBLE);
-            txtUsername.setText("");
-            txtPassword.setText("");
-            txtUsername.requestFocus();
+        if(! startIsFinished) return;
 
-            myTischtennisCredentialsModel.setCredentials(null, null, checked);
-        }
+        pnlLogin.setVisibility(checked ? TextView.VISIBLE : TextView.INVISIBLE);
+        txtUsername.setText("");
+        txtPassword.setText("");
+        txtUsername.requestFocus();
+
+        myTischtennisCredentialsModel.setCredentials(null, null, checked);
     }
 
     @OnClick (R.id.btnLogin)
@@ -173,6 +192,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
         chkMyttLoginPossible.setChecked(myTischtennisCredentialsModel.isMyTischtennisLoginPossible());
         txtUsername.setText(myTischtennisCredentialsModel.getUsername());
         txtPassword.setText(myTischtennisCredentialsModel.getPassword());
+        chkShowPlayersImage.setChecked(myTischtennisCredentialsModel.isPlayersImageShow());
     }
 
     private void initializeTTRKonstante()
@@ -195,7 +215,6 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
                 rbUnter16.toggle();
                 break;
         }
-
         updateTTRKonstante();
     }
 
@@ -206,7 +225,9 @@ public class SettingsActivity extends AppCompatActivity implements ServiceReady<
 
     private void changeAlter(Alter alter, boolean checked)
     {
-        if(startIsFinished && checked)
+        if(! startIsFinished) return;
+
+        if(checked)
         {
             ttrKonstanteModel.setAlter(alter);
             updateTTRKonstante();

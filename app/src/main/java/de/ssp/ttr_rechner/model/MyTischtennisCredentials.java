@@ -10,6 +10,7 @@ public class MyTischtennisCredentials {
     private static final String MY_TISCHTENNIS_CREDENTIALS_SAVE_NAME = "MY_TISCHTENNIS_CREDENTIALS_SAVE_NAME";
     private static final String USERNAME = "USERNAME";
     private static final String PASSWORD = "PASSWORD";
+    private static final String SHOW_PLAYER_IMAGE = "SHOW_PLAYER_IMAGE";
     private static final String MY_TISCHTENNIS_POSSIBLE = "MY_TISCHTENNIS_POSSIBLE";
 
     private SharedPreferences myTischtennisCredentials;
@@ -42,6 +43,18 @@ public class MyTischtennisCredentials {
     public boolean isMyTischtennisLoginPossible()
     {
         return myTischtennisCredentials.getBoolean(MY_TISCHTENNIS_POSSIBLE, true);
+    }
+
+    public void setPlayersImageShow(boolean isPlayersImageShow)
+    {
+        SharedPreferences.Editor myTischtennisCredentialsEdit = myTischtennisCredentials.edit();
+        myTischtennisCredentialsEdit.putBoolean(SHOW_PLAYER_IMAGE, isPlayersImageShow);
+        myTischtennisCredentialsEdit.apply();
+    }
+
+    public boolean isPlayersImageShow()
+    {
+        return myTischtennisCredentials.getBoolean(SHOW_PLAYER_IMAGE, false);
     }
 
     public boolean isSet()
