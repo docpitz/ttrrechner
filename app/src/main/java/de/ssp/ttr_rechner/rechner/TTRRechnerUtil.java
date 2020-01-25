@@ -1,6 +1,5 @@
 package de.ssp.ttr_rechner.rechner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.ssp.ttr_rechner.model.Match;
@@ -17,24 +16,30 @@ public class TTRRechnerUtil
      */
     private int aenderungsKonstante;
     private int eigenerTTRWert;
+    private List<Match> matches;
 
     /**
      * @param eigenerTTRWert - Der eigene TTR-Wert
      * @param aenderungsKonstante - siehe oben
      */
-    public TTRRechnerUtil(int eigenerTTRWert, int aenderungsKonstante)
+    public TTRRechnerUtil(int eigenerTTRWert, int aenderungsKonstante, List<Match> matches)
     {
         this.aenderungsKonstante = aenderungsKonstante;
         this.eigenerTTRWert = eigenerTTRWert;
+        this.matches = matches;
+    }
+
+    public long berechneNeueTTRPunkte()
+    {
+        return eigenerTTRWert + berechneTTRAenderung();
     }
 
     /**
      * Berechnet die Änderung der TTR-Punkte die durch
      * alle Spiele während eines "Spieltages" passiert sind
-     * @param matches - Alle Spiele an einem Spieltag
      * @return die Änderung des TTR-Wertes
      */
-    public long berechneTTRAenderung(List<Match> matches)
+    public long berechneTTRAenderung()
     {
         double gesamtWahrscheinlichkeit = 0;
         int anzahlSiege = 0;
