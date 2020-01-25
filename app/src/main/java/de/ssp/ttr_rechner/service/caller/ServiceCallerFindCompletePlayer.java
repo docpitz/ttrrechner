@@ -12,9 +12,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorFindCompletePla
 public class ServiceCallerFindCompletePlayer extends MyTischtennisEnsureLoginCaller<List<Player>>
 {
     protected List<Player> player;
-    public ServiceCallerFindCompletePlayer(Context context, ServiceReady<List<Player>> serviceReady, List<Player> player)
+    public ServiceCallerFindCompletePlayer(Context context, ServiceFinish<List<Player>> serviceFinish, List<Player> player)
     {
-        super(context, "Suche TTR-Punkte von Spielern", serviceReady);
+        super(context, "Suche TTR-Punkte von Spielern", serviceFinish);
         this.player = player;
     }
 

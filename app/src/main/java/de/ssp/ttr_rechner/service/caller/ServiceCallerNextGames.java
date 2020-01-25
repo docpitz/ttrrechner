@@ -8,9 +8,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorNextGames;
 
 public class ServiceCallerNextGames extends MyTischtennisEnsureLoginCaller<NextGame[]>
 {
-    public ServiceCallerNextGames(Context context, ServiceReady<NextGame[]> serviceReady)
+    public ServiceCallerNextGames(Context context, ServiceFinish<NextGame[]> serviceFinish)
     {
-        super(context, "Lade Begegnungen", serviceReady);
+        super(context, "Lade Begegnungen", serviceFinish);
     }
 
     @Override

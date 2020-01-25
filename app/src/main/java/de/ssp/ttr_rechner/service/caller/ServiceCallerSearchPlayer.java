@@ -13,9 +13,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorSearchPlayer;
 public class ServiceCallerSearchPlayer extends MyTischtennisEnsureLoginCaller<List<Player>>
 {
     private SearchPlayer searchPlayer;
-    public ServiceCallerSearchPlayer(Context context, ServiceReady<List<Player>> serviceReady, SearchPlayer searchPlayer)
+    public ServiceCallerSearchPlayer(Context context, ServiceFinish<List<Player>> serviceFinish, SearchPlayer searchPlayer)
     {
-        super(context, "Suche Spieler", serviceReady);
+        super(context, "Suche Spieler", serviceFinish);
         this.searchPlayer = searchPlayer;
     }
 

@@ -12,9 +12,9 @@ import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorFindPlayersByTe
 public class ServiceCallerFindPlayersByTeam extends MyTischtennisEnsureLoginCaller<List<Player>>
 {
     private String id;
-    public ServiceCallerFindPlayersByTeam(Context context, ServiceReady<List<Player>> serviceReady, String id)
+    public ServiceCallerFindPlayersByTeam(Context context, ServiceFinish<List<Player>> serviceFinish, String id)
     {
-        super(context, "Suche Spieler aus dem Team", serviceReady);
+        super(context, "Suche Spieler aus dem Team", serviceFinish);
         this.id = id;
     }
 

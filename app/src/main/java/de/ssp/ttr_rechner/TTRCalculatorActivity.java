@@ -41,7 +41,7 @@ import de.ssp.ttr_rechner.rechner.TTRRechnerUtil;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerIsPremiumAccount;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerRealNameAndPoints;
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
 import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
@@ -71,10 +71,10 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     private PanelMatchViewHolder panelMatchViewHolder;
     private Boolean isPremiumAccount;
 
-    public class ServiceReadyUser implements ServiceReady<User>
+    public class ServiceFinishUser implements ServiceFinish<User>
     {
         @Override
-        public void serviceReady(boolean success, User user, String errorMessage)
+        public void serviceFinished(boolean success, User user, String errorMessage)
         {
             if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
             {
@@ -88,16 +88,16 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    public class ServiceReadyIsPremiumAccount implements ServiceReady<Boolean>
+    public class ServiceFinishIsPremiumAccount implements ServiceFinish<Boolean>
     {
         protected boolean isSingleChooseActive;
-        public ServiceReadyIsPremiumAccount(boolean isSingleChooseActive)
+        public ServiceFinishIsPremiumAccount(boolean isSingleChooseActive)
         {
             this.isSingleChooseActive = isSingleChooseActive;
         }
 
         @Override
-        public void serviceReady(boolean success, Boolean value, String errorMessage)
+        public void serviceFinished(boolean success, Boolean value, String errorMessage)
         {
             if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
             {
@@ -204,7 +204,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         {
             txtMeinTTRWert.setText(null);
             txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte));
-            ServiceCallerRealNameAndPoints realNameAndPointsCaller = new ServiceCallerRealNameAndPoints(this, new ServiceReadyUser());
+            ServiceCallerRealNameAndPoints realNameAndPointsCaller = new ServiceCallerRealNameAndPoints(this, new ServiceFinishUser());
             realNameAndPointsCaller.callService();
         }
     }
@@ -401,7 +401,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     {
         if(isPremiumAccount == null)
         {
-            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceReadyIsPremiumAccount(isSingleChooseActive));
+            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceFinishIsPremiumAccount(isSingleChooseActive));
             serviceCallerIsPremiumAccount.callService();
             return true;
         }

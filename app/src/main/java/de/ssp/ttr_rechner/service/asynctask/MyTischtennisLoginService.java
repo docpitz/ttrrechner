@@ -20,7 +20,7 @@ import com.jmelzer.myttr.logic.ValidationException;
 
 import java.io.IOException;
 
-import de.ssp.ttr_rechner.service.caller.ServiceReady;
+import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 /**
  * Task that executes the request against mytischtennis.de
@@ -37,15 +37,15 @@ public class MyTischtennisLoginService extends AsyncTask<String, Void, Integer> 
     String password;
     public int ttr = 0;
     Context context;
-    ServiceReady<User> loginServiceReady;
+    ServiceFinish<User> loginServiceFinish;
     private User user;
     LoginDataBaseAdapter loginDataBaseAdapter;
 
-    public MyTischtennisLoginService(Context context, ServiceReady<User> loginServiceReady, String username, String password) {
+    public MyTischtennisLoginService(Context context, ServiceFinish<User> loginServiceFinish, String username, String password) {
         this.context = context;
         this.username = username;
         this.password = password;
-        this.loginServiceReady = loginServiceReady;
+        this.loginServiceFinish = loginServiceFinish;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MyTischtennisLoginService extends AsyncTask<String, Void, Integer> 
         {
             errorMessage = "Login war nicht erfolgreich. Hast du einen Premiumaccount?";
         }
-        loginServiceReady.serviceReady(loginSuccess, user, errorMessage);
+        loginServiceFinish.serviceFinished(loginSuccess, user, errorMessage);
     }
 
     @Override
