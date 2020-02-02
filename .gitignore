@@ -7,3 +7,5 @@
 /captures
 .externalNativeBuild
 /app/release/app-release.aab
+app-release.apk
+output.json

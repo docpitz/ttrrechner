@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".TTRConstantsActivity"
+    tools:showIn="@layout/ttrconstant_activity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/alter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Alter"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbUnter16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="bis 16 Jahre"
+                    android:textSize="18sp"/>
+
+                <RadioButton
+                    android:id="@+id/rbUnter21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="bis 21 Jahre"
+                    android:textSize="18sp"/>
+
+                <RadioButton
+                    android:id="@+id/rbUeber21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="über 21 Jahre"
+                    android:textSize="18sp"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/einsaetze"
+                android:paddingTop="14dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Einsätze"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+            <Switch
+                android:id="@+id/chkKonstanteWeniger15Spiele"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:text="weniger als 15 Spiele"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/chkKonstante1JahrOhneSpiel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="8dp"
+                android:text="über 1 Jahr ohne Spiele"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

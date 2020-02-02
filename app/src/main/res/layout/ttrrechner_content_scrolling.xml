@@ -47,7 +47,7 @@ tools:showIn="@layout/ttrrechner_activity_scrolling">
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:alpha="0.5"
-                android:background="@drawable/ic_search_18" />
+                android:background="@drawable/ic_search_36" />
 
             <Button
                 android:id="@+id/btnCallMyTTRPoints"

@@ -37,11 +37,11 @@ public class MyTischtennisLoginService extends AsyncTask<String, Void, Integer> 
     String password;
     public int ttr = 0;
     Context context;
-    ServiceFinish<User> loginServiceFinish;
+    ServiceFinish<String, User> loginServiceFinish;
     private User user;
     LoginDataBaseAdapter loginDataBaseAdapter;
 
-    public MyTischtennisLoginService(Context context, ServiceFinish<User> loginServiceFinish, String username, String password) {
+    public MyTischtennisLoginService(Context context, ServiceFinish<String, User> loginServiceFinish, String username, String password) {
         this.context = context;
         this.username = username;
         this.password = password;
@@ -70,7 +70,7 @@ public class MyTischtennisLoginService extends AsyncTask<String, Void, Integer> 
         {
             errorMessage = "Login war nicht erfolgreich. Hast du einen Premiumaccount?";
         }
-        loginServiceFinish.serviceFinished(loginSuccess, user, errorMessage);
+        loginServiceFinish.serviceFinished(username, loginSuccess, user, errorMessage);
     }
 
     @Override

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".SearchPlayerActivity">
+    tools:context=".SearchPlayerDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -37,10 +37,10 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:backgroundTint="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_search_36" />
+        app:tint="#FFFFFF"
+        app:srcCompat="@drawable/ic_search_96px" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

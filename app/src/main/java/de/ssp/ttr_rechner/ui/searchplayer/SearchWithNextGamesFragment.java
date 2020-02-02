@@ -41,10 +41,10 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
     protected @BindView(android.R.id.list) ListView listMannschaften;
     protected boolean isSingleChooseActive;
 
-    public class ServiceFinishSearchPlayer implements ServiceFinish<List<Player>>
+    public class ServiceFinishSearchPlayer implements ServiceFinish<String, List<Player>>
     {
         @Override
-        public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
+        public void serviceFinished(String requestValue, boolean success, List<Player> playerList, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {
@@ -54,10 +54,10 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
         }
     }
 
-    public class ServiceFinishFindPlayer implements ServiceFinish<List<Player>>
+    public class ServiceFinishFindPlayer implements ServiceFinish<List<Player>, List<Player>>
     {
         @Override
-        public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
+        public void serviceFinished(List<Player> returnValue, boolean success, List<Player> playerList, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {
@@ -69,10 +69,10 @@ public class SearchWithNextGamesFragment extends ListFragment implements Floatin
         }
     }
 
-    public class ServiceFinishNextGames implements ServiceFinish<NextGame[]>
+    public class ServiceFinishNextGames implements ServiceFinish<Void, NextGame[]>
     {
         @Override
-        public void serviceFinished(boolean success, NextGame[] nextGames, String errorMessage)
+        public void serviceFinished(Void returnValue, boolean success, NextGame[] nextGames, String errorMessage)
         {
             if(! ServiceErrorAlertDialogHelper.showErrorDialog(SearchWithNextGamesFragment.this.getContext(), success, errorMessage))
             {

@@ -21,12 +21,12 @@ import java.util.Date;
 import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluator;
 import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
-public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
+public class MyTischtennisService<S, F> extends AsyncTask<String, Void, Integer> {
     protected String errorMessage;
     protected Context context;
-    protected ServiceFinish<T> serviceFinish;
-    protected ParserEvaluator<T> parserEvaluation;
-    protected T serviceReturnObject;
+    protected ServiceFinish<S, F> serviceFinish;
+    protected ParserEvaluator<S, F> parserEvaluation;
+    protected F serviceReturnObject;
     protected boolean success;
     private ProgressDialog progressDialog;
     protected static long lastServiceCallTimestamp;
@@ -39,7 +39,7 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
         return lastServiceCallTimestamp + 1000 * 30 * 60 < timeNow;
     }
 
-    public MyTischtennisService(Context context, ParserEvaluator<T> parserEvaluation, String dialogMessage, ServiceFinish<T> serviceFinish) {
+    public MyTischtennisService(Context context, ParserEvaluator<S, F> parserEvaluation, String dialogMessage, ServiceFinish<S, F> serviceFinish) {
         if (context == null) throw new IllegalArgumentException("context must not be null");
         this.success = false;
         this.context = context;
@@ -156,6 +156,6 @@ public class MyTischtennisService<T> extends AsyncTask<String, Void, Integer> {
             Log.d(Constants.LOG_TAG, "couldn't load data in class " + getClass());
             errorMessage = "Konnte die Daten nicht laden (Grund unbekannt)";
         }
-        serviceFinish.serviceFinished(success, serviceReturnObject, errorMessage);
+        serviceFinish.serviceFinished(parserEvaluation.getPostElement(), success, serviceReturnObject, errorMessage);
     }
 }

@@ -10,8 +10,9 @@ import com.jmelzer.myttr.model.SearchPlayer;
 
 import java.util.List;
 
-public class ParserEvaluatorSearchPlayer implements ParserEvaluator<List<Player>>
+public class ParserEvaluatorSearchPlayer implements ParserEvaluator<SearchPlayer, List<Player>>
 {
+    public static String ZU_VIELE_SPIELER_GEFUNDEN = "Es wurden zu viele Spieler gefunden.";
     private SearchPlayer searchPlayer;
     private String errorMessage;
 
@@ -30,8 +31,13 @@ public class ParserEvaluatorSearchPlayer implements ParserEvaluator<List<Player>
         }
         catch(TooManyPlayersFound e)
         {
-            throw new ValidationException("Es wurden zu viele Spieler gefunden.");
+            throw new ValidationException(ZU_VIELE_SPIELER_GEFUNDEN);
         }
         return listPlayer;
+    }
+
+    @Override
+    public SearchPlayer getPostElement() {
+        return searchPlayer;
     }
 }

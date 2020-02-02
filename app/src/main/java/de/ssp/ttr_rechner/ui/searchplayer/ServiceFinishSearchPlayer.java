@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.jmelzer.myttr.Player;
+import com.jmelzer.myttr.model.SearchPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import de.ssp.ttr_rechner.TTRCalculatorActivity;
 import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
-public class ServiceFinishSearchPlayer implements ServiceFinish<List<Player>>
+public class ServiceFinishSearchPlayer implements ServiceFinish<SearchPlayer, List<Player>>
 {
     protected Activity activity;
     protected boolean isSingleChooseActiv;
@@ -25,7 +26,7 @@ public class ServiceFinishSearchPlayer implements ServiceFinish<List<Player>>
     }
 
     @Override
-    public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
+    public void serviceFinished(SearchPlayer returnValue, boolean success, List<Player> playerList, String errorMessage)
     {
         if(! ServiceErrorAlertDialogHelper.showErrorDialog(activity, success, errorMessage))
         {

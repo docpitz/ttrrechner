@@ -14,9 +14,10 @@ import java.util.List;
 
 import de.ssp.ttr_rechner.model.NextGame;
 
-public class ParserEvaluatorNextGames implements ParserEvaluator<NextGame[]>
+public class ParserEvaluatorNextGames implements ParserEvaluator<Void, NextGame[]>
 {
     protected Context context;
+
     public ParserEvaluatorNextGames(Context context)
     {
         this.context = context;
@@ -42,5 +43,12 @@ public class ParserEvaluatorNextGames implements ParserEvaluator<NextGame[]>
 
         }
         return nextGames;
+    }
+
+
+    @Override
+    public Void getPostElement()
+    {
+        return null;
     }
 }

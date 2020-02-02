@@ -60,7 +60,8 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     protected @BindView(R.id.pnlPunkte) LinearLayout pnlPunkte;
     protected @BindView(R.id.horizontalButtonScrollView) HorizontalScrollView scrButtonView;
     protected @BindView(R.id.btnCallMyTTRPoints) Button btnCallMyTTRPoints;
-    protected @BindView(R.id.btnSearchPlayers) Button btnSearchPlayers;
+    protected @BindView(R.id.btnSearchDetailPlayers) Button btnSearchPlayersDetail;
+    protected @BindView(R.id.btnSearchFastPlayers) Button btnSearchPlayersFast;
     protected @BindView(R.id.btnCalculatePoints) FloatingActionButton btnCalculatePoints;
     protected @BindView(R.id.btnSearchForMyTTRPoints) Button btnSearchForMyTTRPoints;
     protected @BindView(R.id.toolbar) Toolbar toolbar;
@@ -69,12 +70,12 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     private Wettkampf wettkampf;
     private MyTischtennisCredentials credentials;
     private PanelMatchViewHolder panelMatchViewHolder;
-    private Boolean isPremiumAccount;
+    private boolean isPremiumAccountCalled = false;
 
-    public class ServiceFinishUser implements ServiceFinish<User>
+    public class ServiceFinishUser implements ServiceFinish<Void, User>
     {
         @Override
-        public void serviceFinished(boolean success, User user, String errorMessage)
+        public void serviceFinished(Void returnValue, boolean success, User user, String errorMessage)
         {
             if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
             {
@@ -88,16 +89,16 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    public class ServiceFinishIsPremiumAccount implements ServiceFinish<Boolean>
+    public class ServiceFinishIsPremiumAccountForDetailSearchPlayerActivity implements ServiceFinish<Void, Boolean>
     {
         protected boolean isSingleChooseActive;
-        public ServiceFinishIsPremiumAccount(boolean isSingleChooseActive)
+        public ServiceFinishIsPremiumAccountForDetailSearchPlayerActivity(boolean isSingleChooseActive)
         {
             this.isSingleChooseActive = isSingleChooseActive;
         }
 
         @Override
-        public void serviceFinished(boolean success, Boolean value, String errorMessage)
+        public void serviceFinished(Void returnValue, boolean success, Boolean value, String errorMessage)
         {
             if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
             {
@@ -106,8 +107,36 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
 
             if(success && errorMessage == null)
             {
-                isPremiumAccount = value;
-                callSearchPlayerActivity(isSingleChooseActive);
+                isPremiumAccountCalled = true;
+                credentials.setIsPremiumAccount(value);
+                proccessMyTischtennisLoginPossible(credentials.isMyTischtennisLoginPossible(), credentials.isPremiumAccount());
+                callSearchPlayerDetailActivity(isSingleChooseActive);
+            }
+        }
+    }
+
+    public class ServiceFinishIsPremiumAccountForFastSearchPlayerActivity implements ServiceFinish<Void, Boolean>
+    {
+        protected boolean isSingleChooseActive;
+        public ServiceFinishIsPremiumAccountForFastSearchPlayerActivity(boolean isSingleChooseActive)
+        {
+            this.isSingleChooseActive = isSingleChooseActive;
+        }
+
+        @Override
+        public void serviceFinished(Void returnValue, boolean success, Boolean value, String errorMessage)
+        {
+            if(ServiceErrorAlertDialogHelper.showErrorDialog(TTRCalculatorActivity.this, success, errorMessage))
+            {
+                return;
+            }
+
+            if(success && errorMessage == null)
+            {
+                isPremiumAccountCalled = true;
+                credentials.setIsPremiumAccount(value);
+                proccessMyTischtennisLoginPossible(credentials.isMyTischtennisLoginPossible(), credentials.isPremiumAccount());
+                callSearchPlayerFastActivity(isSingleChooseActive);
             }
         }
     }
@@ -131,7 +160,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     @Override
     protected void onStart() {
         super.onStart();
-        proccessMyTischtennisLoginPossible(credentials.isMyTischtennisLoginPossible());
+        proccessMyTischtennisLoginPossible(credentials.isMyTischtennisLoginPossible(), credentials.isPremiumAccount());
         restoreView(wettkampf);
         txtNeueTTRPunkte.setText(R.string.leer);
     }
@@ -152,14 +181,14 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
         else if(requestCode == REQUEST_CODE_SETTINGS && resultCode == RESULT_OK)
         {
-            onActivityResultSettings(intent);
+            onActivityResultMyTischtennisCredentials(intent);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        getMenuInflater().inflate(R.menu.ttrcalculator_menu, menu);
         return true;
     }
 
@@ -168,9 +197,14 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     {
         int id = item.getItemId();
 
+        if (id == R.id.action_call_mytischtennis_credentials)
+        {
+            callMyTischtennisCredentialsActivity(false);
+            return true;
+        }
         if (id == R.id.action_call_ttr_konstante)
         {
-            callSettingsActivity(false);
+            callTTRConstantsActivity();
             return true;
         }
         if (id == R.id.action_call_licence)
@@ -214,16 +248,22 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     {
         TTRAnimationsUtils.standardAnimationButtonPress(button);
 
-        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessary(true))
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessaryForNormalSearch(true))
         {
-            callSearchPlayerActivity(true);
+            callSearchPlayerDetailActivity(true);
         }
     }
 
-    @OnClick(R.id.btnTTRSettings)
-    public void pressBtnTTRSettings()
+    @OnClick(R.id.btnMyTischtennisCredentials)
+    public void pressBtnMyTischtennisCredentials()
     {
-        callSettingsActivity(false);
+        callMyTischtennisCredentialsActivity(false);
+    }
+
+    @OnClick(R.id.btnTTRKonstant)
+    public void pressBtnTTRConstants()
+    {
+        callTTRConstantsActivity();
     }
 
     @OnClick(R.id.btnReset)
@@ -235,12 +275,21 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
        panelMatchViewHolder.reset(this, this);
     }
 
-    @OnClick(R.id.btnSearchPlayers)
-    public void pressBtnSearchAndAddMatch()
+    @OnClick(R.id.btnSearchFastPlayers)
+    public void pressBtnSearchFast()
     {
-        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessary(false))
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessaryForFastSearch(false))
         {
-            callSearchPlayerActivity(false);
+            callSearchPlayerFastActivity(false);
+        }
+    }
+
+    @OnClick(R.id.btnSearchDetailPlayers)
+    public void pressBtnSearchDetail()
+    {
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessaryForNormalSearch(false))
+        {
+            callSearchPlayerDetailActivity(false);
         }
     }
 
@@ -306,18 +355,40 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + realName);
     }
 
-    private void callSettingsActivity(boolean focusOnCredentials)
+    private void callMyTischtennisCredentialsActivity(boolean focusOnCredentials)
     {
-        Intent intentForTTRKonstanteActivity = new Intent(this, SettingsActivity.class);
+        Intent intentForTTRKonstanteActivity = new Intent(this, MyTischtennisCredentialsActivity.class);
         intentForTTRKonstanteActivity.putExtra(MyTischtennisCredentials.FOCUS_ON_CREDENTIALS, focusOnCredentials);
         startActivityForResult(intentForTTRKonstanteActivity, REQUEST_CODE_SETTINGS);
     }
 
-    private void callSearchPlayerActivity(boolean isSingleChooseActive)
+    private void callTTRConstantsActivity()
     {
-        Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerActivity.class);
+        Intent intentForTTRKonstanteActivity = new Intent(this, TTRConstantsActivity.class);
+        startActivity(intentForTTRKonstanteActivity);
+    }
+
+    private void callSearchPlayerFastActivity(boolean isSingleChooseActive)
+    {
+        if(credentials.isPremiumAccount()) {
+            Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerFastActivity.class);
+            intentForSearchPlayerActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
+            startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
+        }
+        else {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Premium-Account erforderlich")
+                    .setMessage("Diese Funktion steht leider nur myTischtennis-Usern mit Premuim-Account zur Verfügung. In MyTischtennis kann man ohne Premium-Account nicht nach Namen suchen.")
+                    .setPositiveButton("ok", null);
+            dialogBuilder.create().show();
+        }
+    }
+
+    private void callSearchPlayerDetailActivity(boolean isSingleChooseActive)
+    {
+        Intent intentForSearchPlayerActivity = new Intent(this, SearchPlayerDetailActivity.class);
         intentForSearchPlayerActivity.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActive);
-        intentForSearchPlayerActivity.putExtra(SearchPlayerActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, isPremiumAccount.booleanValue());
+        intentForSearchPlayerActivity.putExtra(SearchPlayerDetailActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, credentials.isPremiumAccount());
         startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
     }
 
@@ -328,11 +399,11 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setTitle("Anmeldedaten erforderlich")
                     .setMessage("Derzeit wurden noch keine Anmeldedaten hinterlegt. In den Einstellungen kannst du deine Anmeldedaten für myTischtennis hinterlegen!")
-                    .setPositiveButton(R.string.menu_settings, (dialog, which) -> callSettingsActivity(true))
+                    .setPositiveButton(R.string.menu_settings, (dialog, which) -> callMyTischtennisCredentialsActivity(true))
                     .setNegativeButton("Deaktivieren", new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-                            proccessMyTischtennisLoginPossible(false);
+                            proccessMyTischtennisLoginPossible(false, false);
                             credentials.setCredentials(null, null, false);
                         }
                     });
@@ -342,12 +413,15 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         return !credentials.isSet();
     }
 
-    private void proccessMyTischtennisLoginPossible(boolean isPossible)
+    private void proccessMyTischtennisLoginPossible(boolean isPossible, boolean isPremiumAccount)
     {
         int myTischtennisFunctionVisiblity = isPossible ? TextView.VISIBLE : TextView.GONE;
         btnCallMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
-        btnSearchPlayers.setVisibility(myTischtennisFunctionVisiblity);
+        btnSearchPlayersDetail.setVisibility(myTischtennisFunctionVisiblity);
         btnSearchForMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
+
+        int myTischtennisPremiumFunction = isPremiumAccount && isPossible ? TextView.VISIBLE : TextView.GONE;
+        btnSearchPlayersFast.setVisibility(myTischtennisPremiumFunction);
     }
 
     private int getMeinTTR()
@@ -397,11 +471,22 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    private boolean callServiceIsPremiumAccountIfNeccessary(boolean isSingleChooseActive)
+    private boolean callServiceIsPremiumAccountIfNeccessaryForNormalSearch(boolean isSingleChooseActive)
     {
-        if(isPremiumAccount == null)
+        if(! isPremiumAccountCalled)
         {
-            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceFinishIsPremiumAccount(isSingleChooseActive));
+            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceFinishIsPremiumAccountForDetailSearchPlayerActivity(isSingleChooseActive));
+            serviceCallerIsPremiumAccount.callService();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean callServiceIsPremiumAccountIfNeccessaryForFastSearch(boolean isSingleChooseActive)
+    {
+        if(! isPremiumAccountCalled)
+        {
+            ServiceCallerIsPremiumAccount serviceCallerIsPremiumAccount = new ServiceCallerIsPremiumAccount(this, new ServiceFinishIsPremiumAccountForFastSearchPlayerActivity(isSingleChooseActive));
             serviceCallerIsPremiumAccount.callService();
             return true;
         }
@@ -427,12 +512,13 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    private void onActivityResultSettings(Intent intent)
+    private void onActivityResultMyTischtennisCredentials(Intent intent)
     {
-        boolean isLoginDataChanged = intent.getBooleanExtra(SettingsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, true);
+        boolean isLoginDataChanged = intent.getBooleanExtra(MyTischtennisCredentialsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, true);
         if(isLoginDataChanged)
         {
-            isPremiumAccount = null;
+            isPremiumAccountCalled = false;
+            proccessMyTischtennisLoginPossible(credentials.isMyTischtennisLoginPossible(), credentials.isPremiumAccount());
         }
     }
 }

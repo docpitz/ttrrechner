@@ -7,7 +7,8 @@ import com.jmelzer.myttr.logic.NoClickTTException;
 import com.jmelzer.myttr.logic.NoDataException;
 import com.jmelzer.myttr.logic.ValidationException;
 
-public interface ParserEvaluator<T>
+public interface ParserEvaluator<S, F>
 {
-    public T evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NoClickTTException, NiceGuysException;
+    public F evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NoClickTTException, NiceGuysException;
+    public S getPostElement();
 }

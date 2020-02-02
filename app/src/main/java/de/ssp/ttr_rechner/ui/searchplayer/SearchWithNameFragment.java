@@ -115,7 +115,7 @@ public class SearchWithNameFragment extends Fragment implements FloatingButtonAc
         searchPlayer.setLastname(nachname);
         searchPlayer.setClub(foundedClub);
 
-        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(), new ServiceFinishSearchPlayer(getActivity(), isSingleChooseActive), searchPlayer);
+        ServiceCallerSearchPlayer serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(getContext(), new ServiceFinishSearchPlayer(getActivity(), isSingleChooseActive), searchPlayer, true);
         serviceCallerSearchPlayer.callService();
     }
 
