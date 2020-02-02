@@ -12,7 +12,7 @@ import com.jmelzer.myttr.logic.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParserEvaluatorFindCompletePlayer implements ParserEvaluator<List<Player>>
+public class ParserEvaluatorFindCompletePlayer implements ParserEvaluator<List<Player>, List<Player>>
 {
     protected List<Player> playerList;
     public ParserEvaluatorFindCompletePlayer(List<Player> playerList)
@@ -30,5 +30,10 @@ public class ParserEvaluatorFindCompletePlayer implements ParserEvaluator<List<P
             returnPlayerList.add(parser.completePlayerWithTTR(player));
         }
         return returnPlayerList;
+    }
+
+    @Override
+    public List<Player> getPostElement() {
+        return playerList;
     }
 }

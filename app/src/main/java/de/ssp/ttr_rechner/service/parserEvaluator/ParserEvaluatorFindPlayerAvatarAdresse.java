@@ -11,7 +11,7 @@ import com.jmelzer.myttr.logic.ValidationException;
 
 import java.util.ArrayList;
 
-public class ParserEvaluatorFindPlayerAvatarAdresse implements ParserEvaluator<String>
+public class ParserEvaluatorFindPlayerAvatarAdresse implements ParserEvaluator<String, String>
 {
     protected String playersId;
     public ParserEvaluatorFindPlayerAvatarAdresse(String playersId)
@@ -25,5 +25,10 @@ public class ParserEvaluatorFindPlayerAvatarAdresse implements ParserEvaluator<S
         ArrayList<Player> returnPlayerList = new ArrayList<>();
         MyTischtennisParserExtended parser = new MyTischtennisParserExtended();
         return parser.getPicUrl(playersId);
+    }
+
+    @Override
+    public String getPostElement() {
+        return playersId;
     }
 }

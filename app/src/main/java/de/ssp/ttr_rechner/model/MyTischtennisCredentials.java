@@ -12,6 +12,7 @@ public class MyTischtennisCredentials {
     private static final String PASSWORD = "PASSWORD";
     private static final String SHOW_PLAYER_IMAGE = "SHOW_PLAYER_IMAGE";
     private static final String MY_TISCHTENNIS_POSSIBLE = "MY_TISCHTENNIS_POSSIBLE";
+    private static final String IS_PREMIUM_ACCOUNT = "IS_PREMIUM_ACCOUNT";
 
     private SharedPreferences myTischtennisCredentials;
 
@@ -57,6 +58,18 @@ public class MyTischtennisCredentials {
         return myTischtennisCredentials.getBoolean(SHOW_PLAYER_IMAGE, false);
     }
 
+    public boolean isPremiumAccount()
+    {
+        return myTischtennisCredentials.getBoolean(IS_PREMIUM_ACCOUNT, true);
+    }
+
+    public void setIsPremiumAccount(boolean isPremiumAccount)
+    {
+        SharedPreferences.Editor myTischtennisCredentialsEdit = myTischtennisCredentials.edit();
+        myTischtennisCredentialsEdit.putBoolean(IS_PREMIUM_ACCOUNT, isPremiumAccount);
+        myTischtennisCredentialsEdit.apply();
+    }
+
     public boolean isSet()
     {
         return !getUsername().isEmpty() && !getPassword().isEmpty();
@@ -75,6 +88,7 @@ public class MyTischtennisCredentials {
         {
             myTischtennisCredentialsEdit.remove(USERNAME);
             myTischtennisCredentialsEdit.remove(PASSWORD);
+            myTischtennisCredentialsEdit.remove(IS_PREMIUM_ACCOUNT);
         }
 
         myTischtennisCredentialsEdit.apply();

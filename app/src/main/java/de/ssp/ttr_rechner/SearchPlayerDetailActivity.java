@@ -19,7 +19,7 @@ import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonAction;
 import de.ssp.ttr_rechner.ui.searchplayer.FloatingButtonHideShowListner;
 import de.ssp.ttr_rechner.ui.searchplayer.SectionsPagerAdapter;
 
-public class SearchPlayerActivity extends AppCompatActivity
+public class SearchPlayerDetailActivity extends AppCompatActivity
 {
     public static String PUT_EXTRA_IS_PREMIUM_ACCOUNT = "IS_PREMIUM_ACCOUNT";
 
@@ -41,7 +41,7 @@ public class SearchPlayerActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         boolean isSingleChooseActive = getIntent().getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
-        boolean isPremiumAccount = getIntent().getBooleanExtra(SearchPlayerActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, false);
+        boolean isPremiumAccount = getIntent().getBooleanExtra(SearchPlayerDetailActivity.PUT_EXTRA_IS_PREMIUM_ACCOUNT, false);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), isSingleChooseActive, isPremiumAccount);
         viewPager.setAdapter(sectionsPagerAdapter);

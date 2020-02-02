@@ -18,10 +18,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.ui.foundedplayer.FloatingActionButtonView;
 import de.ssp.ttr_rechner.ui.foundedplayer.FoundedPlayersListAdapter;
 import de.ssp.ttr_rechner.ui.util.FloatingActionButtonUtil;
 
-public class FoundedPlayerActivity extends AppCompatActivity
+public class FoundedPlayerActivity extends AppCompatActivity implements FloatingActionButtonView
 {
     public static String PUT_EXTRA_PLAYER_LIST = "PLAYER_LIST";
     public static String PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV = "IS_SINGLE_CHOOSE_ACTIV";
@@ -44,12 +45,9 @@ public class FoundedPlayerActivity extends AppCompatActivity
 
         players = ChooseablePlayer.convertFromPlayers((ArrayList<Player>) getIntent().getSerializableExtra(PUT_EXTRA_PLAYER_LIST));
         isSingleChooseActiv = getIntent().getBooleanExtra(PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
-        if(isSingleChooseActiv)
-        {
-            FloatingActionButtonUtil.hideFloatingActionButton(floatingActionButton);
-        }
+        FloatingActionButtonUtil.hideFloatingActionButton(floatingActionButton);
 
-        FoundedPlayersListAdapter listAdapter = new FoundedPlayersListAdapter(this, getPlayers(), isSingleChooseActiv);
+        FoundedPlayersListAdapter listAdapter = new FoundedPlayersListAdapter(this, getPlayers(), isSingleChooseActiv, this);
         listViewPlayer.setAdapter(listAdapter);
         listViewPlayer.setItemsCanFocus(true);
         listViewPlayer.setOnItemClickListener((parent, view, position, id) -> {
@@ -59,6 +57,7 @@ public class FoundedPlayerActivity extends AppCompatActivity
             {
                 calcResultAndFinishActivity();
             }
+            showFloatingActionButton(getChoosedPlayers().size() > 0);
         });
     }
 
@@ -85,7 +84,7 @@ public class FoundedPlayerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    protected void calcResultAndFinishActivity()
+    protected ArrayList<Player> getChoosedPlayers()
     {
         ArrayList<Player> playerArrayList = new ArrayList<>();
         for (ChooseablePlayer player: players)
@@ -95,10 +94,27 @@ public class FoundedPlayerActivity extends AppCompatActivity
                 playerArrayList.add(player.player);
             }
         }
+        return playerArrayList;
+    }
+
+    protected void calcResultAndFinishActivity()
+    {
         Intent intent = new Intent();
-        intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, playerArrayList);
+        intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, getChoosedPlayers());
         intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void showFloatingActionButton(boolean show) {
+        if(show)
+        {
+            FloatingActionButtonUtil.showFloatingActionButton(floatingActionButton);
+        }
+        else
+        {
+            FloatingActionButtonUtil.hideFloatingActionButton(floatingActionButton);
+        }
     }
 }

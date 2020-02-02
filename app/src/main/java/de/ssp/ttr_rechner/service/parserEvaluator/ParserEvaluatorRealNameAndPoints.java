@@ -12,7 +12,7 @@ import com.jmelzer.myttr.logic.NetworkException;
 import com.jmelzer.myttr.logic.PlayerNotWellRegistered;
 import com.jmelzer.myttr.logic.ValidationException;
 
-public class ParserEvaluatorRealNameAndPoints implements ParserEvaluator<User>
+public class ParserEvaluatorRealNameAndPoints implements ParserEvaluator<Void, User>
 {
     class MyTischtennisExtendedParser extends MyTischtennisParser
     {
@@ -70,5 +70,10 @@ public class ParserEvaluatorRealNameAndPoints implements ParserEvaluator<User>
             throw new ValidationException(e.getMessage());
         }
         return user;
+    }
+
+    @Override
+    public Void getPostElement() {
+        return null;
     }
 }

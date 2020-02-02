@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".SearchPlayerFastActivity"
+    tools:showIn="@layout/fastsearch_activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <HorizontalScrollView
+            android:id="@+id/horizontalButtonScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:scrollbars="none"
+            android:background="@color/colorPrimary">
+            <LinearLayout
+                android:animateLayoutChanges="true"
+                android:id="@+id/pnlPlayersList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+            </LinearLayout>
+        </HorizontalScrollView>
+        <ListView
+            android:id="@+id/listPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:visibility="gone">
+            <LinearLayout
+                android:id="@+id/pnlImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/imgSearching"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/txtHinweistext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bitte_mit_vorname_nachname_suchen"
+                android:textSize="18dp"
+                android:textStyle="bold"></TextView>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

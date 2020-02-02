@@ -4,7 +4,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="ttbild">TT-Bild</string>
     <string name="gegner">Gegner</string>
-    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_activity_ttr_constant">TTR-Konstante</string>
     <string name="title_activity_player_choose">Spieler auswählen</string>
     <string name="hint_ttr_gegner">TTR-Pkt. Gegner</string>
     <string name="hint_meine_ttr_punkte">Meine TTR-Punkte</string>
@@ -22,7 +22,7 @@
     <string name="vorname">Vorname</string>
     <string name="nachname">Nachname</string>
     <string name="hinzufuegen">Hinzufügen</string>
-    <string name="suchen">Suchen</string>
+    <string name="suchen">Vorname Nachname oder Nachname, Vorname</string>
     <string name="leer">-</string>
     <string name="bild">Bild</string>
     <string name="neue_ttr_punkte">Neue TTR-Punkte:</string>
@@ -32,4 +32,12 @@
     <string name="sieg">Sieg</string>
     <string name="loeschen">löschen</string>
     <string name="licence">Lizenzen</string>
+    <string name="action_fast_search">Schnellsuche</string>
+    <string name="action_add">Hinzufügen</string>
+    <string name="action_detail_search">Detailsuche</string>
+    <string name="action_ttr_constants">TTR-Konstante</string>
+    <string name="action_mytischtennis_credentials">MyTischtennis-Account</string>
+    <string name="title_mytischtennis_credentials">MyTischtennis Account</string>
+    <string name="bitte_mit_vorname_nachname_suchen">Bitte mit \'Vorname Nachname\' suchen...</string>
+    <string name="suche_laeuft">Suche läuft...</string>
 </resources>

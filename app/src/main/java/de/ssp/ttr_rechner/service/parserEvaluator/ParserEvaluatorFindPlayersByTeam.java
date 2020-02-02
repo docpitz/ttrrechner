@@ -10,7 +10,7 @@ import com.jmelzer.myttr.logic.ValidationException;
 
 import java.util.List;
 
-public class ParserEvaluatorFindPlayersByTeam implements ParserEvaluator<List<Player>>
+public class ParserEvaluatorFindPlayersByTeam implements ParserEvaluator<String, List<Player>>
 {
     protected String id;
     public ParserEvaluatorFindPlayersByTeam(String id)
@@ -22,5 +22,10 @@ public class ParserEvaluatorFindPlayersByTeam implements ParserEvaluator<List<Pl
     public List<Player> evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NiceGuysException
     {
         return new MyTischtennisParser().readPlayersFromTeam(id);
+    }
+
+    @Override
+    public String getPostElement() {
+        return id;
     }
 }

@@ -29,12 +29,14 @@
             android:id="@+id/txtName"
             android:textStyle="bold"
             android:textSize="18sp"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/txtVerein"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
@@ -44,6 +46,7 @@
         android:id="@+id/txtTTRPunkte"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:lines="1"
         android:layout_weight="1"
         android:textSize="18sp"
         android:textStyle="bold"

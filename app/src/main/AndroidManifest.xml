@@ -13,32 +13,43 @@
         android:theme="@style/AppTheme"
         android:name=".MyTTRRechnerApplication"
         tools:replace="android:allowBackup">
-        <activity android:name=".FoundedPlayerActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_player_choose"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".TTRCalculatorActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_start_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FoundedPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_player_choose"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".SearchPlayerActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:name=".MyTischtennisCredentialsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_mytischtennis_credentials"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".SearchPlayerDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/spieler_suche"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".SettingsActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_settings"
+            android:name=".SearchPlayerFastActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/spieler_suche"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".TTRConstantsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_ttr_constant"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

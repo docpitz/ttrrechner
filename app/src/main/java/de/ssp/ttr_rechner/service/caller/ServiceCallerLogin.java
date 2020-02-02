@@ -13,10 +13,10 @@ public class ServiceCallerLogin implements ServiceCaller
     private String username;
     private String password;
     private Context context;
-    private ServiceFinish<User> serviceFinishLogin;
+    private ServiceFinish<String, User> serviceFinishLogin;
     private MyTischtennisLoginService serviceLogin;
 
-    public ServiceCallerLogin(Context context, ServiceFinish<User> serviceFinishLogin, String username, String password)
+    public ServiceCallerLogin(Context context, ServiceFinish<String, User> serviceFinishLogin, String username, String password)
     {
         this.context = context;
         this.username = username;

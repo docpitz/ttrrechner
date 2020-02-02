@@ -3,12 +3,11 @@ package de.ssp.ttr_rechner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.jmelzer.myttr.User;
 
@@ -19,29 +18,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import de.ssp.ttr_rechner.model.Alter;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
-import de.ssp.ttr_rechner.model.TTRKonstante;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerLogin;
 import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
-public class SettingsActivity extends AppCompatActivity implements ServiceFinish<User>
+public class MyTischtennisCredentialsActivity extends AppCompatActivity implements ServiceFinish<String, User>
 {
     public static String PUT_EXTRA_IS_LOGIN_DATA_CHANGED = "IS_LOGIN_DATA_CHANGED";
 
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
-    protected @BindView(R.id.chkKonstante1JahrOhneSpiel) Switch chkKonstante1JahrOhneSpiel;
-    protected @BindView(R.id.chkKonstanteWeniger15Spiele) Switch chkKonstanteWeniger15Spiele;
-    protected @BindView(R.id.rbUnter16) RadioButton rbUnter16;
-    protected @BindView(R.id.rbUnter21) RadioButton rbUnter21;
-    protected @BindView(R.id.rbUeber21) RadioButton rbUeber21;
-    protected @BindView(R.id.txtTTRKonstante) TextView txtTTRKonstante;
     protected @BindView(R.id.txtUsername) EditText txtUsername;
     protected @BindView(R.id.txtPassword) EditText txtPassword;
     protected @BindView(R.id.chkMyttLoginPossible) Switch chkMyttLoginPossible;
     protected @BindView(R.id.pnlLogin) LinearLayout pnlLogin;
     protected @BindView(R.id.chkShowPlayersImage) Switch chkShowPlayersImage;
-    protected TTRKonstante ttrKonstanteModel;
+    protected @BindView(R.id.btnLoginDelete) Button btnLoginDelete;
+    protected @BindView(R.id.btnLogin) Button btnLogin;
     protected MyTischtennisCredentials myTischtennisCredentialsModel;
     protected boolean startIsFinished = false;
     protected boolean isLoginDataChanged = false;
@@ -50,14 +42,13 @@ public class SettingsActivity extends AppCompatActivity implements ServiceFinish
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.mytischtennis_credentials_activity);
 
         ButterKnife.bind(this);
 
         setSupportActionBar(tbToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initializeTTRKonstante();
         initializeMyTischtennisCredentials();
         if(getIntent().getBooleanExtra(MyTischtennisCredentials.FOCUS_ON_CREDENTIALS, false))
         {
@@ -82,35 +73,6 @@ public class SettingsActivity extends AppCompatActivity implements ServiceFinish
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @OnCheckedChanged({R.id.chkKonstanteWeniger15Spiele, R.id.chkKonstante1JahrOhneSpiel})
-    public void change15SpieleUnd1JahrOhneSpielSwitch(CompoundButton switchButton, boolean checked)
-    {
-        if(! startIsFinished) return;
-
-        ttrKonstanteModel.setUeberEinJahrOhneSpiel(chkKonstante1JahrOhneSpiel.isChecked());
-        ttrKonstanteModel.setWenigerAls15Spiele(chkKonstanteWeniger15Spiele.isChecked());
-        updateTTRKonstante();
-    }
-
-    @OnCheckedChanged(R.id.rbUnter16)
-    public void toggleUnter16(CompoundButton button, boolean checked)
-    {
-        changeAlter(Alter.UNTER_16, checked);
-    }
-
-    @OnCheckedChanged(R.id.rbUnter21)
-    public void toggleUnter18(CompoundButton button, boolean checked)
-    {
-        changeAlter(Alter.UNTER_21, checked);
-    }
-
-    @OnCheckedChanged(R.id.rbUeber21)
-    public void toggleUeber18(CompoundButton button, boolean checked)
-    {
-        changeAlter(Alter.UEBER_21, checked);
     }
 
     @OnCheckedChanged(R.id.chkShowPlayersImage)
@@ -138,7 +100,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceFinish
     {
         if(! startIsFinished) return;
 
-        pnlLogin.setVisibility(checked ? TextView.VISIBLE : TextView.INVISIBLE);
+        enableView(checked);
         txtUsername.setText("");
         txtPassword.setText("");
         txtUsername.requestFocus();
@@ -164,7 +126,7 @@ public class SettingsActivity extends AppCompatActivity implements ServiceFinish
     }
 
     @Override
-    public void serviceFinished(boolean success, User user, String errorMessage) {
+    public void serviceFinished(String username, boolean success, User user, String errorMessage) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         if(user != null)
         {
@@ -188,58 +150,31 @@ public class SettingsActivity extends AppCompatActivity implements ServiceFinish
     private void initializeMyTischtennisCredentials()
     {
         myTischtennisCredentialsModel = new MyTischtennisCredentials(this);
-        pnlLogin.setVisibility(myTischtennisCredentialsModel.isMyTischtennisLoginPossible() ? TextView.VISIBLE : TextView.INVISIBLE);
         chkMyttLoginPossible.setChecked(myTischtennisCredentialsModel.isMyTischtennisLoginPossible());
         txtUsername.setText(myTischtennisCredentialsModel.getUsername());
         txtPassword.setText(myTischtennisCredentialsModel.getPassword());
         chkShowPlayersImage.setChecked(myTischtennisCredentialsModel.isPlayersImageShow());
+        enableView(myTischtennisCredentialsModel.isMyTischtennisLoginPossible());
     }
 
-    private void initializeTTRKonstante()
+    private void enableView(boolean enable)
     {
-        ttrKonstanteModel = new TTRKonstante(this);
-        chkKonstante1JahrOhneSpiel.setChecked(ttrKonstanteModel.getUeberEinJahrOhneSpiel());
-        chkKonstanteWeniger15Spiele.setChecked(ttrKonstanteModel.getWenigerAls15Spiele());
-        switch (ttrKonstanteModel.getAlter())
+        txtUsername.setEnabled(enable);
+        txtPassword.setEnabled(enable);
+        btnLogin.setEnabled(enable);
+        btnLoginDelete.setEnabled(enable);
+        chkShowPlayersImage.setEnabled(enable);
+        if(! enable)
         {
-            case UNTER_16:
-                rbUnter16.toggle();
-                break;
-            case UNTER_21:
-                rbUnter21.toggle();
-                break;
-            case UEBER_21:
-                rbUeber21.toggle();
-                break;
-            default:
-                rbUnter16.toggle();
-                break;
-        }
-        updateTTRKonstante();
-    }
-
-    private void updateTTRKonstante()
-    {
-        txtTTRKonstante.setText(String.valueOf(ttrKonstanteModel.getTTRKonstante()));
-    }
-
-    private void changeAlter(Alter alter, boolean checked)
-    {
-        if(! startIsFinished) return;
-
-        if(checked)
-        {
-            ttrKonstanteModel.setAlter(alter);
-            updateTTRKonstante();
+            chkShowPlayersImage.setChecked(false);
         }
     }
 
     private void finishActivity()
     {
         Intent intent = new Intent();
-        intent.putExtra(SettingsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, isLoginDataChanged);
+        intent.putExtra(MyTischtennisCredentialsActivity.PUT_EXTRA_IS_LOGIN_DATA_CHANGED, isLoginDataChanged);
         setResult(RESULT_OK, intent);
         finish();
     }
-
 }

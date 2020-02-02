@@ -11,7 +11,7 @@ import com.jmelzer.myttr.logic.NoDataException;
 import com.jmelzer.myttr.logic.PlayerNotWellRegistered;
 import com.jmelzer.myttr.logic.ValidationException;
 
-public class ParserEvaluatorIsPremiumAccount implements ParserEvaluator<Boolean>
+public class ParserEvaluatorIsPremiumAccount implements ParserEvaluator<Void, Boolean>
 {
     @Override
     public Boolean evaluateParser() throws NoDataException, NetworkException, LoginExpiredException, ValidationException, NoClickTTException, NiceGuysException
@@ -27,5 +27,10 @@ public class ParserEvaluatorIsPremiumAccount implements ParserEvaluator<Boolean>
         }
 
         return points != -3;
+    }
+
+    @Override
+    public Void getPostElement() {
+        return null;
     }
 }
