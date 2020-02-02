@@ -116,13 +116,6 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MenuItem actionRestart = (MenuItem) findViewById(R.id.app_bar_search);
-        //onOptionsItemSelected(actionRestart);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if(item.getItemId() == android.R.id.home)
