@@ -16,5 +16,6 @@ public interface SearchPlayerFastView extends FloatingActionButtonView
     public void showServiceIsRunning();
     public void resetView();
     public void addChip(ChooseablePlayer player);
-    public void finishActivity(Intent intent);
+    public void finishActivity(int result, Intent intent);
+    public void showConsultationForBackButton();
 }

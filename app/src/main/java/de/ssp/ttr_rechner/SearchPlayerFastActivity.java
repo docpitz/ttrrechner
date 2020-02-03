@@ -24,6 +24,7 @@ import com.robertlevonyan.views.chip.Chip;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -41,14 +42,6 @@ import de.ssp.ttr_rechner.ui.util.FloatingActionButtonUtil;
 
 public class SearchPlayerFastActivity extends AppCompatActivity implements SearchPlayerFastView
 {
-    public enum ViewState
-    {
-        QUERY_TOO_SMALL,
-        SERVICE_IS_RUNNING,
-        TOO_MUCH_DATA,
-        ERROR,
-        SHOW_RESULTS
-    }
     public static String PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV = "IS_SINGLE_CHOOSE_ACTIV";
 
     protected FoundedPlayersListAdapter listAdapter;
@@ -106,9 +99,9 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
             }
         });
 
-        // Trick um die Searchbar mit leichter Verspätung damit alles klappt
+        // Workaroud um die Searchbar mit leichter Verspätung damit alles klappt
         YoYo.with(Techniques.Pulse)
-                .duration(1)
+                .duration(5)
                 .onEnd(animator -> menu.performIdentifierAction(R.id.app_bar_search, 0))
                 .playOn(appBarSearch.getActionView());
 
@@ -120,11 +113,16 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
     {
         if(item.getItemId() == android.R.id.home)
         {
-            setResult(RESULT_CANCELED);
-            this.finish();
+            presenter.pressedBack();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        presenter.pressedBack();
     }
 
     @OnItemClick(R.id.listPlayer)
@@ -166,6 +164,20 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
         Log.d(this.getClass().toString(), "showErrorMessage");
         clearPlayerList();
         showText(errorMessage);
+    }
+
+    @Override
+    public void showConsultationForBackButton()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Hinweis")
+                .setMessage("Willst du die ausgewählten Spieler zur Berechnung übernehmen?")
+                .setPositiveButton("Übernehmen", (dialog, which) -> presenter.pressedDone())
+                .setNegativeButton("Verwerfen", (dialog, which) -> {
+                    finishActivity(RESULT_CANCELED, null);
+                })
+                .setNeutralButton("Abbrechen", null);
+        dialogBuilder.create().show();
     }
 
     public void showFloatingActionButton(boolean show)
@@ -230,9 +242,9 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
     }
 
     @Override
-    public void finishActivity(Intent intent)
+    public void finishActivity(int result, Intent intent)
     {
-        setResult(RESULT_OK, intent);
+        setResult(result, intent);
         finish();
     }
 
@@ -255,6 +267,5 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
         imgSearching.setImageDrawable(PlayersImageLoader.getNewCircularProgressDrawable(this));
         pnlImageView.setVisibility(View.VISIBLE);
     }
-
 }
 

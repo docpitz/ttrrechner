@@ -1,5 +1,6 @@
 package de.ssp.ttr_rechner.ui.foundedplayer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -131,11 +132,25 @@ public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
         Intent intent = new Intent();
         intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, listPlayer);
         intent.putExtra(SearchPlayerFastActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
-        view.finishActivity(intent);
+        view.finishActivity(Activity.RESULT_OK, intent);
     }
 
     public void pressedDone()
     {
         calcResultAndFinishActivity();
     }
+
+    public void pressedBack()
+    {
+        if(choosedPlayers.size() > 0)
+        {
+            view.showConsultationForBackButton();
+        }
+        else
+        {
+            view.finishActivity(Activity.RESULT_CANCELED, null);
+        }
+    }
+
+
 }
