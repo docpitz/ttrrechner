@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jmelzer.myttr.Player;
@@ -209,8 +208,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
         if (id == R.id.action_call_licence)
         {
-            OssLicensesMenuActivity.setActivityTitle(getString(R.string.licence));
-            startActivity(new Intent(this, OssLicensesMenuActivity.class));
+            startActivity(new Intent(this, LicenseActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

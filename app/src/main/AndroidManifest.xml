@@ -51,6 +51,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_ttr_constant"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LicenseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/licence"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
