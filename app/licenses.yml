@@ -270,13 +270,13 @@
   url: http://tools.android.com
 - artifact: com.android.support:appcompat-v7:+
   name: appcompat-v7
-  copyrightHolder: http://developer.android.com/tools/extras/support-library.html
+  copyrightHolder: The Android Open Source Project
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
 - artifact: com.android.support:design:+
   name: design
-  copyrightHolder: http://developer.android.com/tools/extras/support-library.html
+  copyrightHolder: The Android Open Source Project
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
