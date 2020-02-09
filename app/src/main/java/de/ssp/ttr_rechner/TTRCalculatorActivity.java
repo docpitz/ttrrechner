@@ -32,6 +32,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
+import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
+import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
 import de.ssp.ttr_rechner.model.Match;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
@@ -41,9 +44,6 @@ import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerIsPremiumAccount;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerRealNameAndPoints;
 import de.ssp.ttr_rechner.service.caller.ServiceFinish;
-import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
-import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
-import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
 import de.ssp.ttr_rechner.ui.util.TTRAnimationsUtils;
 
 public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalculatorInteractor
@@ -225,6 +225,13 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
             wettkampf.meinName = null;
             resetNeueTTRPunkte();
         }
+    }
+
+    @OnClick(R.id.btnOCR)
+    public void pressBtnOCR(Button button)
+    {
+        TTRAnimationsUtils.standardAnimationButtonPress(button);
+        startOCR();
     }
 
     @OnClick(R.id.btnCallMyTTRPoints)
@@ -467,6 +474,12 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
             txtMeinTTRWertHint.setHint(getString(R.string.hint_meine_ttr_punkte) + realName);
             txtMeinTTRWert.setText(String.valueOf(wettkampf.meinTTRWert));
         }
+    }
+
+    private void startOCR()
+    {
+        Intent intentForSearchPlayerActivity = new Intent(this, StillImageActivity.class);
+        startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
     }
 
     private boolean callServiceIsPremiumAccountIfNeccessaryForNormalSearch(boolean isSingleChooseActive)

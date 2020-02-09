@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="de.ssp.ttr_rechner">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -53,6 +57,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LicenseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/licence"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".StillImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/licence"
             android:theme="@style/AppTheme.NoActionBar"/>

@@ -34,6 +34,8 @@ public class Wettkampf
 
     public void addMatches(List<Player> playerList)
     {
+        if(playerList == null) return;
+
         if(matches.size() == 1 && matches.get(0).getGegnerischerTTRWert() == -1 && playerList.size() > 0)
         {
             matches.remove(0);

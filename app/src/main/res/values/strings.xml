@@ -34,6 +34,7 @@
     <string name="licence">Lizenzen</string>
     <string name="action_fast_search">Schnellsuche</string>
     <string name="action_add">Hinzufügen</string>
+    <string name="action_ocr">OCR</string>
     <string name="action_detail_search">Detailsuche</string>
     <string name="action_ttr_constants">TTR-Konstante</string>
     <string name="action_mytischtennis_credentials">MyTischtennis-Account</string>
