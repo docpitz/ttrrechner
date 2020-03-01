@@ -6,7 +6,7 @@ import com.jmelzer.myttr.Player;
 
 import java.util.ArrayList;
 
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 
 public interface SearchPlayerFastView extends FloatingActionButtonView
 {
@@ -15,7 +15,7 @@ public interface SearchPlayerFastView extends FloatingActionButtonView
     public void showMessageMoreSearchWords();
     public void showServiceIsRunning();
     public void resetView();
-    public void addChip(ChooseablePlayer player);
+    public void addChip(PlayerChooseable player);
     public void finishActivity(int result, Intent intent);
     public void showConsultationForBackButton();
 }

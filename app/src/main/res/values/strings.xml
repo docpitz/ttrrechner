@@ -6,6 +6,8 @@
     <string name="gegner">Gegner</string>
     <string name="title_activity_ttr_constant">TTR-Konstante</string>
     <string name="title_activity_player_choose">Spieler auswählen</string>
+    <string name="title_activity_ocr">Spieler auswählen</string>
+    <string name="title_activity_licence">Lizenzen</string>
     <string name="hint_ttr_gegner">TTR-Pkt. Gegner</string>
     <string name="hint_meine_ttr_punkte">Meine TTR-Punkte</string>
     <string name="tab_suche_name">Name</string>
@@ -31,14 +33,17 @@
     <string name="verloren">Verloren</string>
     <string name="sieg">Sieg</string>
     <string name="loeschen">löschen</string>
-    <string name="licence">Lizenzen</string>
+
+
     <string name="action_fast_search">Schnellsuche</string>
     <string name="action_add">Hinzufügen</string>
-    <string name="action_ocr">OCR</string>
+    <string name="action_ocr">Bilderkennung</string>
     <string name="action_detail_search">Detailsuche</string>
     <string name="action_ttr_constants">TTR-Konstante</string>
     <string name="action_mytischtennis_credentials">MyTischtennis-Account</string>
     <string name="title_mytischtennis_credentials">MyTischtennis Account</string>
     <string name="bitte_mit_vorname_nachname_suchen">Bitte mit \'Vorname Nachname\' suchen...</string>
     <string name="suche_laeuft">Suche läuft...</string>
+    <string name="kamera">Kamera</string>
+    <string name="album">Album</string>
 </resources>

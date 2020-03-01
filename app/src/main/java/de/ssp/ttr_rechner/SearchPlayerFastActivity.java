@@ -33,9 +33,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 import de.ssp.ttr_rechner.ui.foundedplayer.FoundedPlayersListAdapter;
-import de.ssp.ttr_rechner.ui.foundedplayer.PlayersImageLoader;
+import de.ssp.ttr_rechner.ui.util.PlayersImageLoader;
 import de.ssp.ttr_rechner.ui.foundedplayer.SearchPlayerFastPresenter;
 import de.ssp.ttr_rechner.ui.foundedplayer.SearchPlayerFastView;
 import de.ssp.ttr_rechner.ui.util.FloatingActionButtonUtil;
@@ -67,10 +67,14 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         boolean isSingleChooseActiv = getIntent().getBooleanExtra(PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
+        if(isSingleChooseActiv)
+        {
+            horizontalScrollView.setVisibility(View.GONE);
+        }
         FloatingActionButtonUtil.hideFloatingActionButton(floatingActionButton);
         presenter = new SearchPlayerFastPresenter(this, this, isSingleChooseActiv);
 
-        listAdapter = new FoundedPlayersListAdapter(this, new ChooseablePlayer[]{}, true, null);
+        listAdapter = new FoundedPlayersListAdapter(this, new PlayerChooseable[]{}, true, null);
         listViewPlayer.setAdapter(listAdapter);
         listViewPlayer.setItemsCanFocus(true);
         listViewPlayer.setEmptyView(pnlEmptyView);
@@ -138,7 +142,7 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
         presenter.pressedDone();
     }
 
-    public void addChip(ChooseablePlayer chooseablePlayer)
+    public void addChip(PlayerChooseable chooseablePlayer)
     {
         Player player = chooseablePlayer.player;
         Chip chip = (Chip) getLayoutInflater().inflate(R.layout.fastsearch_choosen_player, null);
@@ -199,7 +203,7 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
         {
             if(playerList.size() > 0)
             {
-                listAdapter.updateData(ChooseablePlayer.getPlayers(ChooseablePlayer.convertFromPlayers(playerList)));
+                listAdapter.updateData(PlayerChooseable.getPlayers(PlayerChooseable.convertFromPlayers(playerList)));
                 listAdapter.getFilter().filter(searchedQuery);
                 showText("Keine Spieler gefunden...");
             }
@@ -237,7 +241,7 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
     {
         Log.d(this.getClass().toString(), "resetView");
         txtSearchField.setQuery("", false);
-        listAdapter.updateData(new ChooseablePlayer[]{});
+        listAdapter.updateData(new PlayerChooseable[]{});
         showMessageMoreSearchWords();
     }
 
@@ -250,7 +254,7 @@ public class SearchPlayerFastActivity extends AppCompatActivity implements Searc
 
     private void clearPlayerList()
     {
-        listAdapter.updateData(new ChooseablePlayer[]{});
+        listAdapter.updateData(new PlayerChooseable[]{});
         listAdapter.notifyDataSetChanged();
     }
 

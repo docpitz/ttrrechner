@@ -13,7 +13,6 @@
 // limitations under the License.
 package de.ssp.ttr_rechner;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +42,6 @@ import android.widget.Spinner;
 
 import com.google.android.gms.common.annotation.KeepName;
 import com.google.firebase.FirebaseApp;
-import com.jmelzer.myttr.Player;
 import com.jmelzer.myttr.model.SearchPlayer;
 
 import java.io.IOException;
@@ -53,6 +51,7 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import de.ssp.ttr_rechner.model.SearchPlayerResults;
 import de.ssp.ttr_rechner.ocr.GraphicOverlay;
 import de.ssp.ttr_rechner.ocr.playerrecognition.PlayerRecognitionProcessor;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayers;
@@ -60,7 +59,7 @@ import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 /** Activity demonstrating different image detector features with a still image from camera. */
 @KeepName
-public final class StillImageActivity extends AppCompatActivity implements ServiceFinish<List<SearchPlayer>, List<Player>> {
+public final class StillImageActivity extends AppCompatActivity implements ServiceFinish<List<SearchPlayer>, List<SearchPlayerResults>> {
 
   private static final String TAG = "StillImageActivity";
   private static final String TEXT_DETECTION = "Text Detection";
@@ -175,12 +174,11 @@ public final class StillImageActivity extends AppCompatActivity implements Servi
   }
 
   @Override
-  public void serviceFinished(List<SearchPlayer> searchObject, boolean success, List<Player> listPlayer, String errorMessage) {
-    Intent intent = new Intent();
-    intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, (ArrayList)listPlayer);
+  public void serviceFinished(List<SearchPlayer> searchObject, boolean success, List<SearchPlayerResults> listPlayer, String errorMessage) {
+    Intent intent = new Intent(this, OCRPlayersActivity.class);
+    //intent.putExtra(OCRPlayersActivity.PUT_EXTRA_SEARCH_PLAYERS, (ArrayList)listPlayer);
     isStartedService = false;
-    setResult(Activity.RESULT_OK, intent);
-    finish();
+    startActivity(intent);
   }
 
   public void playerInPictureSearchSuccess(List<SearchPlayer> playerList)
@@ -403,7 +401,7 @@ public final class StillImageActivity extends AppCompatActivity implements Servi
   private void createImageProcessor() {
     switch (selectedMode) {
       case TEXT_DETECTION:
-        imageProcessor = new PlayerRecognitionProcessor(this);
+        //imageProcessor = new PlayerRecognitionProcessor(this);
         break;
       default:
         throw new IllegalStateException("Unknown selectedMode: " + selectedMode);

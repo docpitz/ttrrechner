@@ -218,7 +218,7 @@ public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, Lis
     {
         if(query.isEmpty())
         {
-            listAdapter.updateData(new ChooseablePlayer[]{});
+            listAdapter.updateData(new PlayerChooseable[]{});
         }
 
         if(!shureRun && serviceCallerSearchPlayer != null && serviceCallerSearchPlayer.isServiceRunning())
@@ -241,8 +241,8 @@ public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, Lis
         }
         else if(!(name.length > 1 && name[1].length() > 2))
         {
-            searchedPlayers = ChooseablePlayer.convertFromPlayers(null);
-            listAdapter.updateData(ChooseablePlayer.getPlayers(searchedPlayers));
+            searchedPlayers = PlayerChooseable.convertFromPlayers(null);
+            listAdapter.updateData(PlayerChooseable.getPlayers(searchedPlayers));
             txtHinweistext.setText(R.string.bitte_mit_vorname_nachname_suchen);
         }
         else
@@ -263,8 +263,8 @@ public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, Lis
         pnlImageView.setVisibility(View.GONE);
         if(success && playerList.size() > 0 && queryNow.contains(lastServiceQueryTry))
         {
-            searchedPlayers = ChooseablePlayer.convertFromPlayers((ArrayList<Player>) playerList);
-            listAdapter.updateData(ChooseablePlayer.getPlayers(searchedPlayers));
+            searchedPlayers = PlayerChooseable.convertFromPlayers((ArrayList<Player>) playerList);
+            listAdapter.updateData(PlayerChooseable.getPlayers(searchedPlayers));
             listAdapter.getFilter().filter(txtSearchField.getQuery());
             lastServiceQueryFound = lastServiceQueryTry;
             txtHinweistext.setText("Es wurden keine Spieler gefunden.");
@@ -278,8 +278,8 @@ public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, Lis
             else {
                 txtHinweistext.setText("Es wurden keine Spieler gefunden.");
             }
-            searchedPlayers = ChooseablePlayer.convertFromPlayers(null);
-            listAdapter.updateData(new ChooseablePlayer[]{});
+            searchedPlayers = PlayerChooseable.convertFromPlayers(null);
+            listAdapter.updateData(new PlayerChooseable[]{});
 
             if((lastServiceQueryTry.length() < queryNow.length() || ! queryNow.contains(lastServiceQueryTry))
                     && (ParserEvaluatorSearchPlayer.ZU_VIELE_SPIELER_GEFUNDEN.equals(errorMessage) || (playerList.isEmpty() && errorMessage == null)))

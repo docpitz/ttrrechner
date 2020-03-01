@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 import de.ssp.ttr_rechner.ui.foundedplayer.FloatingActionButtonView;
 import de.ssp.ttr_rechner.ui.foundedplayer.FoundedPlayersListAdapter;
 import de.ssp.ttr_rechner.ui.util.FloatingActionButtonUtil;
@@ -26,12 +26,11 @@ public class FoundedPlayerActivity extends AppCompatActivity implements Floating
 {
     public static String PUT_EXTRA_PLAYER_LIST = "PLAYER_LIST";
     public static String PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV = "IS_SINGLE_CHOOSE_ACTIV";
-    protected ArrayList<ChooseablePlayer> players;
+    protected ArrayList<PlayerChooseable> players;
     protected boolean isSingleChooseActiv = false;
     protected @BindView(R.id.listPlayer) ListView listViewPlayer;
     protected @BindView(R.id.toolbar) Toolbar tbToolbar;
     protected @BindView(R.id.fab) FloatingActionButton floatingActionButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,7 @@ public class FoundedPlayerActivity extends AppCompatActivity implements Floating
         setSupportActionBar(tbToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        players = ChooseablePlayer.convertFromPlayers((ArrayList<Player>) getIntent().getSerializableExtra(PUT_EXTRA_PLAYER_LIST));
+        players = PlayerChooseable.convertFromPlayers((ArrayList<Player>) getIntent().getSerializableExtra(PUT_EXTRA_PLAYER_LIST));
         isSingleChooseActiv = getIntent().getBooleanExtra(PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
         FloatingActionButtonUtil.hideFloatingActionButton(floatingActionButton);
 
@@ -61,9 +59,9 @@ public class FoundedPlayerActivity extends AppCompatActivity implements Floating
         });
     }
 
-    protected ChooseablePlayer[] getPlayers()
+    protected PlayerChooseable[] getPlayers()
     {
-        return players.toArray(new ChooseablePlayer[players.size()]);
+        return players.toArray(new PlayerChooseable[players.size()]);
     }
 
     @OnClick(R.id.fab)
@@ -87,7 +85,7 @@ public class FoundedPlayerActivity extends AppCompatActivity implements Floating
     protected ArrayList<Player> getChoosedPlayers()
     {
         ArrayList<Player> playerArrayList = new ArrayList<>();
-        for (ChooseablePlayer player: players)
+        for (PlayerChooseable player: players)
         {
             if(player.isChecked)
             {
@@ -100,7 +98,15 @@ public class FoundedPlayerActivity extends AppCompatActivity implements Floating
     protected void calcResultAndFinishActivity()
     {
         Intent intent = new Intent();
-        intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, getChoosedPlayers());
+        if(isSingleChooseActiv)
+        {
+            intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_IAM_PLAYER, getChoosedPlayers().get(0));
+        }
+        else
+        {
+            intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_OTHER_PLAYERS, getChoosedPlayers());
+        }
+
         intent.putExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
         setResult(RESULT_OK, intent);
         finish();

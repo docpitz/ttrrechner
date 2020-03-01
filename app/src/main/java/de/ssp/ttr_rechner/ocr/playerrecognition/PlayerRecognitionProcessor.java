@@ -34,8 +34,6 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import de.ssp.ttr_rechner.StillImageActivity;
-import de.ssp.ttr_rechner.ocr.CameraImageGraphic;
 import de.ssp.ttr_rechner.ocr.FrameMetadata;
 import de.ssp.ttr_rechner.ocr.GraphicOverlay;
 import de.ssp.ttr_rechner.ocr.VisionProcessorBase;
@@ -49,16 +47,16 @@ public class PlayerRecognitionProcessor extends VisionProcessorBase<FirebaseVisi
 
     private final FirebaseVisionTextRecognizer detector;
     private Context context;
-    private StillImageActivity activity;
+    private PlayerRecognitionProcessorFinisher finisher;
 
     private ArrayList<SearchPlayer> searchPlayers;
     private ArrayList<String> foundedLines;
 
     private FirebaseVisionText result;
 
-    public PlayerRecognitionProcessor(StillImageActivity context) {
+    public PlayerRecognitionProcessor(Context context, PlayerRecognitionProcessorFinisher finisher) {
         this.context = context;
-        this.activity = context;
+        this.finisher = finisher;
         detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
     }
 
@@ -82,12 +80,15 @@ public class PlayerRecognitionProcessor extends VisionProcessorBase<FirebaseVisi
             @NonNull FirebaseVisionText results,
             @NonNull FrameMetadata frameMetadata,
             @NonNull GraphicOverlay graphicOverlay) {
-        graphicOverlay.clear();
+        /*
+      graphicOverlay.clear();
         if (originalCameraImage != null) {
             CameraImageGraphic imageGraphic = new CameraImageGraphic(graphicOverlay,
                     originalCameraImage);
             graphicOverlay.add(imageGraphic);
         }
+
+         */
         result = results;
         foundedLines = new ArrayList<>();
         searchPlayers = new ArrayList<>();
@@ -138,9 +139,9 @@ public class PlayerRecognitionProcessor extends VisionProcessorBase<FirebaseVisi
             }
         }
 
-        activity.playerInPictureSearchSuccess(searchPlayers);
+        finisher.ocrFinished(searchPlayers);
 
-        graphicOverlay.postInvalidate();
+        //graphicOverlay.postInvalidate();
     }
 
     @Override

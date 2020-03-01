@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
-import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
-import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
 import de.ssp.ttr_rechner.model.Match;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.model.TTRKonstante;
@@ -44,13 +43,18 @@ import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerIsPremiumAccount;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerRealNameAndPoints;
 import de.ssp.ttr_rechner.service.caller.ServiceFinish;
+import de.ssp.ttr_rechner.ui.calculator.PanelMatchViewHolder;
+import de.ssp.ttr_rechner.ui.calculator.PanelSingleMatchViewHolder;
+import de.ssp.ttr_rechner.ui.calculator.TTRCalculatorInteractor;
 import de.ssp.ttr_rechner.ui.util.TTRAnimationsUtils;
 
 public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalculatorInteractor
 {
-    public static int REQUEST_CODE_SEARCH = 1;
-    public static int REQUEST_CODE_SETTINGS = 2;
-    public static String PUT_EXTRA_RESULT_PLAYERS = "RESULT_PLAYERS";
+    public static final int REQUEST_CODE_SEARCH = 1;
+    public static final int REQUEST_CODE_SETTINGS = 2;
+
+    public static String PUT_EXTRA_RESULT_OTHER_PLAYERS = "RESULT_OTHER_PLAYERS";
+    public static String PUT_EXTRA_RESULT_IAM_PLAYER = "RESULT_MY_TTR_POINTS";
 
     protected @BindView(R.id.txtMeinTTRWert) EditText txtMeinTTRWert;
     protected @BindView(R.id.txtNeueTTRPunkte) TextView txtNeueTTRPunkte;
@@ -62,7 +66,9 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     protected @BindView(R.id.btnSearchDetailPlayers) Button btnSearchPlayersDetail;
     protected @BindView(R.id.btnSearchFastPlayers) Button btnSearchPlayersFast;
     protected @BindView(R.id.btnCalculatePoints) FloatingActionButton btnCalculatePoints;
-    protected @BindView(R.id.btnSearchForMyTTRPoints) Button btnSearchForMyTTRPoints;
+    protected @BindView(R.id.btnSearchDetailForMyTTRPoints) Button btnSearchDetailForMyTTRPoints;
+    protected @BindView(R.id.btnSearchFastForMyTTRPoints) Button btnSearchFastForMyTTRPoints;
+    protected @BindView(R.id.btnOCR) Button btnOCR;
     protected @BindView(R.id.toolbar) Toolbar toolbar;
 
     private Toast anzahlGegnerToast;
@@ -70,6 +76,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     private MyTischtennisCredentials credentials;
     private PanelMatchViewHolder panelMatchViewHolder;
     private boolean isPremiumAccountCalled = false;
+
 
     public class ServiceFinishUser implements ServiceFinish<Void, User>
     {
@@ -230,8 +237,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     @OnClick(R.id.btnOCR)
     public void pressBtnOCR(Button button)
     {
-        TTRAnimationsUtils.standardAnimationButtonPress(button);
-        startOCR();
+        startOCR(button);
     }
 
     @OnClick(R.id.btnCallMyTTRPoints)
@@ -248,14 +254,25 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    @OnClick(R.id.btnSearchForMyTTRPoints)
-    public void pressBtnSearchForMyTTRPoints(Button button)
+    @OnClick(R.id.btnSearchDetailForMyTTRPoints)
+    public void pressBtnSearchDetailForMyTTRPoints(Button button)
     {
         TTRAnimationsUtils.standardAnimationButtonPress(button);
 
         if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessaryForNormalSearch(true))
         {
             callSearchPlayerDetailActivity(true);
+        }
+    }
+
+    @OnClick(R.id.btnSearchFastForMyTTRPoints)
+    public void pressBtnSearchFastForMyTTRPoints(Button button)
+    {
+        TTRAnimationsUtils.standardAnimationButtonPress(button);
+
+        if(! showCredentialsNotSetIfNecessary() && ! callServiceIsPremiumAccountIfNeccessaryForFastSearch(true))
+        {
+            callSearchPlayerFastActivity(true);
         }
     }
 
@@ -423,10 +440,12 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         int myTischtennisFunctionVisiblity = isPossible ? TextView.VISIBLE : TextView.GONE;
         btnCallMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
         btnSearchPlayersDetail.setVisibility(myTischtennisFunctionVisiblity);
-        btnSearchForMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
+        btnSearchDetailForMyTTRPoints.setVisibility(myTischtennisFunctionVisiblity);
 
-        int myTischtennisPremiumFunction = isPremiumAccount && isPossible ? TextView.VISIBLE : TextView.GONE;
-        btnSearchPlayersFast.setVisibility(myTischtennisPremiumFunction);
+        int myTischtennisPremiumFunctionVisibility = isPremiumAccount && isPossible ? TextView.VISIBLE : TextView.GONE;
+        btnSearchPlayersFast.setVisibility(myTischtennisPremiumFunctionVisibility);
+        btnSearchFastForMyTTRPoints.setVisibility(myTischtennisPremiumFunctionVisibility);
+        btnOCR.setVisibility(myTischtennisPremiumFunctionVisibility);
     }
 
     private int getMeinTTR()
@@ -476,9 +495,33 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         }
     }
 
-    private void startOCR()
+    private void startOCR(View view)
     {
-        Intent intentForSearchPlayerActivity = new Intent(this, StillImageActivity.class);
+        // Menu for selecting either: a) take new photo b) select from existing
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.setOnMenuItemClickListener(
+                menuItem -> {
+                    switch (menuItem.getItemId()) {
+                        case R.id.select_images_from_local:
+                            startFoundedOCRPlayersActivity(false);
+                            return true;
+                        case R.id.take_photo_using_camera:
+                            startFoundedOCRPlayersActivity(true);
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.camera_button_menu, popup.getMenu());
+        popup.show();
+    }
+
+    private void startFoundedOCRPlayersActivity(boolean isCameraUsing)
+    {
+        Intent intentForSearchPlayerActivity = new Intent(this, OCRPlayersActivity.class);
+        intentForSearchPlayerActivity.putExtra(OCRPlayersActivity.PUT_EXTRA_IS_CAMERA_USING, isCameraUsing);
         startActivityForResult(intentForSearchPlayerActivity, REQUEST_CODE_SEARCH);
     }
 
@@ -506,20 +549,17 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
 
     private void onActivityResultSearch(Intent intent)
     {
-        ArrayList<Player> playerArrayList = (ArrayList<Player>) intent.getSerializableExtra(PUT_EXTRA_RESULT_PLAYERS);
-        boolean isMyTTRPunkteCalled = intent.getBooleanExtra(FoundedPlayerActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, false);
-        if(isMyTTRPunkteCalled)
+        ArrayList<Player> otherPlayerArrayList = (ArrayList<Player>) intent.getSerializableExtra(PUT_EXTRA_RESULT_OTHER_PLAYERS);
+        Player myTTRPlayer = (Player) intent.getSerializableExtra(PUT_EXTRA_RESULT_IAM_PLAYER);
+
+        if(otherPlayerArrayList != null)
         {
-            if(playerArrayList.size() == 1)
-            {
-                Player player = playerArrayList.get(0);
-                setMyTTRPunkteToView(player.getTtrPoints(), player.getFirstname() + " " + player.getLastname());
-            }
-        }
-        else
-        {
-            wettkampf.addMatches(playerArrayList);
+            wettkampf.addMatches(otherPlayerArrayList);
             showToastAnzahlGegner();
+        }
+        if(myTTRPlayer != null)
+        {
+            setMyTTRPunkteToView(myTTRPlayer.getTtrPoints(), myTTRPlayer.getFirstname() + " " + myTTRPlayer.getLastname());
         }
     }
 

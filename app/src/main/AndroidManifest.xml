@@ -58,12 +58,17 @@
         <activity
             android:name=".LicenseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/licence"
+            android:label="@string/title_activity_licence"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".StillImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/licence"
+            android:label="@string/title_activity_licence"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".OCRPlayersActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_ocr"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

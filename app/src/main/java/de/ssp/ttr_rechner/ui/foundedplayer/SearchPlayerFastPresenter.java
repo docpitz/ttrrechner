@@ -11,15 +11,14 @@ import com.jmelzer.myttr.model.SearchPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ssp.ttr_rechner.SearchPlayerFastActivity;
 import de.ssp.ttr_rechner.TTRCalculatorActivity;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 
 public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
 {
     protected SearchPlayerFastView view;
     protected ServiceSearchPlayerCache serviceSearchPlayerCache;
-    protected ArrayList<ChooseablePlayer> choosedPlayers;
+    protected ArrayList<PlayerChooseable> choosedPlayers;
     protected Context context;
     protected boolean isSingleChooseActiv = false;
 
@@ -28,7 +27,7 @@ public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
         this.isSingleChooseActiv = isSingleChooseActive;
         this.context = context;
         this.view = view;
-        choosedPlayers = ChooseablePlayer.convertFromPlayers(null);
+        choosedPlayers = PlayerChooseable.convertFromPlayers(null);
         this.serviceSearchPlayerCache = new ServiceSearchPlayerCache(context, this);
     }
 
@@ -97,7 +96,7 @@ public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
         }
     }
 
-    public void addChoosedPlayer(ChooseablePlayer chooseablePlayer)
+    public void addChoosedPlayer(PlayerChooseable chooseablePlayer)
     {
         serviceSearchPlayerCache.cancelService();
         choosedPlayers.add(chooseablePlayer);
@@ -113,7 +112,7 @@ public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
         }
     }
 
-    public void removeChoosedPlayer(ChooseablePlayer chooseablePlayer)
+    public void removeChoosedPlayer(PlayerChooseable chooseablePlayer)
     {
         choosedPlayers.remove(chooseablePlayer);
         if(choosedPlayers.size() == 0)
@@ -125,13 +124,19 @@ public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
     public void calcResultAndFinishActivity()
     {
         ArrayList<Player> listPlayer = new ArrayList<>();
-        for (ChooseablePlayer choosedPlayer : choosedPlayers)
+        for (PlayerChooseable choosedPlayer : choosedPlayers)
         {
             listPlayer.add(choosedPlayer.player);
         }
         Intent intent = new Intent();
-        intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_PLAYERS, listPlayer);
-        intent.putExtra(SearchPlayerFastActivity.PUT_EXTRA_IS_SINGLE_CHOOSE_ACTIV, isSingleChooseActiv);
+        if(isSingleChooseActiv)
+        {
+            intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_IAM_PLAYER, listPlayer.get(0));
+        }
+        else
+        {
+            intent.putExtra(TTRCalculatorActivity.PUT_EXTRA_RESULT_OTHER_PLAYERS, listPlayer);
+        }
         view.finishActivity(Activity.RESULT_OK, intent);
     }
 

@@ -22,31 +22,15 @@ import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
 import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 import de.ssp.ttr_rechner.service.caller.ServiceCallerFindPlayerAvatarAdress;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
+import de.ssp.ttr_rechner.ui.util.PlayersImageLoader;
+import de.ssp.ttr_rechner.ui.util.ServiceFinishPlayerAvatar;
 
-public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
+public class FoundedPlayersListAdapter extends ArrayAdapter<PlayerChooseable>
 {
-    class ServiceFinishPlayerAvatar implements ServiceFinish<String, String>
-    {
-        ImageView imageView;
-        ChooseablePlayer player;
-        ServiceFinishPlayerAvatar(ImageView imageView, ChooseablePlayer player)
-        {
-            this.imageView = imageView;
-            this.player = player;
-        }
 
-        @Override
-        public void serviceFinished(String requestValue, boolean success, String url, String errorMessage)
-        {
-            PlayersImageLoader playersImageLoader = new PlayersImageLoader(getContext(), player, imageView);
-            imgAdresses.put(player, url);
-            playersImageLoader.loadImage2View(url);
-        }
-    }
 
     private class ItemFilter extends Filter {
         @Override
@@ -63,12 +47,12 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
                     String filterVorname = filterStringArray[0];
                     String filterNachname = filterStringArray[1];
 
-                    final ChooseablePlayer[] list = originalPlayers;
+                    final PlayerChooseable[] list = originalPlayers;
 
                     int count = list.length;
-                    final ArrayList<ChooseablePlayer> nlist = new ArrayList<ChooseablePlayer>(count);
+                    final ArrayList<PlayerChooseable> nlist = new ArrayList<PlayerChooseable>(count);
 
-                    ChooseablePlayer chooseablePlayer;
+                    PlayerChooseable chooseablePlayer;
 
                     for (int i = 0; i < count; i++)
                     {
@@ -83,7 +67,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
                         }
                     }
 
-                    results.values = ChooseablePlayer.getPlayers(nlist);
+                    results.values = PlayerChooseable.getPlayers(nlist);
                     results.count = nlist.size();
 
                 }
@@ -99,22 +83,20 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
 
             if(results.count > 0)
             {
-                filteredPlayers = (ChooseablePlayer[]) results.values;
+                filteredPlayers = (PlayerChooseable[]) results.values;
                 notifyDataSetChanged();
             }
             else {
-                filteredPlayers = new ChooseablePlayer[]{};
+                filteredPlayers = new PlayerChooseable[]{};
                 notifyDataSetInvalidated();
             }
-
-
         }
 
     }
 
     protected final Context context;
-    protected ChooseablePlayer[] originalPlayers;
-    protected ChooseablePlayer[] filteredPlayers;
+    protected PlayerChooseable[] originalPlayers;
+    protected PlayerChooseable[] filteredPlayers;
 
     protected boolean isSingleChoose;
     protected Filter filter;
@@ -124,13 +106,13 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
 
     protected @BindView(R.id.chkAuswahl) CheckBox chkAuswahl;
     protected @BindView(R.id.txtName) TextView txtName;
-    protected @BindView(R.id.txtVerein) TextView txtVerein;
+    protected @BindView(R.id.txtError) TextView txtVerein;
     protected @BindView(R.id.txtTTRPunkte) TextView txtTTRPunkte;
     protected @Nullable @BindView(R.id.imgPlayer) ImageView imgPlayer;
     protected @BindView(R.id.pnlRowFoundedPlayer) LinearLayout pnlRowFoundedPlayer;
-    protected Map<ChooseablePlayer, String> imgAdresses = new HashMap<>();
+    protected Map<PlayerChooseable, String> imgAdresses = new HashMap<>();
 
-    public FoundedPlayersListAdapter(Context context, ChooseablePlayer[] values, boolean isSingleChoose, FloatingActionButtonView floatingActionButtonView) {
+    public FoundedPlayersListAdapter(Context context, PlayerChooseable[] values, boolean isSingleChoose, FloatingActionButtonView floatingActionButtonView) {
         super(context, -1, values);
         this.context = context;
         this.originalPlayers = values;
@@ -149,7 +131,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         View rowView = inflater.inflate(layoutId, parent, false);
         ButterKnife.bind(this, rowView);
 
-        ChooseablePlayer player = filteredPlayers[position];
+        PlayerChooseable player = filteredPlayers[position];
         txtVerein.setText(player.player.getClub());
         txtName.setText(player.player.getFirstname()+ " " + player.player.getLastname());
         txtTTRPunkte.setText(String.valueOf(player.player.getTtrPoints()));
@@ -161,7 +143,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         chkAuswahl.setOnCheckedChangeListener((buttonView, isChecked) -> {
             player.isChecked = isChecked;
             boolean isAnyPlayerChecked = false;
-            for (ChooseablePlayer searchingPlayer:originalPlayers) {
+            for (PlayerChooseable searchingPlayer:originalPlayers) {
                 if(searchingPlayer.isChecked)
                 {
                     isAnyPlayerChecked = true;
@@ -176,7 +158,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         return rowView;
     }
 
-    public void updateData(ChooseablePlayer[] players)
+    public void updateData(PlayerChooseable[] players)
     {
         Log.d(this.getClass().toString(), "updateData");
         this.originalPlayers = players;
@@ -196,11 +178,11 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
 
     @Nullable
     @Override
-    public ChooseablePlayer getItem(int position) {
+    public PlayerChooseable getItem(int position) {
         return filteredPlayers[position];
     }
 
-    protected void showPlayersImageIfUserRequested(ChooseablePlayer player, ListView listView)
+    protected void showPlayersImageIfUserRequested(PlayerChooseable player, ListView listView)
     {
         if(isPlayersImageShow)
         {
@@ -208,7 +190,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         }
     }
 
-    protected void initializePlayersPic(ChooseablePlayer player, ListView listView)
+    protected void initializePlayersPic(PlayerChooseable player, ListView listView)
     {
 
         imgPlayer.setImageDrawable(PlayersImageLoader.getNewCircularProgressDrawable(getContext()));
@@ -225,7 +207,7 @@ public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
         }
         else
         {
-            FoundedPlayersListAdapter.ServiceFinishPlayerAvatar serviceFinishPlayerAvatar = new ServiceFinishPlayerAvatar(imgPlayer, player);
+            ServiceFinishPlayerAvatar serviceFinishPlayerAvatar = new ServiceFinishPlayerAvatar(imgPlayer, player, imgAdresses, context);
             ServiceCallerFindPlayerAvatarAdress serviceCaller = new ServiceCallerFindPlayerAvatarAdress(getContext(), serviceFinishPlayerAvatar, String.valueOf(player.player.getPersonId()));
             serviceCaller.callService();
             pnlRowFoundedPlayer.setTag(serviceCaller);

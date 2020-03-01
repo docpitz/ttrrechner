@@ -1,4 +1,4 @@
-package de.ssp.ttr_rechner.ui.foundedplayer;
+package de.ssp.ttr_rechner.ui.util;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -8,16 +8,16 @@ import com.squareup.picasso.Picasso;
 
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.ttr_rechner.model.PlayerChooseable;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class PlayersImageLoader implements Callback
 {
-    protected ChooseablePlayer player;
+    protected PlayerChooseable player;
     protected ImageView imageView;
     protected Context context;
 
-    public PlayersImageLoader(Context context, ChooseablePlayer player, ImageView imageView)
+    public PlayersImageLoader(Context context, PlayerChooseable player, ImageView imageView)
     {
         this.context = context;
         this.player = player;

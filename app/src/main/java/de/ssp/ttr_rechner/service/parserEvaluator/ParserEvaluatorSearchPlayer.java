@@ -13,6 +13,7 @@ import java.util.List;
 public class ParserEvaluatorSearchPlayer implements ParserEvaluator<SearchPlayer, List<Player>>
 {
     public static String ZU_VIELE_SPIELER_GEFUNDEN = "Es wurden zu viele Spieler gefunden.";
+    public static String KEINE_SPIELER_GEFUNDEN = "Es wurden keine Spieler gefunden.";
     private SearchPlayer searchPlayer;
     private String errorMessage;
 
