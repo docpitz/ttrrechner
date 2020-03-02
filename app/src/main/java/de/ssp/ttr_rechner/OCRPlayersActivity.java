@@ -208,7 +208,7 @@ public class OCRPlayersActivity extends AppCompatActivity implements SearchResul
 
             //preview.setImageBitmap(resizedBitmap);
             imageProcessor = new PlayerRecognitionProcessor(this, this);
-            imageProcessor.process(resizedBitmap, null);
+            imageProcessor.process(resizedBitmap);
         } catch (IOException e) {
             // Log.e(TAG, "Error retrieving saved image");
         }

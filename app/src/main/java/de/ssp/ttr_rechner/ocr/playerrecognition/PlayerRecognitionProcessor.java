@@ -14,7 +14,6 @@
 package de.ssp.ttr_rechner.ocr.playerrecognition;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -22,20 +21,14 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-import com.jmelzer.myttr.Club;
 import com.jmelzer.myttr.logic.TTRClubParser;
 import com.jmelzer.myttr.model.SearchPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import de.ssp.ttr_rechner.ocr.FrameMetadata;
-import de.ssp.ttr_rechner.ocr.GraphicOverlay;
 import de.ssp.ttr_rechner.ocr.VisionProcessorBase;
 
 /**
@@ -48,16 +41,14 @@ public class PlayerRecognitionProcessor extends VisionProcessorBase<FirebaseVisi
     private final FirebaseVisionTextRecognizer detector;
     private Context context;
     private PlayerRecognitionProcessorFinisher finisher;
-
-    private ArrayList<SearchPlayer> searchPlayers;
-    private ArrayList<String> foundedLines;
-
-    private FirebaseVisionText result;
+    private List<PlayerFinder> playerFinderList = new ArrayList<>();
 
     public PlayerRecognitionProcessor(Context context, PlayerRecognitionProcessorFinisher finisher) {
         this.context = context;
         this.finisher = finisher;
         detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+        playerFinderList.add(new PlayerInGroupFinder(new TTRClubParser(context)));
+        playerFinderList.add(new PlayerInGroupFinder(new TTRClubParser(context)));
     }
 
     @Override
@@ -75,73 +66,18 @@ public class PlayerRecognitionProcessor extends VisionProcessorBase<FirebaseVisi
     }
 
     @Override
-    protected void onSuccess(
-            @Nullable Bitmap originalCameraImage,
-            @NonNull FirebaseVisionText results,
-            @NonNull FrameMetadata frameMetadata,
-            @NonNull GraphicOverlay graphicOverlay) {
-        /*
-      graphicOverlay.clear();
-        if (originalCameraImage != null) {
-            CameraImageGraphic imageGraphic = new CameraImageGraphic(graphicOverlay,
-                    originalCameraImage);
-            graphicOverlay.add(imageGraphic);
-        }
-
-         */
-        result = results;
-        foundedLines = new ArrayList<>();
-        searchPlayers = new ArrayList<>();
-        Log.d(this.getClass().toString(), results.toString());
-        List<FirebaseVisionText.TextBlock> blocks = results.getTextBlocks();
-        Pattern patternIsWord = Pattern.compile("([A-Z])\\w+");
-        for (int i = 0; i < blocks.size(); i++) {
-            List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
-            for (FirebaseVisionText.Line line: lines) {
-                String lineText = line.getText();
-                Matcher matcherWord = patternIsWord.matcher(lineText);
-                if(matcherWord.find())
-                {
-                    foundedLines.add(lineText);
-                }
+    protected void onSuccess(@NonNull FirebaseVisionText results)
+    {
+        ArrayList<SearchPlayer> searchPlayers = new ArrayList<>();
+        for (PlayerFinder playerFinder: playerFinderList) {
+            ArrayList<SearchPlayer> tmpSearchPlayers = playerFinder.search(results);
+            if(tmpSearchPlayers != null && tmpSearchPlayers.size() > 0)
+            {
+                searchPlayers = tmpSearchPlayers;
+                break;
             }
         }
-        Pattern patternName = Pattern.compile("([A-Z])\\w+, ([A-Z])\\w+");
-        Pattern patternVerein = Pattern.compile("([A-Z])\\w+");
-        SearchPlayer searchPlayer = null;
-        boolean isPlayerFound = false;
-        for (String lineText: foundedLines) {
-            Matcher matcherName = patternName.matcher(lineText);
-            Matcher matcherVerein = patternVerein.matcher(lineText);
-            if (matcherName.find()) {
-                if(searchPlayer != null && searchPlayer.getFirstname() != null && searchPlayer.getLastname() != null) {
-                    searchPlayers.add(searchPlayer);
-                }
-                String player = lineText.substring(matcherName.start(), matcherName.end());
-                if(player != null && !player.isEmpty())
-                {
-                    searchPlayer = new SearchPlayer();
-                    String[] name = player.split(", ");
-
-                    searchPlayer.setLastname(name[0]);
-                    searchPlayer.setFirstname(name[1]);
-                    isPlayerFound = true;
-
-                }
-            }
-            else if (matcherVerein.find() && isPlayerFound) {
-                TTRClubParser clubParser = new TTRClubParser(context);
-                Club verein = clubParser.getClubExact(lineText);
-                searchPlayer.setClub(verein);
-                searchPlayers.add(searchPlayer);
-                searchPlayer = new SearchPlayer();
-                isPlayerFound = false;
-            }
-        }
-
         finisher.ocrFinished(searchPlayers);
-
-        //graphicOverlay.postInvalidate();
     }
 
     @Override
