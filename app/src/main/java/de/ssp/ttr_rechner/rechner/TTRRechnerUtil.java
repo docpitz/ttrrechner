@@ -2,7 +2,7 @@ package de.ssp.ttr_rechner.rechner;
 
 import java.util.List;
 
-import de.ssp.ttr_rechner.model.Match;
+import de.ssp.service.mytischtennis.model.Match;
 
 public class TTRRechnerUtil
 {

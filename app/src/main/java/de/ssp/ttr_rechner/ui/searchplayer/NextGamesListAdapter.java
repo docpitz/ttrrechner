@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.ssp.service.mytischtennis.model.NextGame;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.NextGame;
 
 public class NextGamesListAdapter extends ArrayAdapter<NextGame> {
     private final Context context;

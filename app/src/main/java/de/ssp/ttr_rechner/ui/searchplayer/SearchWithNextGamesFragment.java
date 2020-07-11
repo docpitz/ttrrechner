@@ -19,15 +19,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.ssp.service.mytischtennis.ServiceErrorAlertDialogHelper;
+import de.ssp.service.mytischtennis.caller.ServiceCallerFindCompletePlayer;
+import de.ssp.service.mytischtennis.caller.ServiceCallerFindPlayersByTeam;
+import de.ssp.service.mytischtennis.caller.ServiceCallerNextGames;
+import de.ssp.service.mytischtennis.caller.ServiceFinish;
+import de.ssp.service.mytischtennis.model.NextGame;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
 import de.ssp.ttr_rechner.TTRCalculatorActivity;
-import de.ssp.ttr_rechner.model.NextGame;
-import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerFindCompletePlayer;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerFindPlayersByTeam;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerNextGames;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -21,11 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.ssp.service.mytischtennis.caller.ServiceCallerFindPlayerAvatarAdress;
+import de.ssp.service.mytischtennis.caller.ServiceFinish;
+import de.ssp.service.mytischtennis.model.ChooseablePlayer;
+import de.ssp.service.mytischtennis.model.MyTischtennisCredentials;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
-import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerFindPlayerAvatarAdress;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 public class FoundedPlayersListAdapter extends ArrayAdapter<ChooseablePlayer>
 {

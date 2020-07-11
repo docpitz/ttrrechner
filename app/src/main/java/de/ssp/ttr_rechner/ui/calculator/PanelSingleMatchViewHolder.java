@@ -18,8 +18,8 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import de.ssp.service.mytischtennis.model.Match;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.Match;
 
 public class PanelSingleMatchViewHolder
 {

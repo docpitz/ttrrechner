@@ -11,9 +11,9 @@ import com.jmelzer.myttr.model.SearchPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ssp.service.mytischtennis.model.ChooseablePlayer;
 import de.ssp.ttr_rechner.SearchPlayerFastActivity;
 import de.ssp.ttr_rechner.TTRCalculatorActivity;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
 
 public class SearchPlayerFastPresenter implements ServiceSearchPlayerCallback
 {

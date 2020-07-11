@@ -6,7 +6,7 @@ import com.jmelzer.myttr.Player;
 
 import java.util.ArrayList;
 
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.service.mytischtennis.model.ChooseablePlayer;
 
 public interface SearchPlayerFastView extends FloatingActionButtonView
 {

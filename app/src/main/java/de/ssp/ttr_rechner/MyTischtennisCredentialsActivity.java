@@ -18,9 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import de.ssp.ttr_rechner.model.MyTischtennisCredentials;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerLogin;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
+import de.ssp.service.mytischtennis.caller.ServiceCallerLogin;
+import de.ssp.service.mytischtennis.caller.ServiceFinish;
+import de.ssp.service.mytischtennis.model.MyTischtennisCredentials;
 
 public class MyTischtennisCredentialsActivity extends AppCompatActivity implements ServiceFinish<String, User>
 {

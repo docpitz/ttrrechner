@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
+import de.ssp.service.mytischtennis.model.ChooseablePlayer;
 import de.ssp.ttr_rechner.ui.foundedplayer.FoundedPlayersListAdapter;
 import de.ssp.ttr_rechner.ui.foundedplayer.PlayersImageLoader;
 import de.ssp.ttr_rechner.ui.foundedplayer.SearchPlayerFastPresenter;

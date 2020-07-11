@@ -10,7 +10,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ssp.ttr_rechner.model.Match;
+import de.ssp.service.mytischtennis.model.Match;
 
 public class PanelMatchViewHolder
 {

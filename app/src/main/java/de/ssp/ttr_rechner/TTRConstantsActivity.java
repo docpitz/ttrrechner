@@ -12,8 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
-import de.ssp.ttr_rechner.model.Alter;
-import de.ssp.ttr_rechner.model.TTRKonstante;
+import de.ssp.service.mytischtennis.model.Alter;
+import de.ssp.service.mytischtennis.model.TTRKonstante;
 
 public class TTRConstantsActivity extends AppCompatActivity
 {

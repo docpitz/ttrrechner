@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
-import de.ssp.ttr_rechner.service.parserEvaluator.ParserEvaluatorSearchPlayer;
+import de.ssp.service.mytischtennis.caller.ServiceCallerSearchPlayer;
+import de.ssp.service.mytischtennis.caller.ServiceFinish;
+import de.ssp.service.mytischtennis.parserEvaluator.ParserEvaluatorSearchPlayer;
 
 public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, List<Player>>
 {
@@ -211,83 +211,4 @@ public class ServiceSearchPlayerCache implements ServiceFinish<SearchPlayer, Lis
     public boolean isServiceRunning() {
         return isServiceRunning;
     }
-
-    /*
-
-    private void callServiceSearchPlayerIfNessecary(String query, boolean shureRun)
-    {
-        if(query.isEmpty())
-        {
-            listAdapter.updateData(new ChooseablePlayer[]{});
-        }
-
-        if(!shureRun && serviceCallerSearchPlayer != null && serviceCallerSearchPlayer.isServiceRunning())
-        {
-            return;
-        }
-
-        SearchPlayer searchPlayer = new SearchPlayer();
-        String name[] = query.split(" ");
-        if(name.length > 1 && name[1].length() > 2 &&
-                (searchedPlayers.isEmpty() || lastServiceQueryFound.length() > query.length() || ! query.contains(lastServiceQueryFound)))
-        {
-            searchPlayer.setFirstname(name[0]);
-            searchPlayer.setLastname(name[1]);
-            serviceCallerSearchPlayer = new ServiceCallerSearchPlayer(context, this, searchPlayer, false);
-            serviceCallerSearchPlayer.callService();
-            txtHinweistext.setText("Suche läuft...");
-            pnlImageView.setVisibility(View.VISIBLE);
-            lastServiceQueryTry = query;
-        }
-        else if(!(name.length > 1 && name[1].length() > 2))
-        {
-            searchedPlayers = ChooseablePlayer.convertFromPlayers(null);
-            listAdapter.updateData(ChooseablePlayer.getPlayers(searchedPlayers));
-            txtHinweistext.setText(R.string.bitte_mit_vorname_nachname_suchen);
-        }
-        else
-        {
-            listAdapter.getFilter().filter(query);
-            if(listAdapter.getCount() == 0 && name.length > 1 && name[1].length() > 2)
-            {
-                txtHinweistext.setText("Es wurden keine Spieler gefunden.");
-            }
-        }
-    }
-
-    /*
-    @Override
-    public void serviceFinished(boolean success, List<Player> playerList, String errorMessage)
-    {
-        String queryNow = txtSearchField.getQuery().toString();
-        pnlImageView.setVisibility(View.GONE);
-        if(success && playerList.size() > 0 && queryNow.contains(lastServiceQueryTry))
-        {
-            searchedPlayers = ChooseablePlayer.convertFromPlayers((ArrayList<Player>) playerList);
-            listAdapter.updateData(ChooseablePlayer.getPlayers(searchedPlayers));
-            listAdapter.getFilter().filter(txtSearchField.getQuery());
-            lastServiceQueryFound = lastServiceQueryTry;
-            txtHinweistext.setText("Es wurden keine Spieler gefunden.");
-        }
-        else
-        {
-            if(errorMessage != null)
-            {
-                txtHinweistext.setText(errorMessage);
-            }
-            else {
-                txtHinweistext.setText("Es wurden keine Spieler gefunden.");
-            }
-            searchedPlayers = ChooseablePlayer.convertFromPlayers(null);
-            listAdapter.updateData(new ChooseablePlayer[]{});
-
-            if((lastServiceQueryTry.length() < queryNow.length() || ! queryNow.contains(lastServiceQueryTry))
-                    && (ParserEvaluatorSearchPlayer.ZU_VIELE_SPIELER_GEFUNDEN.equals(errorMessage) || (playerList.isEmpty() && errorMessage == null)))
-            {
-                callServiceSearchPlayerIfNessecary(queryNow, true);
-            }
-        }
-    }
-
-     */
 }

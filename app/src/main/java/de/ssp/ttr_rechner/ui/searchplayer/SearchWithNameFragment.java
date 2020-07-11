@@ -18,9 +18,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.ssp.service.mytischtennis.caller.ServiceCallerSearchPlayer;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
 
 /**
  * A simple {@link Fragment} subclass.

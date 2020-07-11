@@ -18,9 +18,9 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
+import de.ssp.service.mytischtennis.caller.ServiceCallerSearchPlayer;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.service.caller.ServiceCallerSearchPlayer;
 
 /**
  * A simple {@link Fragment} subclass.

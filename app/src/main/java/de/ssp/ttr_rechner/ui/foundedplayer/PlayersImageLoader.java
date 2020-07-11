@@ -7,8 +7,9 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
+import de.ssp.service.mytischtennis.model.ChooseablePlayer;
 import de.ssp.ttr_rechner.R;
-import de.ssp.ttr_rechner.model.ChooseablePlayer;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class PlayersImageLoader implements Callback

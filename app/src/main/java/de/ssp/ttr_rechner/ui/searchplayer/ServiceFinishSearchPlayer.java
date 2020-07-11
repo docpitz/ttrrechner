@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
+
+import de.ssp.service.mytischtennis.ServiceErrorAlertDialogHelper;
+import de.ssp.service.mytischtennis.caller.ServiceFinish;
 import de.ssp.ttr_rechner.FoundedPlayerActivity;
 import de.ssp.ttr_rechner.TTRCalculatorActivity;
-import de.ssp.ttr_rechner.service.ServiceErrorAlertDialogHelper;
-import de.ssp.ttr_rechner.service.caller.ServiceFinish;
 
 public class ServiceFinishSearchPlayer implements ServiceFinish<SearchPlayer, List<Player>>
 {
