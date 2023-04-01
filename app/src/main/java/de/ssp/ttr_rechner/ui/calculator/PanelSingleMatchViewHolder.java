@@ -45,28 +45,37 @@ public class PanelSingleMatchViewHolder
     {
         txtHintTTRGegner.setHint(activity.getString(R.string.hint_ttr_gegner));
         ttrCalculatorInteractor.resetNeueTTRPunkte();
+        btnRemoveMatch.setVisibility(View.VISIBLE);
     }
 
     @OnCheckedChanged(R.id.chkSieg)
     public void changeChkSieg(CompoundButton switchButton, boolean checked)
     {
         ttrCalculatorInteractor.resetNeueTTRPunkte();
+        btnRemoveMatch.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.btnRemoveMatch)
     public void pressBtnRemoveMatch(ImageButton button)
     {
+        if(ttrCalculatorInteractor.countMatches() == 1) {
+            changeTxtTTRGegner("");
+            txtTTRGegner.setText("");
+            chkSieg.setChecked(false);
+            btnRemoveMatch.setVisibility(View.INVISIBLE);
+        } else {
+            YoYo.with(Techniques.Pulse)
+                    .duration(200)
+                    .onStart(animator -> button.setAlpha(0.5f))
+                    .onEnd(animator ->
+                    {
+                        ttrCalculatorInteractor.removeMatch(PanelSingleMatchViewHolder.this);
+                        ttrCalculatorInteractor.showToastAnzahlGegner();
+                        ttrCalculatorInteractor.resetNeueTTRPunkte();
+                    })
+                    .playOn(btnRemoveMatch);
+        }
 
-        YoYo.with(Techniques.Pulse)
-                .duration(200)
-                .onStart(animator -> button.setAlpha(0.5f))
-                .onEnd(animator ->
-                {
-                    ttrCalculatorInteractor.removeMatch(PanelSingleMatchViewHolder.this);
-                    ttrCalculatorInteractor.showToastAnzahlGegner();
-                    ttrCalculatorInteractor.resetNeueTTRPunkte();
-                })
-                .playOn(btnRemoveMatch);
     }
 
     public Match getMatch()

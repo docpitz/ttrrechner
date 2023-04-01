@@ -5,4 +5,5 @@ public interface TTRCalculatorInteractor
     public void resetNeueTTRPunkte();
     public void showToastAnzahlGegner();
     public void removeMatch(PanelSingleMatchViewHolder panelSingleMatchViewHolder);
+    public int countMatches();
 }

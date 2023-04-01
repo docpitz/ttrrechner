@@ -43,7 +43,7 @@ public class PanelMatchViewHolder
             }
         }
 
-        if(panelSingleMatchViewHolderList.size() == 1)
+        if(panelSingleMatchViewHolderList.size() == 1 && panelSingleMatchViewHolderList.get(0).getMatch().getGegnerischerTTRWert() == -1)
         {
             panelSingleMatchViewHolderList.get(0).setDeleteButtonVisibility(View.INVISIBLE);
         }

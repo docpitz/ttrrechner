@@ -338,6 +338,11 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
     }
 
     @Override
+    public int countMatches() {
+        return wettkampf.matches.size();
+    }
+
+    @Override
     public void resetNeueTTRPunkte()
     {
         txtDiffTTRPunkte.setText("");
@@ -506,6 +511,7 @@ public class TTRCalculatorActivity extends AppCompatActivity implements TTRCalcu
         else
         {
             wettkampf.addMatches(playerArrayList);
+            restoreView(wettkampf);
             showToastAnzahlGegner();
         }
     }
